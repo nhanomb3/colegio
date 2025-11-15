@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Colégio 27 de Março - Área do Aluno</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Segoe UI', 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #f0f4f8, #e2e8f0);
+      padding: 20px;
+      min-height: 100vh;
+    }
+    
+    .school-header {
+      background: linear-gradient(135deg, #1a3a6c, #2c5aa0);
+      color: white;
+      text-align: center;
+      padding: 30px 20px;
+      border-radius: 15px;
+      margin-bottom: 30px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .school-header::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,149.3C960,160,1056,160,1152,138.7C1248,117,1344,75,1392,53.3L1440,32L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+      background-size: cover;
+      opacity: 0.1;
+    }
+    
+    .school-header h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 5px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    .school-header p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+    
+    .school-logo {
+      font-size: 3rem;
+      margin-bottom: 15px;
+      display: block;
+    }
+
+    .user-header {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 25px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .user-info h2 {
+      font-size: 1.5rem;
+      color: #2c3e50;
+      margin-bottom: 5px;
+    }
+
+    .user-details {
+      color: #7f8c8d;
+      font-size: 0.9rem;
+    }
+
+    .logout-btn {
+      background: #e74c3c;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+
+    .logout-btn:hover {
+      background: #c0392b;
+    }
+
+    .tabs {
+      display: flex;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 25px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .tab {
+      flex: 1;
+      padding: 15px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      background: white;
+      border: none;
+      font-size: 1rem;
+    }
+
+    .tab:hover {
+      background-color: #f0f0f0;
+    }
+
+    .tab.active {
+      background-color: #2c5aa0;
+      color: white;
+    }
+
+    .tab-content {
+      display: none;
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      margin-bottom: 25px;
+    }
+
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .card-title {
+      font-size: 1.3rem;
+      margin-bottom: 15px;
+      color: #2c3e50;
+      border-bottom: 2px solid #f0f0f0;
+      padding-bottom: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #f8f9fa;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+
+    tr:hover {
+      background-color: #f9f9f9;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px;
+      color: #7f8c8d;
+    }
+
+    .stats-container {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+    
+    .stat-card {
+      flex: 1;
+      min-width: 200px;
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    
+    .stat-label {
+      font-size: 1rem;
+      color: #7f8c8d;
+    }
+    
+    .grade-approved {
+      color: #27ae60;
+      font-weight: bold;
+    }
+    
+    .grade-reproved {
+      color: #e74c3c;
+      font-weight: bold;
+    }
+
+    .mensalidade-paga {
+      color: #27ae60;
+      font-weight: bold;
+    }
+    
+    .mensalidade-pendente {
+      color: #f39c12;
+      font-weight: bold;
+    }
+    
+    .mensalidade-cancelada {
+      color: #e74c3c;
+      font-weight: bold;
+    }
+
+    .alert {
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .alert-warning {
+      background-color: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeaa7;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #7f8c8d;
+    }
+
+    .student-photo {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: #3498db;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 2rem;
+      margin-right: 20px;
+    }
+
+    .profile-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .profile-info {
+      flex: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="school-header">
+    <div class="school-logo">🏫</div>
+    <h1>Colégio 27 de Março</h1>
+    <p>Área do Aluno</p>
+  </div>
+
+  <div class="user-header">
+    <div class="user-info">
+      <h2 id="student-name">Carregando...</h2>
+      <div class="user-details">
+        Matrícula: <span id="student-id">-</span> | 
+        Turma: <span id="student-class">-</span> |
+        Status: <span id="student-status">-</span>
+      </div>
+    </div>
+    <button class="logout-btn" onclick="logout()">Sair</button>
+  </div>
+
+  <div id="alert-container"></div>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="info">Minhas Informações</div>
+    <div class="tab" data-tab="grades">Minhas Notas</div>
+    <div class="tab" data-tab="mensalidades">Minhas Mensalidades</div>
+  </div>
+
+  <div class="tab-content active" id="info-tab">
+    <div class="card">
+      <div class="profile-header">
+        <div class="student-photo" id="student-photo">👨‍🎓</div>
+        <div class="profile-info">
+          <h3 class="card-title">Dados Pessoais</h3>
+          <div id="student-details">Carregando informações...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="grades-tab">
+    <div class="card">
+      <h3 class="card-title">Minhas Notas</h3>
+      <div id="grades-content">
+        <div class="loading">Carregando notas...</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="mensalidades-tab">
+    <div class="card">
+      <h3 class="card-title">Minhas Mensalidades</h3>
+      <div id="mensalidades-content">
+        <div class="loading">Carregando mensalidades...</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // CONFIGURAÇÃO SUPABASE
+    const SUPABASE_URL = 'https://seu-project.supabase.co';
+    const SUPABASE_ANON_KEY = 'sua-anon-key-aqui';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // VARIÁVEIS GLOBAIS
+    let currentStudent = null;
+    let students = [];
+    let classes = [];
+    let schoolYears = [];
+    let grades = [];
+    let mensalidades = [];
+    let disciplines = [];
+
+    // CARREGAR DADOS
+    async function loadData() {
+      try {
+        // Verificar se usuário está logado
+        const savedUser = localStorage.getItem('currentUser');
+        if (!savedUser) {
+          window.location.href = 'index.html';
+          return;
+        }
+
+        currentStudent = JSON.parse(savedUser);
+        
+        // Carregar dados do Supabase
+        const [studentsRes, classesRes, yearsRes, gradesRes, mensalidadesRes, disciplinesRes] = await Promise.all([
+          supabase.from('students').select('*'),
+          supabase.from('classes').select('*'),
+          supabase.from('school_years').select('*'),
+          supabase.from('grades').select('*'),
+          supabase.from('mensalidades').select('*'),
+          supabase.from('disciplines').select('*')
+        ]);
+
+        students = studentsRes.data || [];
+        classes = classesRes.data || [];
+        schoolYears = yearsRes.data || [];
+        grades = gradesRes.data || [];
+        mensalidades = mensalidadesRes.data || [];
+        disciplines = disciplinesRes.data || [];
+
+        // Atualizar interface
+        updateStudentInfo();
+        loadTabContent('info');
+
+      } catch (error) {
+        console.error('Erro ao carregar dados:', error);
+        showAlert('Erro ao carregar dados do sistema', 'warning');
+      }
+    }
+
+    // ATUALIZAR INFORMAÇÕES DO ALUNO
+    function updateStudentInfo() {
+      const student = students.find(s => s.student_id === currentStudent.student_id);
+      if (!student) return;
+
+      document.getElementById('student-name').textContent = student.name;
+      document.getElementById('student-id').textContent = student.student_id;
+      
+      const turma = classes.find(c => c.id === student.class_id);
+      document.getElementById('student-class').textContent = turma ? `${turma.grade}ª ${turma.name}` : '-';
+      
+      document.getElementById('student-status').textContent = student.status === 'approved' ? 'Aprovado' : 'Pendente';
+      
+      // Foto do aluno (inicial baseada no gênero)
+      document.getElementById('student-photo').textContent = student.gender === 'M' ? '👨‍🎓' : '👩‍🎓';
+    }
+
+    // CARREGAR CONTEÚDO DAS TABS
+    function loadTabContent(tabId) {
+      switch(tabId) {
+        case 'info':
+          loadInfoTab();
+          break;
+        case 'grades':
+          loadGradesTab();
+          break;
+        case 'mensalidades':
+          loadMensalidadesTab();
+          break;
+      }
+    }
+
+    // TAB INFORMAÇÕES
+    function loadInfoTab() {
+      const student = students.find(s => s.student_id === currentStudent.student_id);
+      if (!student) return;
+
+      const turma = classes.find(c => c.id === student.class_id);
+      const ano = schoolYears.find(y => y.id === student.school_year_id);
+
+      const detailsHTML = `
+        <table>
+          <tr>
+            <th>Nome Completo:</th>
+            <td>${student.name}</td>
+          </tr>
+          <tr>
+            <th>Matrícula:</th>
+            <td>${student.student_id}</td>
+          </tr>
+          <tr>
+            <th>Gênero:</th>
+            <td>${student.gender === 'M' ? 'Masculino' : 'Feminino'}</td>
+          </tr>
+          <tr>
+            <th>Turma:</th>
+            <td>${turma ? `${turma.grade}ª ${turma.name}` : '-'}</td>
+          </tr>
+          <tr>
+            <th>Ano Letivo:</th>
+            <td>${ano ? ano.name : '-'}</td>
+          </tr>
+          <tr>
+            <th>Status da Matrícula:</th>
+            <td>
+              ${student.status === 'approved' ? 
+                '<span style="color: #27ae60; font-weight: bold;">✅ Aprovado</span>' : 
+                '<span style="color: #f39c12; font-weight: bold;">⏳ Pendente de Aprovação</span>'}
+            </td>
+          </tr>
+        </table>
+      `;
+
+      document.getElementById('student-details').innerHTML = detailsHTML;
+    }
+
+    // TAB NOTAS
+    function loadGradesTab() {
+      const student = students.find(s => s.student_id === currentStudent.student_id);
+      if (!student) return;
+
+      const studentGrades = grades.filter(g => 
+        g.student_id === student.id && 
+        g.status === 'approved'
+      );
+
+      if (studentGrades.length === 0) {
+        document.getElementById('grades-content').innerHTML = `
+          <div class="empty-state">
+            <h3>📚 Nenhuma nota disponível</h3>
+            <p>Suas notas aparecerão aqui após serem lançadas e aprovadas pelos professores.</p>
+          </div>
+        `;
+        return;
+      }
+
+      // Agrupar notas por disciplina
+      const gradesByDiscipline = {};
+      studentGrades.forEach(grade => {
+        if (!gradesByDiscipline[grade.discipline_id]) {
+          gradesByDiscipline[grade.discipline_id] = [];
+        }
+        gradesByDiscipline[grade.discipline_id].push(grade);
+      });
+
+      let gradesHTML = '';
+      Object.keys(gradesByDiscipline).forEach(disciplineId => {
+        const disciplina = disciplines.find(d => d.id === parseInt(disciplineId));
+        const disciplineGrades = gradesByDiscipline[disciplineId];
+        
+        const gradeTypes = {
+          'ac1': 'AC1', 'ac2': 'AC2', 'ac3': 'AC3', 'at': 'AT', 'trabalho': 'Trabalho'
+        };
+
+        gradesHTML += `
+          <div style="margin-bottom: 30px;">
+            <h4 style="color: #2c5aa0; margin-bottom: 15px; border-bottom: 2px solid #f0f0f0; padding-bottom: 5px;">
+              📖 ${disciplina.name}
+            </h4>
+            <table>
+              <thead>
+                <tr>
+                  <th>Tipo de Avaliação</th>
+                  <th>Nota</th>
+                  <th>Resultado</th>
+                  <th>Data</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${disciplineGrades.map(g => {
+                  const resultado = g.grade >= 9.5 ? 
+                    '<span class="grade-approved">✅ Aprovado</span>' : 
+                    '<span class="grade-reproved">❌ Reprovado</span>';
+                  
+                  return `
+                    <tr>
+                      <td>${gradeTypes[g.grade_type] || g.grade_type}</td>
+                      <td><strong>${g.grade}</strong></td>
+                      <td>${resultado}</td>
+                      <td>${new Date(g.created_at).toLocaleDateString('pt-BR')}</td>
+                    </tr>
+                  `;
+                }).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+      });
+
+      document.getElementById('grades-content').innerHTML = gradesHTML;
+    }
+
+    // TAB MENSALIDADES
+    function loadMensalidadesTab() {
+      const student = students.find(s => s.student_id === currentStudent.student_id);
+      if (!student) return;
+
+      const studentMensalidades = mensalidades.filter(m => m.student_id === student.id);
+
+      if (studentMensalidades.length === 0) {
+        document.getElementById('mensalidades-content').innerHTML = `
+          <div class="empty-state">
+            <h3>💰 Nenhuma mensalidade registrada</h3>
+            <p>Seu histórico de mensalidades aparecerá aqui.</p>
+          </div>
+        `;
+        return;
+      }
+
+      // Calcular estatísticas
+      const totalMensalidades = studentMensalidades.length;
+      const mensalidadesPagas = studentMensalidades.filter(m => m.status === 'paga').length;
+      const mensalidadesPendentes = studentMensalidades.filter(m => m.status === 'pendente').length;
+      const totalPago = studentMensalidades
+        .filter(m => m.status === 'paga')
+        .reduce((sum, m) => sum + parseFloat(m.valor), 0);
+      const totalPendente = studentMensalidades
+        .filter(m => m.status === 'pendente')
+        .reduce((sum, m) => sum + parseFloat(m.valor), 0);
+
+      // Estatísticas
+      const statsHTML = `
+        <div class="stats-container">
+          <div class="stat-card">
+            <div class="stat-number">${totalMensalidades}</div>
+            <div class="stat-label">Total</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" style="color: #27ae60">${mensalidadesPagas}</div>
+            <div class="stat-label">Pagas</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" style="color: #f39c12">${mensalidadesPendentes}</div>
+            <div class="stat-label">Pendentes</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" style="color: #27ae60">${totalPago.toFixed(2)}</div>
+            <div class="stat-label">Total Pago (MZN)</div>
+          </div>
+        </div>
+      `;
+
+      // Tabela de mensalidades
+      const tableHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Mês/Ano</th>
+              <th>Valor</th>
+              <th>Status</th>
+              <th>Data Pagamento</th>
+              <th>Nº Recibo</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${studentMensalidades.map(m => {
+              const statusClass = 
+                m.status === 'paga' ? 'mensalidade-paga' :
+                m.status === 'pendente' ? 'mensalidade-pendente' :
+                'mensalidade-cancelada';
+              
+              const statusText = 
+                m.status === 'paga' ? '✅ Paga' :
+                m.status === 'pendente' ? '⏳ Pendente' :
+                '❌ Cancelada';
+
+              const meses = [
+                '', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+                'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+              ];
+
+              return `
+                <tr>
+                  <td>${meses[m.mes]}/${m.ano}</td>
+                  <td>${parseFloat(m.valor).toFixed(2)} MZN</td>
+                  <td class="${statusClass}">${statusText}</td>
+                  <td>${m.data_confirmacao ? new Date(m.data_confirmacao).toLocaleDateString('pt-BR') : '-'}</td>
+                  <td>${m.recibo || '-'}</td>
+                </tr>
+              `;
+            }).join('')}
+          </tbody>
+        </table>
+      `;
+
+      document.getElementById('mensalidades-content').innerHTML = statsHTML + tableHTML;
+    }
+
+    // TROCA DE TABS
+    function setupTabs() {
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          // Remover active de todas as tabs
+          document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+          document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+          
+          // Adicionar active na tab clicada
+          tab.classList.add('active');
+          const tabId = tab.dataset.tab;
+          document.getElementById(`${tabId}-tab`).classList.add('active');
+          
+          // Carregar conteúdo da tab
+          loadTabContent(tabId);
+        });
+      });
+    }
+
+    // LOGOUT
+    function logout() {
+      localStorage.removeItem('currentUser');
+      window.location.href = 'index.html';
+    }
+
+    // MOSTRAR ALERTA
+    function showAlert(message, type) {
+      const alertDiv = document.createElement('div');
+      alertDiv.className = `alert alert-${type}`;
+      alertDiv.textContent = message;
+      document.getElementById('alert-container').appendChild(alertDiv);
+      
+      setTimeout(() => {
+        if (alertDiv.parentNode) {
+          alertDiv.parentNode.removeChild(alertDiv);
+        }
+      }, 5000);
+    }
+
+    // INICIALIZAÇÃO
+    document.addEventListener('DOMContentLoaded', () => {
+      setupTabs();
+      loadData();
+    });
+  </script>
+</body>
+</html>
