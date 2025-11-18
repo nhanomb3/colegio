@@ -502,6 +502,64 @@
             }
         }
 
+        // TESTE DETALHADO DE CONEXÃO
+        async function testDetailedConnection() {
+            try {
+                showDebugInfo('🔧 Iniciando teste detalhado...');
+                
+                // Teste 1: Autenticação básica
+                const { data: authData, error: authError } = await supabase.auth.getSession();
+                if (authError) {
+                    showDebugInfo(`❌ Auth Error: ${authError.message}`);
+                    return false;
+                }
+                showDebugInfo('✅ Autenticação: OK');
+                
+                // Teste 2: Acesso à tabela users
+                const { data: users, error: usersError } = await supabase
+                    .from('users')
+                    .select('count')
+                    .limit(1);
+                    
+                if (usersError) {
+                    showDebugInfo(`❌ Users Table Error: ${usersError.message}`);
+                    
+                    if (usersError.message.includes('RLS')) {
+                        showDebugInfo('🔧 Problema de RLS. Verifique as políticas da tabela.');
+                    }
+                    return false;
+                }
+                showDebugInfo('✅ Tabela users: OK');
+                
+                showDebugInfo('🎉 Todos os testes passaram!');
+                return true;
+                
+            } catch (error) {
+                showDebugInfo(`💥 Erro inesperado: ${error.message}`);
+                return false;
+            }
+        }
+
+        // VERIFICAR SE TABELA USERS EXISTE
+        async function checkUsersTable() {
+            try {
+                // Apenas testar se conseguimos acessar a tabela
+                const { data, error } = await supabase
+                    .from('users')
+                    .select('id')
+                    .limit(1);
+                    
+                if (error) {
+                    console.error('Erro ao acessar tabela users:', error);
+                    return false;
+                }
+                return true;
+            } catch (error) {
+                console.error('Erro ao verificar tabela:', error);
+                return false;
+            }
+        }
+
         // VERIFICAR CONFIGURAÇÃO DO SISTEMA
         async function checkSystemSetup() {
             try {
@@ -509,20 +567,6 @@
                 
                 if (!supabase) {
                     throw new Error('Cliente Supabase não inicializado');
-                }
-
-                // Primeiro, verificar se a tabela users existe
-                const { data: tables, error: tablesError } = await supabase
-                    .from('users')
-                    .select('count')
-                    .limit(1);
-
-                // Se der erro, a tabela provavelmente não existe
-                if (tablesError) {
-                    console.log('Tabela users não existe ou tem problemas de RLS');
-                    showSetupSection();
-                    showDebugInfo('Tabela users não encontrada. Será criada automaticamente.');
-                    return;
                 }
 
                 // Verificar se existe algum usuário director
@@ -584,24 +628,6 @@
             }
         }
 
-        // CRIAR TABELA USERS SE NÃO EXISTIR
-        async function createUsersTable() {
-            try {
-                // Tentar criar a tabela users (isso pode falhar devido a permissões)
-                const { error } = await supabase.rpc('create_users_table_if_not_exists');
-                
-                if (error) {
-                    console.log('Não foi possível criar tabela via RPC, tentando inserção direta...');
-                    // Se RPC falhar, tentaremos criar a tabela através de uma inserção
-                }
-                
-                return true;
-            } catch (error) {
-                console.error('Erro ao criar tabela:', error);
-                return false;
-            }
-        }
-
         // CONFIGURAR CREDENCIAIS DO DIRECTOR
         async function setupDirector() {
             const directorName = document.getElementById('director-name').value.trim();
@@ -645,7 +671,10 @@
 
                 // 1. Primeiro criar o usuário no Supabase Auth
                 showDebugInfo('Criando usuário no Auth...');
-                const { data: authData, error: authError } = await supabase.auth.signUp({
+                let authData;
+                let authError;
+
+                ({ data: authData, error: authError } = await supabase.auth.signUp({
                     email: directorEmail,
                     password: directorPassword,
                     options: {
@@ -654,7 +683,7 @@
                             role: 'director'
                         }
                     }
-                });
+                }));
 
                 if (authError) {
                     console.error('Erro no Auth:', authError);
@@ -681,9 +710,13 @@
                     showDebugInfo('✅ Usuário criado com sucesso no Auth');
                 }
 
-                // 2. Tentar criar a tabela users se necessário
+                // 2. Verificar se tabela users existe
                 showDebugInfo('Verificando tabela users...');
-                await createUsersTable();
+                const tableExists = await checkUsersTable();
+                if (!tableExists) {
+                    throw new Error('Tabela "users" não encontrada. Verifique se foi criada corretamente no Supabase.');
+                }
+                showDebugInfo('✅ Tabela users encontrada');
 
                 // 3. Inserir na tabela users
                 showDebugInfo('Inserindo na tabela users...');
@@ -709,11 +742,7 @@
                 if (userError) {
                     console.error('Erro ao inserir na tabela users:', userError);
                     
-                    // Se for erro de tabela não existente, tentar criar estrutura básica
-                    if (userError.message.includes('does not exist')) {
-                        showDebugInfo('Tabela users não existe. Tentando criar estrutura...');
-                        throw new Error('A tabela "users" não existe no banco de dados. É necessário criá-la primeiro no Supabase.');
-                    } else if (userError.message.includes('violates row-level security')) {
+                    if (userError.message.includes('violates row-level security')) {
                         throw new Error('Problema de permissões (RLS). Verifique as políticas da tabela users no Supabase.');
                     } else {
                         throw userError;
@@ -722,11 +751,7 @@
 
                 showDebugInfo('✅ Director inserido na tabela users');
 
-                // 4. Criar dados básicos do sistema se não existirem
-                showDebugInfo('Criando dados do sistema...');
-                await createSystemData();
-
-                // 5. Mostrar resultados
+                // 4. Mostrar resultados
                 document.getElementById('result-name').textContent = directorName;
                 document.getElementById('result-email').textContent = directorEmail;
                 document.getElementById('setup-results').style.display = 'block';
@@ -734,7 +759,7 @@
                 showAlert('✅ Sistema configurado com sucesso! Director criado.', 'success');
                 showDebugInfo('✅ Configuração concluída com sucesso!');
                 
-                // 6. Atualizar interface e redirecionar
+                // 5. Atualizar interface e redirecionar
                 setTimeout(() => {
                     showLoginSection();
                     showAlert('Agora você pode fazer login como Director.', 'info');
@@ -767,29 +792,6 @@
             } finally {
                 setupBtn.innerHTML = '⚙️ Configurar Sistema & Criar Director';
                 setupBtn.disabled = false;
-            }
-        }
-
-        // CRIAR DADOS BÁSICOS DO SISTEMA
-        async function createSystemData() {
-            try {
-                // Tentar criar ano letivo
-                const { error: yearError } = await supabase
-                    .from('school_years')
-                    .upsert({
-                        year: '2024-2025',
-                        is_active: true
-                    }, {
-                        onConflict: 'year'
-                    });
-
-                if (yearError && !yearError.message.includes('does not exist')) {
-                    console.log('Tabela school_years não existe, ignorando...');
-                }
-
-            } catch (error) {
-                console.log('Erro ao criar dados do sistema (pode ser normal se tabelas não existirem):', error);
-                // Não bloquear o processo principal se houver erro aqui
             }
         }
 
@@ -930,9 +932,18 @@
         }
 
         // INICIALIZAÇÃO
-        document.addEventListener('DOMContentLoaded', () => {
-            checkSystemSetup();
-            checkExistingSession();
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Teste detalhado de conexão
+            const connectionOK = await testDetailedConnection();
+            
+            if (connectionOK) {
+                await checkSystemSetup();
+                await checkExistingSession();
+            } else {
+                showAlert('❌ Problema de configuração do banco de dados. Verifique o Supabase.', 'danger');
+                showSystemStatus('❌ Sistema offline - Verifique configuração', 'bad');
+            }
+            
             document.getElementById('loginForm').addEventListener('submit', handleLogin);
             
             // Event listeners para configuração
@@ -950,4 +961,4 @@
         });
     </script>
 </body>
-</html>
+                            </html>
