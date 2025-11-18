@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colégio 27 de Março - Sistema Acadêmico</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a3a6c, #2c5aa0);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            width: 100%;
+            max-width: 500px;
+            transition: all 0.3s ease;
+        }
+        .school-header {
+            background: linear-gradient(135deg, #1a3a6c, #2c5aa0);
+            color: white;
+            text-align: center;
+            padding: 40px 30px;
+            position: relative;
+        }
+        .school-header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,149.3C960,160,1056,160,1152,138.7C1248,117,1344,75,1392,53.3L1440,32L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            background-size: cover;
+            opacity: 0.1;
+        }
+        .school-logo {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+        }
+        .school-header h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        .school-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+        .login-form {
+            padding: 40px;
+        }
+        .form-group {
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 1rem;
+        }
+        input, select {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3498db;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.1);
+            transform: translateY(-2px);
+        }
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+        }
+        .login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(39, 174, 96, 0.4);
+        }
+        .login-btn:active {
+            transform: translateY(-1px);
+        }
+        .login-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .setup-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
+        }
+        .setup-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(230, 126, 34, 0.4);
+        }
+        .setup-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .alert {
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 0.95rem;
+            font-weight: 500;
+            border: 2px solid transparent;
+        }
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+        }
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+        .alert-warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border-color: #ffeaa7;
+        }
+        .alert-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border-color: #bee5eb;
+        }
+        .system-info {
+            background: #f8f9fa;
+            padding: 25px;
+            text-align: center;
+            border-top: 3px solid #e9ecef;
+        }
+        .info-item {
+            margin-bottom: 10px;
+            color: #6c757d;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+        .setup-section {
+            background: linear-gradient(135deg, #e8f4fd, #d4edda);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border-left: 5px solid #3498db;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        .setup-title {
+            color: #2c5aa0;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+        .credentials-display {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            border: 3px dashed #27ae60;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .credential-item {
+            margin-bottom: 12px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        .credential-label {
+            font-weight: 600;
+            color: #2c3e50;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .credential-value {
+            color: #e67e22;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        .setup-complete {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 20px;
+            border: 2px solid #27ae60;
+        }
+        .welcome-message {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2c3e50;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        .system-status {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+        .status-good { color: #27ae60; }
+        .status-warning { color: #e67e22; }
+        .status-bad { color: #e74c3c; }
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        .password-toggle {
+            position: relative;
+        }
+        .toggle-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #7f8c8d;
+            font-size: 1.2rem;
+            background: none;
+            border: none;
+            padding: 5px;
+        }
+        .password-strength {
+            margin-top: 8px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .strength-weak { color: #e74c3c; }
+        .strength-medium { color: #f39c12; }
+        .strength-strong { color: #27ae60; }
+        .debug-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-family: monospace;
+            font-size: 0.8rem;
+            border-left: 4px solid #e74c3c;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="school-header">
+            <div class="school-logo">🏫</div>
+            <h1>Colégio 27 de Março</h1>
+            <p>Sistema Acadêmico Integrado</p>
+        </div>
+
+        <div class="login-form">
+            <div id="alert-container"></div>
+
+            <!-- Seção de Configuração Inicial -->
+            <div id="setup-section" class="setup-section" style="display: none;">
+                <h3 class="setup-title">🎯 Configuração Inicial do Sistema</h3>
+                
+                <div class="welcome-message">
+                    <p><strong>Bem-vindo ao Sistema Acadêmico do Colégio 27 de Março!</strong></p>
+                    <p>Para começar, configure as credenciais do Director. Esta é uma ação única necessária para ativar o sistema.</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="director-name">Nome Completo do Director:</label>
+                    <input type="text" id="director-name" placeholder="Ex: Dr. João Manuel Silva" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="director-email">Email Institucional:</label>
+                    <input type="email" id="director-email" readonly>
+                    <small style="color: #7f8c8d; font-size: 0.85rem;">Email gerado automaticamente</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="director-password">Senha de Acesso:</label>
+                    <div class="password-toggle">
+                        <input type="password" id="director-password" placeholder="Crie uma senha segura" required>
+                        <button type="button" class="toggle-icon" onclick="togglePassword('director-password')">👁️</button>
+                    </div>
+                    <div id="password-strength" class="password-strength">
+                        <span id="strength-icon">🔒</span>
+                        <span id="strength-text">Digite uma senha</span>
+                    </div>
+                </div>
+
+                <div id="debug-info" class="debug-info" style="display: none;">
+                    <strong>🔧 Informações de Debug:</strong>
+                    <div id="debug-content"></div>
+                </div>
+
+                <div id="setup-results" style="display: none;">
+                    <div class="credentials-display fade-in">
+                        <h4 style="color: #27ae60; margin-bottom: 15px; text-align: center;">✅ Credenciais Criadas com Sucesso!</h4>
+                        <div class="credential-item">
+                            <span class="credential-label">Director:</span>
+                            <span class="credential-value" id="result-name"></span>
+                        </div>
+                        <div class="credential-item">
+                            <span class="credential-label">Email de Acesso:</span>
+                            <span class="credential-value" id="result-email"></span>
+                        </div>
+                        <div class="credential-item">
+                            <span class="credential-label">Senha:</span>
+                            <span class="credential-value" id="result-password"></span>
+                        </div>
+                    </div>
+                    <div class="setup-complete fade-in">
+                        <p style="font-size: 1.1rem; font-weight: 600; margin-bottom: 10px;">🎉 Configuração Concluída!</p>
+                        <p>O sistema está pronto para uso. Você será redirecionado para o login automaticamente.</p>
+                    </div>
+                </div>
+
+                <button type="button" class="setup-btn" id="setupBtn" onclick="setupDirector()">
+                    ⚙️ Configurar Sistema & Criar Director
+                </button>
+            </div>
+
+            <!-- Formulário de Login Normal -->
+            <form id="loginForm">
+                <div class="welcome-message">
+                    <p><strong>Bem-vindo de volta!</strong></p>
+                    <p>Entre com suas credenciais para acessar o sistema.</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">📧 Email Institucional:</label>
+                    <input type="email" id="email" required placeholder="seu.email@colegio27demarco.com">
+                </div>
+
+                <div class="form-group password-toggle">
+                    <label for="password">🔒 Senha:</label>
+                    <input type="password" id="password" required placeholder="Sua senha de acesso">
+                    <button type="button" class="toggle-icon" onclick="togglePassword('password')">👁️</button>
+                </div>
+
+                <button type="submit" class="login-btn" id="loginBtn">
+                    🚀 Entrar no Sistema
+                </button>
+            </form>
+        </div>
+
+        <div class="system-info">
+            <div class="info-item"><strong>📅 Ano Letivo:</strong> 2024-2025</div>
+            <div class="info-item"><strong>🛡️ Sistema Seguro & Verificado</strong></div>
+            <div class="info-item system-status" id="system-status">🔍 Verificando sistema...</div>
+        </div>
+    </div>
+
+    <script>
+        // BANCO DE DADOS LOCALSTORAGE - CORRIGIDO
+        const DB = {
+            init: function() {
+                console.log('🔄 Inicializando banco de dados...');
+                
+                // Inicializar tabelas se não existirem
+                if (!localStorage.getItem('users')) {
+                    localStorage.setItem('users', JSON.stringify([]));
+                    console.log('✅ Tabela users criada');
+                }
+                if (!localStorage.getItem('students')) {
+                    localStorage.setItem('students', JSON.stringify([]));
+                }
+                if (!localStorage.getItem('teachers')) {
+                    localStorage.setItem('teachers', JSON.stringify([]));
+                }
+                if (!localStorage.getItem('classes')) {
+                    localStorage.setItem('classes', JSON.stringify([
+                        { id: 1, name: 'A', grade: '10', created_at: new Date().toISOString() },
+                        { id: 2, name: 'B', grade: '10', created_at: new Date().toISOString() },
+                        { id: 3, name: 'A', grade: '11', created_at: new Date().toISOString() },
+                        { id: 4, name: 'B', grade: '11', created_at: new Date().toISOString() },
+                        { id: 5, name: 'A', grade: '12', created_at: new Date().toISOString() }
+                    ]));
+                }
+                if (!localStorage.getItem('school_years')) {
+                    localStorage.setItem('school_years', JSON.stringify([
+                        { id: 1, year: '2024-2025', is_active: true, created_at: new Date().toISOString() }
+                    ]));
+                }
+                if (!localStorage.getItem('grades')) {
+                    localStorage.setItem('grades', JSON.stringify([]));
+                }
+                if (!localStorage.getItem('disciplines')) {
+                    localStorage.setItem('disciplines', JSON.stringify([
+                        { id: 1, name: 'Matemática', created_at: new Date().toISOString() },
+                        { id: 2, name: 'Português', created_at: new Date().toISOString() },
+                        { id: 3, name: 'Física', created_at: new Date().toISOString() },
+                        { id: 4, name: 'Química', created_at: new Date().toISOString() },
+                        { id: 5, name: 'História', created_at: new Date().toISOString() }
+                    ]));
+                }
+                if (!localStorage.getItem('payments')) {
+                    localStorage.setItem('payments', JSON.stringify([]));
+                }
+                if (!localStorage.getItem('announcements')) {
+                    localStorage.setItem('announcements', JSON.stringify([]));
+                }
+                console.log('✅ Banco de dados localStorage inicializado');
+            },
+
+            // Operações genéricas
+            get: function(table) {
+                const data = JSON.parse(localStorage.getItem(table)) || [];
+                console.log(`📂 GET ${table}:`, data.length, 'registros');
+                return data;
+            },
+
+            insert: function(table, data) {
+                const items = this.get(table);
+                data.id = this.generateId();
+                data.created_at = new Date().toISOString();
+                items.push(data);
+                localStorage.setItem(table, JSON.stringify(items));
+                console.log(`✅ INSERT em ${table}:`, data);
+                return data;
+            },
+
+            update: function(table, id, updates) {
+                const items = this.get(table);
+                const index = items.findIndex(item => item.id == id);
+                if (index !== -1) {
+                    items[index] = { ...items[index], ...updates };
+                    localStorage.setItem(table, JSON.stringify(items));
+                    console.log(`✏️ UPDATE em ${table} ID ${id}:`, updates);
+                    return items[index];
+                }
+                return null;
+            },
+
+            delete: function(table, id) {
+                const items = this.get(table);
+                const filtered = items.filter(item => item.id != id);
+                localStorage.setItem(table, JSON.stringify(filtered));
+                console.log(`🗑️ DELETE em ${table} ID ${id}`);
+            },
+
+            find: function(table, field, value) {
+                const items = this.get(table);
+                const result = items.find(item => item[field] === value);
+                console.log(`🔍 FIND em ${table} ${field}=${value}:`, result);
+                return result;
+            },
+
+            where: function(table, field, value) {
+                const items = this.get(table);
+                const results = items.filter(item => item[field] === value);
+                console.log(`🔍 WHERE em ${table} ${field}=${value}:`, results.length, 'resultados');
+                return results;
+            },
+
+            generateId: function() {
+                return Date.now().toString(36) + Math.random().toString(36).substr(2);
+            }
+        };
+
+        // Inicializar banco de dados
+        DB.init();
+
+        // GERAR EMAIL INSTITUCIONAL - CORRIGIDO
+        function generateInstitutionalEmail(fullName) {
+            if (!fullName) return '';
+            
+            // Remover acentos e caracteres especiais
+            const normalized = fullName.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+            
+            // Separar nome e sobrenome
+            const names = normalized.split(' ').filter(name => name.length > 0);
+            
+            if (names.length < 2) return '';
+            
+            // Pegar primeiro nome e último sobrenome
+            const firstName = names[0].toLowerCase();
+            const lastName = names[names.length - 1].toLowerCase();
+            
+            // Gerar email no formato: primeiro.ultimo@colegio27demarco.com
+            const email = `${firstName}.${lastName}@colegio27demarco.com`;
+            console.log('📧 Email gerado:', email);
+            return email;
+        }
+
+        // ATUALIZAR EMAIL QUANDO NOME MUDAR - CORRIGIDO
+        function updateEmailFromName() {
+            const nameInput = document.getElementById('director-name');
+            const emailInput = document.getElementById('director-email');
+            
+            const fullName = nameInput.value.trim();
+            const email = generateInstitutionalEmail(fullName);
+            
+            emailInput.value = email;
+        }
+
+        // VERIFICAR FORÇA DA SENHA
+        function checkPasswordStrength(password) {
+            const strengthElement = document.getElementById('password-strength');
+            const iconElement = document.getElementById('strength-icon');
+            const textElement = document.getElementById('strength-text');
+            
+            if (!password) {
+                strengthElement.className = 'password-strength';
+                iconElement.textContent = '🔒';
+                textElement.textContent = 'Digite uma senha';
+                return 'empty';
+            }
+            
+            let score = 0;
+            
+            // Verificar comprimento
+            if (password.length >= 8) score++;
+            if (password.length >= 12) score++;
+            
+            // Verificar caracteres
+            if (/[a-z]/.test(password)) score++;
+            if (/[A-Z]/.test(password)) score++;
+            if (/[0-9]/.test(password)) score++;
+            if (/[^a-zA-Z0-9]/.test(password)) score++;
+            
+            if (score <= 2) {
+                strengthElement.className = 'password-strength strength-weak';
+                iconElement.textContent = '🔴';
+                textElement.textContent = 'Senha fraca';
+                return 'weak';
+            } else if (score <= 4) {
+                strengthElement.className = 'password-strength strength-medium';
+                iconElement.textContent = '🟡';
+                textElement.textContent = 'Senha média';
+                return 'medium';
+            } else {
+                strengthElement.className = 'password-strength strength-strong';
+                iconElement.textContent = '🟢';
+                textElement.textContent = 'Senha forte';
+                return 'strong';
+            }
+        }
+
+        // TOGGLE VISIBILIDADE DA SENHA
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const icon = input.parentNode.querySelector('.toggle-icon');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.textContent = '🔒';
+            } else {
+                input.type = 'password';
+                icon.textContent = '👁️';
+            }
+        }
+
+        // VERIFICAR CONFIGURAÇÃO DO SISTEMA - CORRIGIDO
+        function checkSystemSetup() {
+            console.log('🔍 Verificando configuração do sistema...');
+            showSystemStatus('🔍 Verificando configuração do sistema...', 'warning');
+            
+            try {
+                const directorUsers = DB.where('users', 'role', 'director');
+                console.log('Director users encontrados:', directorUsers);
+
+                if (!directorUsers || directorUsers.length === 0) {
+                    console.log('❌ Nenhum director encontrado - mostrando setup');
+                    showSetupSection();
+                    showDebugInfo('Nenhum director encontrado. Configure o primeiro director.');
+                } else {
+                    console.log('✅ Director encontrado - mostrando login');
+                    showLoginSection();
+                    showSystemStatus('✅ Sistema configurado e pronto', 'good');
+                    showDebugInfo(`Director encontrado: ${directorUsers[0].email}`);
+                }
+            } catch (error) {
+                console.error('Erro ao verificar configuração:', error);
+                showSetupSection();
+                showSystemStatus('⚠️ Sistema não configurado', 'warning');
+                showDebugInfo(`Erro geral: ${error.message}`);
+            }
+        }
+
+        function showSetupSection() {
+            console.log('👁️ Mostrando seção de setup');
+            document.getElementById('setup-section').style.display = 'block';
+            document.getElementById('loginForm').style.display = 'none';
+            showSystemStatus('⚠️ Configure o Director para começar', 'warning');
+            showAlert('Bem-vindo! Configure primeiro as credenciais do Director para ativar o sistema.', 'info');
+        }
+
+        function showLoginSection() {
+            console.log('👁️ Mostrando seção de login');
+            document.getElementById('setup-section').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'block';
+            showSystemStatus('✅ Sistema configurado e pronto', 'good');
+        }
+
+        function showSystemStatus(message, type) {
+            const statusElement = document.getElementById('system-status');
+            statusElement.textContent = message;
+            statusElement.className = `info-item system-status status-${type}`;
+        }
+
+        function showDebugInfo(message) {
+            const debugElement = document.getElementById('debug-info');
+            const debugContent = document.getElementById('debug-content');
+            
+            if (debugElement && debugContent) {
+                debugContent.textContent = message;
+                debugElement.style.display = 'block';
+            }
+        }
+
+        // CONFIGURAR CREDENCIAIS DO DIRECTOR - CORRIGIDO
+        function setupDirector() {
+            console.log('🚀 Iniciando configuração do Director...');
+            
+            const directorName = document.getElementById('director-name').value.trim();
+            const directorEmail = document.getElementById('director-email').value;
+            const directorPassword = document.getElementById('director-password').value;
+            const setupBtn = document.getElementById('setupBtn');
+
+            console.log('Dados do formulário:', { directorName, directorEmail, directorPassword });
+
+            // Validações
+            if (!directorName) {
+                showAlert('Por favor, insira o nome completo do Director.', 'warning');
+                document.getElementById('director-name').focus();
+                return;
+            }
+
+            if (directorName.length < 5) {
+                showAlert('Por favor, insira o nome completo do Director (mínimo 5 caracteres).', 'warning');
+                return;
+            }
+
+            if (!directorEmail || !directorEmail.includes('@')) {
+                showAlert('Email inválido. Verifique se o nome completo foi preenchido corretamente.', 'warning');
+                return;
+            }
+
+            if (!directorPassword) {
+                showAlert('Por favor, crie uma senha para o Director.', 'warning');
+                document.getElementById('director-password').focus();
+                return;
+            }
+
+            const passwordStrength = checkPasswordStrength(directorPassword);
+            if (passwordStrength === 'weak') {
+                showAlert('A senha é muito fraca. Use pelo menos 8 caracteres com letras maiúsculas, minúsculas e números.', 'warning');
+                return;
+            }
+
+            setupBtn.innerHTML = '⏳ Configurando Sistema...';
+            setupBtn.disabled = true;
+
+            try {
+                showDebugInfo('Iniciando configuração do Director...');
+
+                // Verificar se já existe um director
+                const existingDirector = DB.find('users', 'role', 'director');
+                if (existingDirector) {
+                    throw new Error('Já existe um Director configurado no sistema.');
+                }
+
+                // Verificar se o email já existe
+                const existingUser = DB.find('users', 'email', directorEmail);
+                if (existingUser) {
+                    throw new Error('Este email já está em uso. Use um nome diferente.');
+                }
+
+                // Criar usuário director
+                console.log('📝 Criando usuário director...');
+                const userRecord = {
+                    email: directorEmail,
+                    password: directorPassword,
+                    role: 'director',
+                    name: directorName,
+                    username: directorEmail.split('@')[0],
+                    user_data: {
+                        name: directorName,
+                        department: 'Direção',
+                        setup_complete: true,
+                        setup_date: new Date().toISOString()
+                    }
+                };
+
+                const newUser = DB.insert('users', userRecord);
+                console.log('✅ Director criado:', newUser);
+
+                showDebugInfo('✅ Director criado com sucesso no sistema');
+
+                // Mostrar resultados
+                document.getElementById('result-name').textContent = directorName;
+                document.getElementById('result-email').textContent = directorEmail;
+                document.getElementById('result-password').textContent = directorPassword;
+                document.getElementById('setup-results').style.display = 'block';
+                
+                showAlert('✅ Sistema configurado com sucesso! Director criado.', 'success');
+                showDebugInfo('✅ Configuração concluída com sucesso!');
+                
+                // Atualizar interface e redirecionar
+                setTimeout(() => {
+                    showLoginSection();
+                    showAlert('Agora você pode fazer login como Director.', 'info');
+                    // Preencher automaticamente o login
+                    document.getElementById('email').value = directorEmail;
+                    document.getElementById('password').value = directorPassword;
+                }, 5000);
+
+            } catch (error) {
+                console.error('❌ Erro na configuração:', error);
+                
+                let errorMessage = 'Erro ao configurar o sistema';
+                if (error.message.includes('já existe')) {
+                    errorMessage = 'O Director já está configurado. Você pode fazer login.';
+                } else if (error.message.includes('email já está em uso')) {
+                    errorMessage = 'Este email já está em uso. Use um nome diferente para gerar outro email.';
+                }
+                
+                showAlert(errorMessage, 'danger');
+                showDebugInfo(`Erro: ${error.message}`);
+            } finally {
+                setupBtn.innerHTML = '⚙️ Configurar Sistema & Criar Director';
+                setupBtn.disabled = false;
+            }
+        }
+
+        // VERIFICAR SESSÃO EXISTENTE
+        function checkExistingSession() {
+            try {
+                const session = JSON.parse(localStorage.getItem('currentUser'));
+                if (session) {
+                    console.log('Sessão encontrada:', session);
+                    showDebugInfo(`Sessão encontrada para: ${session.email}`);
+                    redirectToDashboard(session.role);
+                }
+            } catch (error) {
+                console.error('Erro ao verificar sessão:', error);
+            }
+        }
+
+        // REDIRECIONAR PARA DASHBOARD
+        function redirectToDashboard(role) {
+            console.log('🔄 Redirecionando para dashboard:', role);
+            const pages = { 
+                'student': 'aluno.html', 
+                'teacher': 'professor.html', 
+                'coordinator': 'pedagogico.html', 
+                'admin': 'secretaria.html', 
+                'director': 'director.html' 
+            };
+            
+            if (pages[role]) {
+                window.location.href = pages[role];
+            }
+        }
+
+        // PROCESSAR LOGIN - CORRIGIDO
+        function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const loginBtn = document.getElementById('loginBtn');
+
+            console.log('🔐 Tentativa de login:', email);
+
+            if (!email || !password) {
+                showAlert('Por favor, preencha todos os campos.', 'warning');
+                return;
+            }
+
+            if (!email.includes('@colegio27demarco.com')) {
+                showAlert('Por favor, use um email institucional @colegio27demarco.com', 'warning');
+                return;
+            }
+
+            loginBtn.innerHTML = '⏳ Autenticando...';
+            loginBtn.disabled = true;
+
+            try {
+                const user = DB.find('users', 'email', email);
+                console.log('Usuário encontrado:', user);
+
+                if (!user) {
+                    throw new Error('Usuário não encontrado.');
+                }
+
+                if (user.password !== password) {
+                    throw new Error('Senha incorreta.');
+                }
+
+                const userSession = { 
+                    id: user.id, 
+                    email: user.email, 
+                    role: user.role, 
+                    name: user.name,
+                    username: user.username,
+                    user_data: user.user_data 
+                };
+                
+                localStorage.setItem('currentUser', JSON.stringify(userSession));
+                console.log('✅ Login bem-sucedido:', userSession);
+                showAlert('✅ Login realizado com sucesso!', 'success');
+                
+                setTimeout(() => redirectToDashboard(user.role), 1500);
+
+            } catch (error) {
+                console.error('❌ Erro no login:', error);
+                
+                let errorMessage = 'Erro ao fazer login';
+                if (error.message.includes('não encontrado') || error.message.includes('incorreta')) {
+                    errorMessage = 'Email ou senha incorretos. Verifique suas credenciais.';
+                }
+                
+                showAlert(errorMessage, 'danger');
+            } finally {
+                loginBtn.innerHTML = '🚀 Entrar no Sistema';
+                loginBtn.disabled = false;
+            }
+        }
+
+        // MOSTRAR ALERTA
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} fade-in`;
+            alertDiv.innerHTML = `
+                <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    <span>${getAlertIcon(type)}</span>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            const container = document.getElementById('alert-container');
+            container.innerHTML = '';
+            container.appendChild(alertDiv);
+            
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.parentNode.removeChild(alertDiv);
+                }
+            }, 6000);
+        }
+
+        function getAlertIcon(type) {
+            const icons = {
+                'success': '✅',
+                'danger': '❌',
+                'warning': '⚠️',
+                'info': 'ℹ️'
+            };
+            return icons[type] || '💡';
+        }
+
+        // INICIALIZAÇÃO
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🚀 Inicializando sistema...');
+            checkSystemSetup();
+            checkExistingSession();
+            document.getElementById('loginForm').addEventListener('submit', handleLogin);
+            
+            // Event listeners para configuração
+            document.getElementById('director-name').addEventListener('input', updateEmailFromName);
+            document.getElementById('director-password').addEventListener('input', function() {
+                checkPasswordStrength(this.value);
+            });
+            
+            // Focar no campo de nome quando mostrar a configuração
+            setTimeout(() => {
+                if (document.getElementById('setup-section').style.display !== 'none') {
+                    document.getElementById('director-name').focus();
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Colégio 27 de Março - Área do Professor</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #f0f4f8, #e2e8f0); padding: 20px; min-height: 100vh; }
+    .school-header { background: linear-gradient(135deg, #1a3a6c, #2c5aa0); color: white; text-align: center; padding: 30px 20px; border-radius: 15px; margin-bottom: 30px; }
+    .user-header { background: white; padding: 20px; border-radius: 12px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; }
+    .tabs { display: flex; background: white; border-radius: 10px; overflow: hidden; margin-bottom: 25px; }
+    .tab { flex: 1; padding: 15px; text-align: center; cursor: pointer; font-weight: 600; background: white; border: none; }
+    .tab.active { background-color: #e67e22; color: white; }
+    .tab-content { display: none; background: white; padding: 25px; border-radius: 10px; margin-bottom: 25px; }
+    .tab-content.active { display: block; }
+    .card { background: white; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .btn { background-color: #3498db; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; margin: 2px; }
+  </style>
+</head>
+<body>
+
+  <div class="school-header">
+    <div class="school-logo">🏫</div>
+    <h1>Colégio 27 de Março</h1>
+    <p>Área do Professor</p>
+  </div>
+
+  <div class="user-header">
+    <div class="user-info">
+      <h2 id="teacher-name">Carregando...</h2>
+      <div class="user-details">
+        Usuário: <span id="teacher-username">-</span> | 
+        Setor: Professor
+      </div>
+    </div>
+    <button class="logout-btn" onclick="logout()">Sair</button>
+  </div>
+
+  <div id="alert-container"></div>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="dashboard">Dashboard</div>
+    <div class="tab" data-tab="grades">Lançar Notas</div>
+    <div class="tab" data-tab="notifications">Notificações</div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="tab-content active" id="dashboard-tab">
+    <div class="card">
+      <h3 class="card-title">📊 Minhas Turmas</h3>
+      <div id="teacher-classes">
+        <div class="loading">Carregando suas turmas...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LANÇAR NOTAS -->
+  <div class="tab-content" id="grades-tab">
+    <div class="card">
+      <h3 class="card-title">📝 Lançar Notas</h3>
+      <div id="grades-content">
+        <div class="loading">Carregando formulário de notas...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTIFICAÇÕES -->
+  <div class="tab-content" id="notifications-tab">
+    <div class="card">
+      <h3 class="card-title">🔔 Notificações</h3>
+      <div id="notifications-content">
+        <div class="loading">Carregando notificações...</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // BANCO DE DADOS LOCALSTORAGE
+    const DB = {
+        init: function() {
+            if (!localStorage.getItem('users')) localStorage.setItem('users', JSON.stringify([]));
+            if (!localStorage.getItem('students')) localStorage.setItem('students', JSON.stringify([]));
+            if (!localStorage.getItem('teachers')) localStorage.setItem('teachers', JSON.stringify([]));
+            if (!localStorage.getItem('classes')) localStorage.setItem('classes', JSON.stringify([
+                { id: 1, name: 'A', grade: '10', created_at: new Date().toISOString() },
+                { id: 2, name: 'B', grade: '10', created_at: new Date().toISOString() },
+                { id: 3, name: 'A', grade: '11', created_at: new Date().toISOString() },
+                { id: 4, name: 'B', grade: '11', created_at: new Date().toISOString() },
+                { id: 5, name: 'A', grade: '12', created_at: new Date().toISOString() }
+            ]));
+            if (!localStorage.getItem('school_years')) localStorage.setItem('school_years', JSON.stringify([
+                { id: 1, year: '2024-2025', is_active: true, created_at: new Date().toISOString() }
+            ]));
+            if (!localStorage.getItem('grades')) localStorage.setItem('grades', JSON.stringify([]));
+            if (!localStorage.getItem('disciplines')) localStorage.setItem('disciplines', JSON.stringify([
+                { id: 1, name: 'Matemática', created_at: new Date().toISOString() },
+                { id: 2, name: 'Português', created_at: new Date().toISOString() },
+                { id: 3, name: 'Física', created_at: new Date().toISOString() },
+                { id: 4, name: 'Química', created_at: new Date().toISOString() },
+                { id: 5, name: 'História', created_at: new Date().toISOString() }
+            ]));
+            if (!localStorage.getItem('payments')) localStorage.setItem('payments', JSON.stringify([]));
+            if (!localStorage.getItem('announcements')) localStorage.setItem('announcements', JSON.stringify([]));
+        },
+
+        get: function(table) { return JSON.parse(localStorage.getItem(table)) || []; },
+        insert: function(table, data) {
+            const items = this.get(table);
+            data.id = this.generateId();
+            data.created_at = new Date().toISOString();
+            items.push(data);
+            localStorage.setItem(table, JSON.stringify(items));
+            return data;
+        },
+        update: function(table, id, updates) {
+            const items = this.get(table);
+            const index = items.findIndex(item => item.id == id);
+            if (index !== -1) {
+                items[index] = { ...items[index], ...updates };
+                localStorage.setItem(table, JSON.stringify(items));
+                return items[index];
+            }
+            return null;
+        },
+        where: function(table, field, value) {
+            const items = this.get(table);
+            return items.filter(item => item[field] === value);
+        },
+        generateId: function() { return Date.now().toString(36) + Math.random().toString(36).substr(2); }
+    };
+
+    // VARIÁVEIS GLOBAIS
+    let currentUser = null;
+    let students = [];
+    let classes = [];
+    let grades = [];
+    let disciplines = [];
+    let teacherGrades = [];
+    let rejectedGrades = [];
+
+    // CARREGAR DADOS
+    async function loadData() {
+      try {
+        const savedUser = localStorage.getItem('currentUser');
+        if (!savedUser) {
+          window.location.href = 'index.html';
+          return;
+        }
+
+        currentUser = JSON.parse(savedUser);
+        
+        if (currentUser.role !== 'teacher') {
+          showAlert('Acesso não autorizado!', 'danger');
+          setTimeout(() => window.location.href = 'index.html', 2000);
+          return;
+        }
+
+        // Carregar dados do localStorage
+        students = DB.get('students');
+        classes = DB.get('classes');
+        grades = DB.get('grades');
+        disciplines = DB.get('disciplines');
+
+        // Filtrar notas do professor
+        teacherGrades = grades.filter(g => g.teacher_id === currentUser.id);
+        rejectedGrades = teacherGrades.filter(g => g.status === 'rejected');
+
+        updateUserInfo();
+        loadTabContent('dashboard');
+
+      } catch (error) {
+        console.error('Erro ao carregar dados:', error);
+        showAlert('Erro ao carregar dados do sistema', 'warning');
+      }
+    }
+
+    // ATUALIZAR INFORMAÇÕES DO USUÁRIO
+    function updateUserInfo() {
+      document.getElementById('teacher-name').textContent = currentUser.name;
+      document.getElementById('teacher-username').textContent = currentUser.username;
+    }
+
+    // CARREGAR CONTEÚDO DAS TABS
+    function loadTabContent(tabId) {
+      switch(tabId) {
+        case 'dashboard': loadDashboardTab(); break;
+        case 'grades': loadGradesTab(); break;
+        case 'notifications': loadNotificationsTab(); break;
+      }
+    }
+
+    // TAB DASHBOARD
+    function loadDashboardTab() {
+      const container = document.getElementById('teacher-classes');
+      if (!container) return;
+
+      // Simular que o professor tem acesso a todas as turmas
+      let classesHTML = `
+        <div class="class-grid">
+          ${classes.map(classe => {
+            const classStudents = students.filter(s => s.class_id === classe.id);
+            const classGrades = teacherGrades.filter(g => {
+              const student = students.find(s => s.id === g.student_id);
+              return student && student.class_id === classe.id;
+            });
+            
+            return `
+              <div class="class-card">
+                <div class="class-header">
+                  <div class="class-name">${classe.grade}ª ${classe.name}</div>
+                  <div class="class-grade">${classStudents.length} alunos</div>
+                </div>
+                <div class="class-stats">
+                  <div class="class-stat">
+                    <div class="stat-value">${classGrades.length}</div>
+                    <div class="stat-label">Notas Lançadas</div>
+                  </div>
+                </div>
+                <button class="btn" onclick="loadGradesTab()">
+                  📝 Lançar Notas
+                </button>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+
+      container.innerHTML = classesHTML;
+    }
+
+    // TAB LANÇAR NOTAS
+    function loadGradesTab() {
+      const container = document.getElementById('grades-content');
+      if (!container) return;
+
+      let gradesHTML = `
+        <div class="form-group">
+          <label>Selecionar Turma:</label>
+          <select id="grade-class" onchange="loadClassStudents()">
+            <option value="">Selecione a turma</option>
+            ${classes.map(c => `<option value="${c.id}">${c.grade}ª ${c.name}</option>`).join('')}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Selecionar Disciplina:</label>
+          <select id="grade-discipline">
+            <option value="">Selecione a disciplina</option>
+            ${disciplines.map(d => `<option value="${d.id}">${d.name}</option>`).join('')}
+          </select>
+        </div>
+        <div id="students-grades-container"></div>
+      `;
+
+      container.innerHTML = gradesHTML;
+    }
+
+    function loadClassStudents() {
+      const classId = document.getElementById('grade-class').value;
+      const disciplineId = document.getElementById('grade-discipline').value;
+      
+      if (!classId || !disciplineId) return;
+
+      const classStudents = students.filter(s => s.class_id === classId);
+      const container = document.getElementById('students-grades-container');
+      
+      let studentsHTML = `
+        <h4 style="margin: 20px 0;">Lançar Notas para os Alunos</h4>
+        <table style="width: 100%;">
+          <thead>
+            <tr>
+              <th>Aluno</th>
+              <th>Nota</th>
+              <th>Tipo</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${classStudents.map(student => `
+              <tr>
+                <td>${student.name}</td>
+                <td>
+                  <input type="number" id="grade-${student.id}" min="0" max="20" step="0.5" placeholder="0-20">
+                </td>
+                <td>
+                  <select id="type-${student.id}">
+                    <option value="teste">Teste</option>
+                    <option value="trabalho">Trabalho</option>
+                    <option value="prova">Prova</option>
+                  </select>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+        <button class="btn btn-success" onclick="submitGrades()" style="margin-top: 15px;">
+          💾 Salvar Todas as Notas
+        </button>
+      `;
+
+      container.innerHTML = studentsHTML;
+    }
+
+    function submitGrades() {
+      const classId = document.getElementById('grade-class').value;
+      const disciplineId = document.getElementById('grade-discipline').value;
+      const classStudents = students.filter(s => s.class_id === classId);
+
+      let hasErrors = false;
+
+      classStudents.forEach(student => {
+        const gradeValue = document.getElementById(`grade-${student.id}`).value;
+        const gradeType = document.getElementById(`type-${student.id}`).value;
+
+        if (gradeValue && !isNaN(gradeValue)) {
+          const gradeData = {
+            student_id: student.id,
+            teacher_id: currentUser.id,
+            discipline_id: disciplineId,
+            grade: parseFloat(gradeValue),
+            grade_type: gradeType,
+            status: 'pending'
+          };
+
+          DB.insert('grades', gradeData);
+        } else if (gradeValue) {
+          hasErrors = true;
+        }
+      });
+
+      if (hasErrors) {
+        showAlert('Algumas notas não foram salvas. Verifique os valores.', 'warning');
+      } else {
+        showAlert('✅ Todas as notas foram enviadas para aprovação!', 'success');
+        document.getElementById('students-grades-container').innerHTML = '';
+      }
+    }
+
+    // TAB NOTIFICAÇÕES
+    function loadNotificationsTab() {
+      const container = document.getElementById('notifications-content');
+      if (!container) return;
+
+      if (rejectedGrades.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <h3>✅ Nenhuma notificação</h3>
+            <p>Suas notas estão todas aprovadas pelo pedagógico.</p>
+          </div>
+        `;
+        return;
+      }
+
+      let notificationsHTML = `
+        <div class="alert alert-warning">
+          <strong>⚠️ Atenção:</strong> Você tem ${rejectedGrades.length} nota(s) rejeitada(s) que precisam de correção.
+        </div>
+      `;
+
+      rejectedGrades.forEach(grade => {
+        const student = students.find(s => s.id === grade.student_id);
+        const discipline = disciplines.find(d => d.id === grade.discipline_id);
+        
+        notificationsHTML += `
+          <div class="rejection-notice">
+            <div class="rejection-header">
+              <div class="rejection-title">
+                ❌ Nota Rejeitada - ${student ? student.name : 'Aluno não encontrado'}
+              </div>
+            </div>
+            
+            <div class="rejection-details">
+              <p><strong>Disciplina:</strong> ${discipline ? discipline.name : 'N/A'}</p>
+              <p><strong>Nota Enviada:</strong> ${grade.grade}</p>
+            </div>
+
+            <div class="rejection-observation">
+              <strong>Observação do Pedagógico:</strong><br>
+              ${grade.rejection_observation || 'Nenhuma observação fornecida.'}
+            </div>
+
+            <div style="margin-top: 15px;">
+              <button class="btn btn-warning" onclick="reSubmitGrade('${grade.id}')">
+                ✏️ Corrigir e Reenviar
+              </button>
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = notificationsHTML;
+    }
+
+    function reSubmitGrade(gradeId) {
+      const grade = rejectedGrades.find(g => g.id === gradeId);
+      if (!grade) return;
+
+      const newGrade = prompt(`Corrigir nota para ${grade.grade}:`, grade.grade);
+      if (!newGrade || isNaN(newGrade)) {
+        showAlert('Nota inválida!', 'warning');
+        return;
+      }
+
+      try {
+        DB.update('grades', gradeId, {
+          grade: parseFloat(newGrade),
+          status: 'pending',
+          rejection_observation: null,
+          rejected_by: null,
+          rejected_at: null
+        });
+
+        showAlert('✅ Nota corrigida e reenviada para aprovação!', 'success');
+        loadData();
+        
+      } catch (error) {
+        console.error('Erro ao reenviar nota:', error);
+        showAlert('Erro ao reenviar nota', 'danger');
+      }
+    }
+
+    // TROCA DE TABS
+    function setupTabs() {
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+          document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+          
+          tab.classList.add('active');
+          const tabId = tab.dataset.tab;
+          document.getElementById(`${tabId}-tab`).classList.add('active');
+          
+          loadTabContent(tabId);
+        });
+      });
+    }
+
+    // LOGOUT
+    function logout() {
+      localStorage.removeItem('currentUser');
+      window.location.href = 'index.html';
+    }
+
+    // MOSTRAR ALERTA
+    function showAlert(message, type) {
+      const alertDiv = document.createElement('div');
+      alertDiv.className = `alert alert-${type}`;
+      alertDiv.textContent = message;
+      const container = document.getElementById('alert-container');
+      if (container) {
+        container.appendChild(alertDiv);
+        setTimeout(() => {
+          if (alertDiv.parentNode) alertDiv.parentNode.removeChild(alertDiv);
+        }, 5000);
+      }
+    }
+
+    // INICIALIZAÇÃO
+    document.addEventListener('DOMContentLoaded', () => {
+      DB.init();
+      setupTabs();
+      loadData();
+    });
+  </script>
+</body>
+</html>
