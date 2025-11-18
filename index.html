@@ -316,7 +316,7 @@
                 
                 <div class="form-group">
                     <label for="director-name">Nome Completo do Director:</label>
-                    <input type="text" id="director-name" placeholder="Ex: Dr. João Manuel Silva" required>
+                    <input type="text" id="director-name" placeholder="Ex: Edmilson Bartolomeu Nhanombe" required>
                 </div>
                 
                 <div class="form-group">
@@ -414,19 +414,14 @@
         function generateInstitutionalEmail(fullName) {
             if (!fullName) return '';
             
-            // Remover acentos e caracteres especiais
             const normalized = fullName.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-            
-            // Separar nome e sobrenome
             const names = normalized.split(' ');
             
             if (names.length < 2) return '';
             
-            // Pegar primeiro nome e último sobrenome
             const firstName = names[0].toLowerCase();
             const lastName = names[names.length - 1].toLowerCase();
             
-            // Gerar email no formato: primeiro.ultimo@colegio27demarco.com
             return `${firstName}.${lastName}@colegio27demarco.com`;
         }
 
@@ -460,11 +455,8 @@
             
             let score = 0;
             
-            // Verificar comprimento
             if (password.length >= 8) score++;
             if (password.length >= 12) score++;
-            
-            // Verificar caracteres
             if (/[a-z]/.test(password)) score++;
             if (/[A-Z]/.test(password)) score++;
             if (/[0-9]/.test(password)) score++;
@@ -502,60 +494,37 @@
             }
         }
 
-        // TESTE DETALHADO DE CONEXÃO
-        async function testDetailedConnection() {
+        // TESTE DE CONEXÃO SIMPLIFICADO
+        async function testConnection() {
             try {
-                showDebugInfo('🔧 Iniciando teste detalhado...');
+                showDebugInfo('🔧 Testando conexão com Supabase...');
                 
-                // Teste 1: Autenticação básica
-                const { data: authData, error: authError } = await supabase.auth.getSession();
-                if (authError) {
-                    showDebugInfo(`❌ Auth Error: ${authError.message}`);
+                if (!supabase) {
+                    showDebugInfo('❌ Cliente Supabase não inicializado');
                     return false;
                 }
-                showDebugInfo('✅ Autenticação: OK');
-                
-                // Teste 2: Acesso à tabela users
+
+                const { data: authData, error: authError } = await supabase.auth.getSession();
+                if (authError) {
+                    showDebugInfo(`❌ Erro de Auth: ${authError.message}`);
+                    return false;
+                }
+
                 const { data: users, error: usersError } = await supabase
                     .from('users')
                     .select('count')
                     .limit(1);
                     
                 if (usersError) {
-                    showDebugInfo(`❌ Users Table Error: ${usersError.message}`);
-                    
-                    if (usersError.message.includes('RLS')) {
-                        showDebugInfo('🔧 Problema de RLS. Verifique as políticas da tabela.');
-                    }
+                    showDebugInfo(`❌ Erro na tabela users: ${usersError.message}`);
                     return false;
                 }
-                showDebugInfo('✅ Tabela users: OK');
-                
-                showDebugInfo('🎉 Todos os testes passaram!');
-                return true;
-                
-            } catch (error) {
-                showDebugInfo(`💥 Erro inesperado: ${error.message}`);
-                return false;
-            }
-        }
 
-        // VERIFICAR SE TABELA USERS EXISTE
-        async function checkUsersTable() {
-            try {
-                // Apenas testar se conseguimos acessar a tabela
-                const { data, error } = await supabase
-                    .from('users')
-                    .select('id')
-                    .limit(1);
-                    
-                if (error) {
-                    console.error('Erro ao acessar tabela users:', error);
-                    return false;
-                }
+                showDebugInfo('✅ Conexão com Supabase: OK');
                 return true;
+                
             } catch (error) {
-                console.error('Erro ao verificar tabela:', error);
+                showDebugInfo(`💥 Erro: ${error.message}`);
                 return false;
             }
         }
@@ -563,13 +532,18 @@
         // VERIFICAR CONFIGURAÇÃO DO SISTEMA
         async function checkSystemSetup() {
             try {
-                showSystemStatus('🔍 Verificando configuração do sistema...', 'warning');
+                showSystemStatus('🔍 Verificando sistema...', 'warning');
                 
                 if (!supabase) {
                     throw new Error('Cliente Supabase não inicializado');
                 }
 
-                // Verificar se existe algum usuário director
+                const connectionOK = await testConnection();
+                if (!connectionOK) {
+                    showSetupSection();
+                    return;
+                }
+
                 const { data: directorUsers, error } = await supabase
                     .from('users')
                     .select('id, email, user_data')
@@ -579,7 +553,7 @@
                 if (error) {
                     console.error('Erro ao verificar director:', error);
                     showSetupSection();
-                    showDebugInfo(`Erro na consulta: ${error.message}`);
+                    showDebugInfo(`Erro: ${error.message}`);
                     return;
                 }
 
@@ -589,13 +563,13 @@
                 } else {
                     showLoginSection();
                     showSystemStatus('✅ Sistema configurado e pronto', 'good');
-                    showDebugInfo(`Director encontrado: ${directorUsers[0].email}`);
+                    showDebugInfo(`Director: ${directorUsers[0].email}`);
                 }
             } catch (error) {
                 console.error('Erro ao verificar configuração:', error);
                 showSetupSection();
                 showSystemStatus('⚠️ Sistema não configurado', 'warning');
-                showDebugInfo(`Erro geral: ${error.message}`);
+                showDebugInfo(`Erro: ${error.message}`);
             }
         }
 
@@ -669,7 +643,6 @@
             try {
                 showDebugInfo('Iniciando configuração do Director...');
 
-                // 1. Primeiro criar o usuário no Supabase Auth
                 showDebugInfo('Criando usuário no Auth...');
                 let authData;
                 let authError;
@@ -690,7 +663,6 @@
                     
                     if (authError.message.includes('already registered')) {
                         showDebugInfo('Usuário já existe no Auth. Tentando login...');
-                        // Se já existe, tentar fazer login para verificar
                         const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
                             email: directorEmail,
                             password: directorPassword
@@ -700,7 +672,6 @@
                             throw new Error(`Director já existe, mas as credenciais estão incorretas: ${signInError.message}`);
                         }
                         
-                        // Usar o usuário existente
                         authData = { user: signInData.user };
                         showAlert('✅ Director já estava configurado no Auth. Verificando tabela users...', 'info');
                     } else {
@@ -710,15 +681,6 @@
                     showDebugInfo('✅ Usuário criado com sucesso no Auth');
                 }
 
-                // 2. Verificar se tabela users existe
-                showDebugInfo('Verificando tabela users...');
-                const tableExists = await checkUsersTable();
-                if (!tableExists) {
-                    throw new Error('Tabela "users" não encontrada. Verifique se foi criada corretamente no Supabase.');
-                }
-                showDebugInfo('✅ Tabela users encontrada');
-
-                // 3. Inserir na tabela users
                 showDebugInfo('Inserindo na tabela users...');
                 const userRecord = {
                     id: authData.user.id,
@@ -741,17 +703,11 @@
 
                 if (userError) {
                     console.error('Erro ao inserir na tabela users:', userError);
-                    
-                    if (userError.message.includes('violates row-level security')) {
-                        throw new Error('Problema de permissões (RLS). Verifique as políticas da tabela users no Supabase.');
-                    } else {
-                        throw userError;
-                    }
+                    throw userError;
                 }
 
                 showDebugInfo('✅ Director inserido na tabela users');
 
-                // 4. Mostrar resultados
                 document.getElementById('result-name').textContent = directorName;
                 document.getElementById('result-email').textContent = directorEmail;
                 document.getElementById('setup-results').style.display = 'block';
@@ -759,11 +715,9 @@
                 showAlert('✅ Sistema configurado com sucesso! Director criado.', 'success');
                 showDebugInfo('✅ Configuração concluída com sucesso!');
                 
-                // 5. Atualizar interface e redirecionar
                 setTimeout(() => {
                     showLoginSection();
                     showAlert('Agora você pode fazer login como Director.', 'info');
-                    // Preencher automaticamente o login
                     document.getElementById('email').value = directorEmail;
                 }, 4000);
 
@@ -771,7 +725,6 @@
                 console.error('Erro na configuração:', error);
                 
                 let errorMessage = 'Erro ao configurar o sistema';
-                let debugMessage = `Erro: ${error.message}`;
                 
                 if (error.message.includes('already registered')) {
                     errorMessage = 'O Director já está configurado. Você pode fazer login.';
@@ -780,15 +733,11 @@
                 } else if (error.message.includes('Network') || error.message.includes('Fetch')) {
                     errorMessage = 'Erro de conexão. Verifique sua internet e tente novamente.';
                 } else if (error.message.includes('does not exist')) {
-                    errorMessage = 'Tabela não encontrada. É necessário criar a tabela "users" no Supabase.';
-                    debugMessage += '\n\n📋 PARA CORRIGIR: Acesse o Supabase → SQL Editor e execute:\n\nCREATE TABLE users (\n  id UUID PRIMARY KEY,\n  email TEXT UNIQUE,\n  role TEXT,\n  user_data JSONB,\n  created_at TIMESTAMP DEFAULT NOW()\n);\n\nALTER TABLE users ENABLE ROW LEVEL SECURITY;\nCREATE POLICY "Users can read all data" ON users FOR ALL USING (true);';
-                } else if (error.message.includes('row-level security')) {
-                    errorMessage = 'Problema de segurança (RLS). Verifique as políticas da tabela no Supabase.';
-                    debugMessage += '\n\n📋 PARA CORRIGIR: No Supabase, na tabela users, desative RLS temporariamente ou crie políticas apropriadas.';
+                    errorMessage = 'Tabela não encontrada. Execute o SQL fornecido no Supabase.';
                 }
                 
                 showAlert(errorMessage, 'danger');
-                showDebugInfo(debugMessage);
+                showDebugInfo(`Erro: ${error.message}`);
             } finally {
                 setupBtn.innerHTML = '⚙️ Configurar Sistema & Criar Director';
                 setupBtn.disabled = false;
@@ -801,7 +750,6 @@
                 const { data: { session } } = await supabase.auth.getSession();
                 if (session) {
                     showDebugInfo(`Sessão encontrada para: ${session.user.email}`);
-                    // Tentar buscar dados do usuário
                     const { data: userData } = await supabase
                         .from('users')
                         .select('role, user_data')
@@ -933,8 +881,7 @@
 
         // INICIALIZAÇÃO
         document.addEventListener('DOMContentLoaded', async () => {
-            // Teste detalhado de conexão
-            const connectionOK = await testDetailedConnection();
+            const connectionOK = await testConnection();
             
             if (connectionOK) {
                 await checkSystemSetup();
@@ -946,13 +893,11 @@
             
             document.getElementById('loginForm').addEventListener('submit', handleLogin);
             
-            // Event listeners para configuração
             document.getElementById('director-name').addEventListener('input', updateEmailFromName);
             document.getElementById('director-password').addEventListener('input', function() {
                 checkPasswordStrength(this.value);
             });
             
-            // Focar no campo de nome quando mostrar a configuração
             setTimeout(() => {
                 if (document.getElementById('setup-section').style.display !== 'none') {
                     document.getElementById('director-name').focus();
@@ -961,4 +906,4 @@
         });
     </script>
 </body>
-                            </html>
+                        </html>
