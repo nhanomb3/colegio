@@ -749,7 +749,7 @@
           </div>
           <div class="supervision-details">
             <div class="supervision-functionality">
-              <div class="functionality-title">📋 Lista de Alunos</div>
+              <div class="functionality-title">Lista de Alunos</div>
               <div class="functionality-desc">Visualização completa de todos os alunos matriculados</div>
             </div>
             <div class="supervision-functionality">
@@ -770,7 +770,7 @@
         <!-- Pedagógico -->
         <div class="supervision-card">
           <div class="supervision-header">
-            <div class="supervision-title">📚 Pedagógico</div>
+            <div class="supervision-title"> Pedagógico</div>
             <div class="pending-count" id="pedagogical-pending">0</div>
           </div>
           <div class="supervision-details">
@@ -787,7 +787,7 @@
               <div class="functionality-desc">Registro e controle de frequência dos alunos</div>
             </div>
             <div class="supervision-functionality">
-              <div class="functionality-title">🎯 Desempenho por Turma</div>
+              <div class="functionality-title"> Desempenho por Turma</div>
               <div class="functionality-desc">Análise do desempenho acadêmico por turma</div>
             </div>
           </div>
@@ -928,12 +928,27 @@
         <input type="text" id="pedagogical-name" placeholder="Digite o nome completo do pedagógico...">
       </div>
 
-      <button class="btn btn-success" onclick="createPedagogicalCredentials()">🎓 Criar Credenciais</button>
+      <div class="form-group">
+        <label>Email Institucional *</label>
+        <input type="email" id="pedagogical-email" placeholder="pedagogico@colegio27demarco.com">
+      </div>
+
+      <div class="form-group">
+        <label>Senha Temporária *</label>
+        <input type="text" id="pedagogical-password" placeholder="Senha temporária...">
+        <button type="button" class="btn" onclick="generatePassword()" style="margin-top: 5px;">
+          🔄 Gerar Senha
+        </button>
+      </div>
+
+      <button class="btn btn-success" onclick="createPedagogicalCredentials()">
+        🎓 Criar Credenciais do Pedagógico
+      </button>
 
       <div id="credentials-result" style="margin-top: 20px;"></div>
 
       <div style="margin-top: 30px;">
-        <h4 style="margin-bottom: 15px; color: #2c3e50;">📋 Credenciais Criadas</h4>
+        <h4 style="margin-bottom: 15px; color: #2c3e50;">📋 Credenciais Criadas - Pedagógico</h4>
         <div id="credentials-list">
           <div class="loading">Carregando credenciais...</div>
         </div>
@@ -1217,26 +1232,54 @@
       document.getElementById('teachers-pending').textContent = pendingGrades.length;
     }
 
-    // TAB CREDENCIAIS
-    function loadCredentialsTab() {
-      // Já carregado no loadData()
+    // GERAR SENHA AUTOMATICAMENTE
+    function generatePassword() {
+      const length = 12;
+      const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%";
+      let password = "";
+      for (let i = 0; i < length; i++) {
+        password += charset.charAt(Math.floor(Math.random() * charset.length));
+      }
+      document.getElementById('pedagogical-password').value = password;
     }
 
+    // CRIAR CREDENCIAIS DO PEDAGÓGICO - CORRIGIDO
     async function createPedagogicalCredentials() {
       const name = document.getElementById('pedagogical-name').value.trim();
+      const email = document.getElementById('pedagogical-email').value.trim();
+      const password = document.getElementById('pedagogical-password').value.trim();
 
-      if (!name) {
-        showAlert('Preencha o nome do pedagógico', 'warning');
+      if (!name || !email || !password) {
+        showAlert('Preencha todos os campos obrigatórios', 'warning');
         return;
       }
 
-      // Gerar email institucional
-      const email = generateEmail(name);
-      const password = generatePassword();
-      const username = generateUsername(name);
+      // Validar formato de email
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        showAlert('Formato de email inválido', 'warning');
+        return;
+      }
 
       try {
-        const { error } = await supabase
+        // Verificar se o email já existe
+        const { data: existingUsers, error: checkError } = await supabase
+          .from('users')
+          .select('id')
+          .eq('email', email);
+
+        if (checkError) throw checkError;
+
+        if (existingUsers && existingUsers.length > 0) {
+          showAlert('Este email já está em uso', 'warning');
+          return;
+        }
+
+        // Gerar username automático
+        const username = generateUsername(name);
+
+        // Inserir novo usuário pedagógico
+        const { data, error } = await supabase
           .from('users')
           .insert([
             {
@@ -1245,108 +1288,213 @@
               password: password,
               username: username,
               role: 'pedagogical',
-              status: 'active'
+              status: 'active',
+              created_at: new Date().toISOString(),
+              created_by: currentUser.id
             }
-          ]);
+          ])
+          .select();
 
-        if (error) throw error;
+        if (error) {
+          console.error('Erro do Supabase:', error);
+          throw error;
+        }
 
-        // Mostrar resultado
+        // Mostrar resultado com sucesso
         document.getElementById('credentials-result').innerHTML = `
           <div class="credentials-result">
             <h4>✅ Credenciais criadas com sucesso!</h4>
             <div class="credentials-info">
               <strong>Nome:</strong> ${name}<br>
-              <strong>Email institucional:</strong> ${email}<br>
+              <strong>Email:</strong> ${email}<br>
               <strong>Senha:</strong> ${password}<br>
-              <strong>Usuário:</strong> ${username}
+              <strong>Usuário:</strong> ${username}<br>
+              <strong>Função:</strong> Pedagógico<br>
+              <strong>Status:</strong> Ativo
+            </div>
+            <p><strong>⚠️ Importante:</strong> Anote estas credenciais e compartilhe com o usuário.</p>
+          </div>
+        `;
+
+        // Limpar campos
+        document.getElementById('pedagogical-name').value = '';
+        document.getElementById('pedagogical-email').value = '';
+        document.getElementById('pedagogical-password').value = '';
+
+        // Recarregar lista de credenciais
+        await loadPedagogicalCredentials();
+
+        showAlert('🎓 Credenciais do pedagógico criadas com sucesso!', 'success');
+
+      } catch (error) {
+        console.error('Erro detalhado ao criar credenciais:', error);
+        showAlert(`Erro ao criar credenciais: ${error.message}`, 'danger');
+      }
+    }
+
+    // GERAR USERNAME AUTOMÁTICO
+    function generateUsername(name) {
+      // Remover acentos e caracteres especiais
+      let username = name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+      
+      // Substituir espaços por pontos
+      username = username.replace(/\s+/g, '.');
+      
+      // Remover caracteres inválidos
+      username = username.replace(/[^a-z0-9.]/g, '');
+      
+      // Adicionar timestamp para garantir unicidade
+      const timestamp = Date.now().toString().slice(-4);
+      
+      return `${username}.${timestamp}`;
+    }
+
+    // CARREGAR CREDENCIAIS EXISTENTES - CORRIGIDO
+    async function loadPedagogicalCredentials() {
+      try {
+        const { data, error } = await supabase
+          .from('users')
+          .select('*')
+          .eq('role', 'pedagogical')
+          .order('created_at', { ascending: false });
+
+        if (error) {
+          console.error('Erro ao carregar credenciais:', error);
+          document.getElementById('credentials-list').innerHTML = `
+            <div class="alert alert-danger">
+              Erro ao carregar credenciais: ${error.message}
+            </div>
+          `;
+          return;
+        }
+
+        pedagogicalUsers = data || [];
+        
+        let credentialsHTML = '';
+
+        if (pedagogicalUsers.length === 0) {
+          credentialsHTML = `
+            <div class="empty-state">
+              <h4>📝 Nenhuma credencial criada</h4>
+              <p>Use o formulário acima para criar as primeiras credenciais do pedagógico.</p>
+            </div>
+          `;
+        } else {
+          credentialsHTML = `
+            <div style="overflow-x: auto;">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Usuário</th>
+                    <th>Status</th>
+                    <th>Criado em</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${pedagogicalUsers.map(user => `
+                    <tr>
+                      <td>${user.name || 'N/A'}</td>
+                      <td>${user.email || 'N/A'}</td>
+                      <td>${user.username || 'N/A'}</td>
+                      <td>
+                        <span class="${user.status === 'active' ? 'btn-success' : 'btn-danger'}" 
+                              style="padding: 4px 8px; border-radius: 4px; font-size: 0.8rem;">
+                          ${user.status === 'active' ? '🟢 Ativo' : '🔴 Inativo'}
+                        </span>
+                      </td>
+                      <td>${user.created_at ? new Date(user.created_at).toLocaleDateString('pt-BR') : 'N/A'}</td>
+                      <td>
+                        <button class="btn btn-warning" onclick="resetPassword(${user.id})" 
+                                title="Redefinir senha">
+                          🔄
+                        </button>
+                        <button class="btn ${user.status === 'active' ? 'btn-danger' : 'btn-success'}" 
+                                onclick="toggleUserStatus(${user.id}, '${user.status}')"
+                                title="${user.status === 'active' ? 'Desativar' : 'Ativar'} usuário">
+                          ${user.status === 'active' ? '⏸️' : '▶️'}
+                        </button>
+                      </td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+          `;
+        }
+
+        document.getElementById('credentials-list').innerHTML = credentialsHTML;
+
+      } catch (error) {
+        console.error('Erro inesperado:', error);
+        document.getElementById('credentials-list').innerHTML = `
+          <div class="alert alert-danger">
+            Erro inesperado ao carregar credenciais
+          </div>
+        `;
+      }
+    }
+
+    // ALTERNAR STATUS DO USUÁRIO
+    async function toggleUserStatus(userId, currentStatus) {
+      const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+      
+      if (!confirm(`Tem certeza que deseja ${newStatus === 'active' ? 'ativar' : 'desativar'} este usuário?`)) {
+        return;
+      }
+
+      try {
+        const { error } = await supabase
+          .from('users')
+          .update({ status: newStatus })
+          .eq('id', userId);
+
+        if (error) throw error;
+
+        showAlert(`✅ Status do usuário alterado para ${newStatus === 'active' ? 'ativo' : 'inativo'}`, 'success');
+        await loadPedagogicalCredentials();
+
+      } catch (error) {
+        console.error('Erro ao alterar status:', error);
+        showAlert('Erro ao alterar status do usuário', 'danger');
+      }
+    }
+
+    // REDEFINIR SENHA
+    async function resetPassword(userId) {
+      const newPassword = generatePassword();
+      
+      if (!confirm('Deseja redefinir a senha deste usuário?')) {
+        return;
+      }
+
+      try {
+        const { error } = await supabase
+          .from('users')
+          .update({ password: newPassword })
+          .eq('id', userId);
+
+        if (error) throw error;
+
+        showAlert(`✅ Senha redefinida para: ${newPassword}`, 'success');
+        
+        // Mostrar a nova senha
+        document.getElementById('credentials-result').innerHTML = `
+          <div class="credentials-result">
+            <h4>✅ Senha Redefinida!</h4>
+            <div class="credentials-info">
+              <strong>Nova Senha:</strong> ${newPassword}<br>
+              <strong>⚠️ Importante:</strong> Compartilhe a nova senha com o usuário.
             </div>
           </div>
         `;
 
-        // Limpar campo
-        document.getElementById('pedagogical-name').value = '';
-
-        // Recarregar lista
-        await loadPedagogicalCredentials();
-
       } catch (error) {
-        console.error('Erro ao criar credenciais:', error);
-        showAlert('Erro ao criar credenciais', 'danger');
+        console.error('Erro ao redefinir senha:', error);
+        showAlert('Erro ao redefinir senha', 'danger');
       }
-    }
-
-    function generateEmail(name) {
-      // Remover acentos e converter para minúsculas
-      let email = name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-      // Substituir espaços por pontos
-      email = email.replace(/\s+/g, '.');
-      // Adicionar domínio
-      email += '@colégio27demarco.com';
-      return email;
-    }
-
-    function generatePassword() {
-      const length = 8;
-      const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%";
-      let password = "";
-      for (let i = 0; i < length; i++) {
-        password += charset.charAt(Math.floor(Math.random() * charset.length));
-      }
-      return password;
-    }
-
-    function generateUsername(name) {
-      const names = name.toLowerCase().split(' ');
-      const firstName = names[0];
-      const lastName = names[names.length - 1];
-      return `${firstName}.${lastName}`.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-    }
-
-    async function loadPedagogicalCredentials() {
-      const { data, error } = await supabase
-        .from('users')
-        .select('*')
-        .eq('role', 'pedagogical')
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        console.error('Erro ao carregar credenciais:', error);
-        return;
-      }
-
-      pedagogicalUsers = data || [];
-      
-      let credentialsHTML = '';
-
-      if (pedagogicalUsers.length === 0) {
-        credentialsHTML = '<div class="empty-state">Nenhuma credencial criada</div>';
-      } else {
-        credentialsHTML = `
-          <table>
-            <thead>
-              <tr>
-                <th>Nome</th>
-                <th>Email</th>
-                <th>Usuário</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${pedagogicalUsers.map(user => `
-                <tr>
-                  <td>${user.name}</td>
-                  <td>${user.email}</td>
-                  <td>${user.username}</td>
-                  <td>${user.status === 'active' ? '🟢 Ativo' : '🔴 Inativo'}</td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
-        `;
-      }
-
-      document.getElementById('credentials-list').innerHTML = credentialsHTML;
     }
 
     // TAB RELATÓRIOS
@@ -1644,7 +1792,7 @@
       document.getElementById('overdue-students').innerHTML = overdueHTML;
     }
 
-    // SISTEMA DE INFORMES (mantido igual)
+    // SISTEMA DE INFORMES
     let selectedRecipient = 'all';
     let selectedUrgency = 'medium';
 
@@ -1783,7 +1931,7 @@
       document.getElementById('announcements-content').innerHTML = announcementsHTML;
     }
 
-    // CONFIGURAÇÕES (mantido igual)
+    // CONFIGURAÇÕES
     function loadSettingsTab() {
       const yearSelect = document.getElementById('active-school-year');
       yearSelect.innerHTML = '<option value="">Selecione o ano letivo</option>' +
@@ -1817,7 +1965,7 @@
       }
     }
 
-    // FUNÇÕES ADMINISTRATIVAS (mantidas iguais)
+    // FUNÇÕES ADMINISTRATIVAS
     function backupDatabase() {
       showAlert('📦 Backup iniciado... Esta operação pode levar alguns minutos.', 'warning');
       setTimeout(() => {
@@ -1913,4 +2061,4 @@
     });
   </script>
 </body>
-                                                                                          </html>
+            </html>
