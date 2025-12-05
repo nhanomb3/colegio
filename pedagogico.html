@@ -247,14 +247,15 @@
 
         /* BOTÕES */
         .btn {
-            padding: 10px 20px;
+            padding: 8px 15px;
             border: none;
             border-radius: 6px;
             cursor: pointer;
             font-weight: 600;
             transition: all 0.3s ease;
-            margin: 5px;
+            margin: 3px;
             border: 1px solid #2c3e50;
+            font-size: 0.9rem;
         }
 
         .btn-primary {
@@ -308,6 +309,30 @@
             box-shadow: 0 4px 12px rgba(231, 126, 34, 0.4);
         }
 
+        /* BADGES DE STATUS */
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .status-active {
+            background: #27ae60;
+            color: white;
+        }
+
+        .status-suspended {
+            background: #f39c12;
+            color: white;
+        }
+
+        .status-inactive {
+            background: #e74c3c;
+            color: white;
+        }
+
         /* TABELAS */
         table {
             width: 100%;
@@ -328,7 +353,7 @@
         }
 
         td {
-            padding: 15px;
+            padding: 12px 15px;
             border-bottom: 1px solid #ffed4e;
             color: #2c3e50;
         }
@@ -421,42 +446,6 @@
             display: block;
         }
 
-        /* GENDER STATS */
-        .gender-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
-            padding: 20px;
-            background: #fff9e6;
-            border-radius: 8px;
-            border: 1px solid #ffed4e;
-        }
-
-        .gender-stat {
-            text-align: center;
-            padding: 15px;
-            background: white;
-            border-radius: 6px;
-            border: 1px solid #ffed4e;
-        }
-
-        .gender-stat-title {
-            font-weight: 600;
-            color: #8B0000;
-            margin-bottom: 10px;
-        }
-
-        .positive {
-            color: #27ae60;
-            font-weight: 600;
-        }
-
-        .negative {
-            color: #e74c3c;
-            font-weight: 600;
-        }
-
         /* FINANCIAL SETTINGS */
         .financial-settings {
             background: #fff9e6;
@@ -546,6 +535,57 @@
             border: 2px solid #27ae60;
         }
 
+        /* MENSAGENS E PEDIDOS */
+        .messages-section {
+            background: #fff9e6;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border: 2px solid #3498db;
+        }
+
+        .message-list {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+
+        .message-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid #3498db;
+            border: 1px solid #ffed4e;
+        }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .message-sender {
+            font-weight: 600;
+            color: #8B0000;
+        }
+
+        .message-date {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .message-content {
+            color: #2c3e50;
+            line-height: 1.5;
+        }
+
+        .message-actions {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+        }
+
         /* RESPONSIVIDADE */
         @media (max-width: 768px) {
             body {
@@ -585,6 +625,15 @@
             <button class="sidebar-tab active" data-tab="approvals">
                 📋 Aprovações
             </button>
+            <button class="sidebar-tab" data-tab="informes">
+                📢 Informes
+            </button>
+            <button class="sidebar-tab" data-tab="pedidos">
+                📨 Pedidos
+            </button>
+            <button class="sidebar-tab" data-tab="recepcao">
+                👥 Recepção
+            </button>
             <button class="sidebar-tab" data-tab="students">
                 👥 Alunos
             </button>
@@ -620,6 +669,199 @@
                 <div id="approvals-content">
                     <div style="text-align: center; padding: 40px;">
                         <p style="color: #8B0000;">Carregando aprovações pendentes...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- INFORMES -->
+        <div class="tab-content" id="informes-tab">
+            <div class="card">
+                <h2 class="card-title">📢 Gestão de Informes</h2>
+                
+                <div class="financial-settings">
+                    <h3 style="color: #8B0000; margin-bottom: 20px;">📝 Criar Novo Informe</h3>
+                    
+                    <div class="form-group">
+                        <label>Título do Informe:</label>
+                        <input type="text" id="informe-title" placeholder="Digite o título do informe">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Destinatários:</label>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-top: 10px;">
+                            <label style="display: flex; align-items: center; gap: 8px; padding: 10px; background: white; border-radius: 6px; border: 1px solid #ffed4e;">
+                                <input type="checkbox" id="to-teachers" value="teachers">
+                                👨‍🏫 Professores
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px; padding: 10px; background: white; border-radius: 6px; border: 1px solid #ffed4e;">
+                                <input type="checkbox" id="to-secretary" value="secretary">
+                                📋 Secretaria
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px; padding: 10px; background: white; border-radius: 6px; border: 1px solid #ffed4e;">
+                                <input type="checkbox" id="to-all" value="all">
+                                👥 Todos
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Urgência:</label>
+                        <div style="display: flex; gap: 10px; margin-top: 10px;">
+                            <label style="display: flex; align-items: center; gap: 8px; padding: 10px; background: white; border-radius: 6px; border: 1px solid #ffed4e; flex: 1;">
+                                <input type="radio" name="informe-urgency" value="low">
+                                🟢 Baixa
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px; padding: 10px; background: white; border-radius: 6px; border: 1px solid #ffed4e; flex: 1;">
+                                <input type="radio" name="informe-urgency" value="medium" checked>
+                                🟡 Média
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px; padding: 10px; background: white; border-radius: 6px; border: 1px solid #ffed4e; flex: 1;">
+                                <input type="radio" name="informe-urgency" value="high">
+                                🔴 Alta
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Mensagem:</label>
+                        <textarea id="informe-message" rows="6" placeholder="Digite a mensagem do informe..."></textarea>
+                    </div>
+                    
+                    <button class="btn btn-success" onclick="sendInforme()" style="width: 100%; padding: 15px;">
+                        📢 Enviar Informe
+                    </button>
+                </div>
+
+                <div id="informes-list">
+                    <h3 style="color: #8B0000; margin: 30px 0 20px;">📋 Informes Enviados</h3>
+                    <div style="text-align: center; padding: 40px;">
+                        <p style="color: #8B0000;">Carregando informes...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PEDIDOS -->
+        <div class="tab-content" id="pedidos-tab">
+            <div class="card">
+                <h2 class="card-title">📨 Pedidos e Solicitações</h2>
+                
+                <div class="messages-section">
+                    <h3 style="color: #8B0000; margin-bottom: 20px;">📨 Pedidos Recebidos</h3>
+                    
+                    <div class="message-list" id="pedidos-list">
+                        <div style="text-align: center; padding: 40px;">
+                            <p style="color: #8B0000;">Carregando pedidos...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="financial-settings">
+                    <h3 style="color: #8B0000; margin-bottom: 20px;">📝 Enviar Pedido ao Director</h3>
+                    
+                    <div class="form-group">
+                        <label>Assunto do Pedido:</label>
+                        <input type="text" id="pedido-title" placeholder="Digite o assunto do pedido">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Tipo de Pedido:</label>
+                        <select id="pedido-type">
+                            <option value="material">📚 Material Didático</option>
+                            <option value="equipamento">💻 Equipamento</option>
+                            <option value="recurso">💰 Recursos Financeiros</option>
+                            <option value="outro">📋 Outro</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Descrição Detalhada:</label>
+                        <textarea id="pedido-message" rows="6" placeholder="Descreva detalhadamente seu pedido..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Urgência:</label>
+                        <div style="display: flex; gap: 10px; margin-top: 10px;">
+                            <label style="display: flex; align-items: center; gap: 8px; padding: 10px; background: white; border-radius: 6px; border: 1px solid #ffed4e; flex: 1;">
+                                <input type="radio" name="pedido-urgency" value="low">
+                                🟢 Baixa
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px; padding: 10px; background: white; border-radius: 6px; border: 1px solid #ffed4e; flex: 1;">
+                                <input type="radio" name="pedido-urgency" value="medium" checked>
+                                🟡 Média
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px; padding: 10px; background: white; border-radius: 6px; border: 1px solid #ffed4e; flex: 1;">
+                                <input type="radio" name="pedido-urgency" value="high">
+                                🔴 Alta
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-success" onclick="sendPedidoToDirector()" style="width: 100%; padding: 15px;">
+                        📤 Enviar Pedido ao Director
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- RECEPÇÃO -->
+        <div class="tab-content" id="recepcao-tab">
+            <div class="card">
+                <h2 class="card-title">👥 Recepção de Pais e Encarregados</h2>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="total-visitas">0</div>
+                        <div class="stat-label">Visitas Hoje</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="visitas-pendentes">0</div>
+                        <div class="stat-label">Aguardando</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="visitas-atendidas">0</div>
+                        <div class="stat-label">Atendidas</div>
+                    </div>
+                </div>
+
+                <div class="financial-settings">
+                    <h3 style="color: #8B0000; margin-bottom: 20px;">📝 Registrar Nova Visita</h3>
+                    
+                    <div class="form-group">
+                        <label>Nome do Visitante:</label>
+                        <input type="text" id="visita-nome" placeholder="Nome completo do visitante">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Tipo de Visitante:</label>
+                        <select id="visita-tipo">
+                            <option value="pai">👨‍👦 Pai/Encarregado</option>
+                            <option value="fornecedor">🚚 Fornecedor</option>
+                            <option value="visita">👤 Visita Técnica</option>
+                            <option value="outro">📋 Outro</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Aluno/Assunto:</label>
+                        <input type="text" id="visita-assunto" placeholder="Nome do aluno ou assunto">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Observações:</label>
+                        <textarea id="visita-observacoes" rows="4" placeholder="Observações sobre a visita..."></textarea>
+                    </div>
+                    
+                    <button class="btn btn-success" onclick="registrarVisita()" style="width: 100%; padding: 15px;">
+                        📝 Registrar Visita
+                    </button>
+                </div>
+
+                <div id="visitas-list">
+                    <h3 style="color: #8B0000; margin: 30px 0 20px;">📋 Visitas do Dia</h3>
+                    <div style="text-align: center; padding: 40px;">
+                        <p style="color: #8B0000;">Carregando visitas...</p>
                     </div>
                 </div>
             </div>
@@ -825,6 +1067,10 @@
                 if (!localStorage.getItem('disciplines')) localStorage.setItem('disciplines', JSON.stringify([]));
                 if (!localStorage.getItem('payments')) localStorage.setItem('payments', JSON.stringify([]));
                 if (!localStorage.getItem('announcements')) localStorage.setItem('announcements', JSON.stringify([]));
+                if (!localStorage.getItem('informes')) localStorage.setItem('informes', JSON.stringify([]));
+                if (!localStorage.getItem('pedidos')) localStorage.setItem('pedidos', JSON.stringify([]));
+                if (!localStorage.getItem('visitas')) localStorage.setItem('visitas', JSON.stringify([]));
+                if (!localStorage.getItem('messages')) localStorage.setItem('messages', JSON.stringify([]));
                 if (!localStorage.getItem('financial_settings')) localStorage.setItem('financial_settings', JSON.stringify({
                     late_fee_enabled: false,
                     penalty_percentage: 30,
@@ -945,6 +1191,12 @@
         function loadTabContent(tabId) {
             if (tabId === 'approvals') {
                 loadApprovalsContent('enrollments');
+            } else if (tabId === 'informes') {
+                loadInformesTab();
+            } else if (tabId === 'pedidos') {
+                loadPedidosTab();
+            } else if (tabId === 'recepcao') {
+                loadRecepcaoTab();
             } else if (tabId === 'students') {
                 loadStudentsTab();
             } else if (tabId === 'reports') {
@@ -1023,434 +1275,357 @@
             document.getElementById('approvals-content').innerHTML = approvalsHTML;
         }
 
-        // APROVAÇÕES - NOTAS PENDENTES
-        function loadPendingGrades() {
-            const students = DB.get('students');
-            const classes = DB.get('classes');
-            const teachers = DB.get('teachers');
-            const disciplines = DB.get('disciplines');
-            const grades = DB.get('grades');
+        // INFORMES
+        function loadInformesTab() {
+            loadInformesList();
+        }
+
+        function sendInforme() {
+            const title = document.getElementById('informe-title').value.trim();
+            const message = document.getElementById('informe-message').value.trim();
             
-            const pendingGrades = grades.filter(g => g.status === 'pending');
-            const classesWithPending = [...new Set(pendingGrades.map(g => g.class_id))];
+            if (!title || !message) {
+                showAlert('Preencha o título e a mensagem do informe', 'warning');
+                return;
+            }
+            
+            // Coletar destinatários
+            const recipients = [];
+            if (document.getElementById('to-teachers').checked) recipients.push('teachers');
+            if (document.getElementById('to-secretary').checked) recipients.push('secretary');
+            if (document.getElementById('to-all').checked) recipients.push('all');
+            
+            if (recipients.length === 0) {
+                showAlert('Selecione pelo menos um destinatário', 'warning');
+                return;
+            }
+            
+            // Coletar urgência
+            const urgency = document.querySelector('input[name="informe-urgency"]:checked')?.value || 'medium';
+            
+            // Criar informe
+            const informe = {
+                id: Date.now().toString(),
+                title: title,
+                message: message,
+                recipients: recipients,
+                urgency: urgency,
+                sender: currentUser.name,
+                sender_role: currentUser.role,
+                created_at: new Date().toISOString(),
+                status: 'sent'
+            };
+            
+            DB.insert('informes', informe);
+            
+            // Limpar formulário
+            document.getElementById('informe-title').value = '';
+            document.getElementById('informe-message').value = '';
+            document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+            document.querySelector('input[name="informe-urgency"][value="medium"]').checked = true;
+            
+            showAlert('📢 Informe enviado com sucesso!', 'success');
+            loadInformesList();
+        }
 
-            let approvalsHTML = '';
+        function loadInformesList() {
+            const informes = DB.get('informes');
+            const filteredInformes = informes.filter(i => 
+                i.sender === currentUser.name || 
+                i.recipients.includes('all') ||
+                i.recipients.includes('coordinator')
+            );
 
-            if (pendingGrades.length === 0) {
-                approvalsHTML = `
+            let informesHTML = '';
+
+            if (filteredInformes.length === 0) {
+                informesHTML = `
                     <div style="text-align: center; padding: 40px;">
-                        <h3 style="color: #27ae60;">✅ Nenhuma nota pendente</h3>
-                        <p style="color: #8B0000;">Todas as notas estão regularizadas no momento.</p>
+                        <h3 style="color: #8B0000;">📭 Nenhum informe enviado</h3>
+                        <p style="color: #8B0000; opacity: 0.8;">Use o formulário acima para enviar informes.</p>
                     </div>
                 `;
             } else {
-                approvalsHTML = `
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <div class="stat-number">${pendingGrades.length}</div>
-                            <div class="stat-label">Notas Pendentes</div>
+                informesHTML = filteredInformes.slice().reverse().map(informe => {
+                    const urgencyColor = {
+                        'low': '🟢',
+                        'medium': '🟡',
+                        'high': '🔴'
+                    }[informe.urgency] || '🟡';
+                    
+                    return `
+                        <div class="message-item">
+                            <div class="message-header">
+                                <div class="message-sender">
+                                    ${urgencyColor} ${informe.title}
+                                </div>
+                                <div class="message-date">
+                                    ${new Date(informe.created_at).toLocaleString('pt-BR')}
+                                </div>
+                            </div>
+                            <div class="message-content">
+                                <p>${informe.message}</p>
+                                <div style="margin-top: 10px; padding: 10px; background: #f8f9fa; border-radius: 6px;">
+                                    <strong>Destinatários:</strong> ${informe.recipients.join(', ').replace('teachers', 'Professores').replace('secretary', 'Secretaria').replace('all', 'Todos')}
+                                </div>
+                            </div>
                         </div>
-                        <div class="stat-card">
-                            <div class="stat-number">${classesWithPending.length}</div>
-                            <div class="stat-label">Turmas com Pendências</div>
-                        </div>
+                    `;
+                }).join('');
+            }
+
+            document.getElementById('informes-list').innerHTML = informesHTML;
+        }
+
+        // PEDIDOS
+        function loadPedidosTab() {
+            loadPedidosList();
+        }
+
+        function sendPedidoToDirector() {
+            const title = document.getElementById('pedido-title').value.trim();
+            const message = document.getElementById('pedido-message').value.trim();
+            const type = document.getElementById('pedido-type').value;
+            
+            if (!title || !message) {
+                showAlert('Preencha o assunto e a descrição do pedido', 'warning');
+                return;
+            }
+            
+            const urgency = document.querySelector('input[name="pedido-urgency"]:checked')?.value || 'medium';
+            
+            const pedido = {
+                id: Date.now().toString(),
+                title: title,
+                message: message,
+                type: type,
+                urgency: urgency,
+                sender: currentUser.name,
+                sender_role: currentUser.role,
+                status: 'pending',
+                created_at: new Date().toISOString()
+            };
+            
+            DB.insert('pedidos', pedido);
+            
+            // Limpar formulário
+            document.getElementById('pedido-title').value = '';
+            document.getElementById('pedido-message').value = '';
+            document.querySelector('input[name="pedido-urgency"][value="medium"]').checked = true;
+            
+            showAlert('📤 Pedido enviado ao Director com sucesso!', 'success');
+            loadPedidosList();
+        }
+
+        function loadPedidosList() {
+            const pedidos = DB.get('pedidos');
+            const filteredPedidos = pedidos.filter(p => p.sender === currentUser.name);
+
+            let pedidosHTML = '';
+
+            if (filteredPedidos.length === 0) {
+                pedidosHTML = `
+                    <div style="text-align: center; padding: 40px;">
+                        <h3 style="color: #8B0000;">📭 Nenhum pedido enviado</h3>
+                        <p style="color: #8B0000; opacity: 0.8;">Use o formulário abaixo para enviar pedidos ao Director.</p>
                     </div>
                 `;
-
-                classesWithPending.forEach(classId => {
-                    const classObj = classes.find(c => c.id === classId);
-                    const classGrades = pendingGrades.filter(g => g.class_id === classId);
-                    const classStudents = students.filter(s => s.class_id === classId);
+            } else {
+                pedidosHTML = filteredPedidos.slice().reverse().map(pedido => {
+                    const typeIcons = {
+                        'material': '📚',
+                        'equipamento': '💻',
+                        'recurso': '💰',
+                        'outro': '📋'
+                    };
                     
-                    // Estatísticas de gênero
-                    const femaleStudents = classStudents.filter(s => s.gender === 'F');
-                    const maleStudents = classStudents.filter(s => s.gender === 'M');
+                    const urgencyColor = {
+                        'low': '🟢',
+                        'medium': '🟡',
+                        'high': '🔴'
+                    }[pedido.urgency] || '🟡';
                     
-                    const femalePositive = femaleStudents.filter(s => {
-                        const studentGrades = classGrades.filter(g => g.student_id === s.id);
-                        return studentGrades.every(g => g.grade >= 10);
-                    }).length;
+                    const statusText = {
+                        'pending': '⏳ Pendente',
+                        'approved': '✅ Aprovado',
+                        'rejected': '❌ Rejeitado'
+                    }[pedido.status] || pedido.status;
                     
-                    const femaleNegative = femaleStudents.length - femalePositive;
+                    const statusColor = {
+                        'pending': '#f39c12',
+                        'approved': '#27ae60',
+                        'rejected': '#e74c3c'
+                    }[pedido.status] || '#7f8c8d';
                     
-                    const malePositive = maleStudents.filter(s => {
-                        const studentGrades = classGrades.filter(g => g.student_id === s.id);
-                        return studentGrades.every(g => g.grade >= 10);
-                    }).length;
-                    
-                    const maleNegative = maleStudents.length - malePositive;
-
-                    approvalsHTML += `
-                        <div class="class-folder open">
-                            <div class="class-folder-header" onclick="toggleClassFolder(this)">
-                                <strong>${classObj.grade}ª ${classObj.name}</strong>
-                                <span>${classGrades.length} notas pendentes</span>
+                    return `
+                        <div class="message-item">
+                            <div class="message-header">
+                                <div class="message-sender">
+                                    ${typeIcons[pedido.type] || '📋'} ${pedido.title}
+                                </div>
+                                <div class="message-date">
+                                    ${new Date(pedido.created_at).toLocaleString('pt-BR')}
+                                </div>
                             </div>
-                            <div class="class-folder-content">
-                                <div class="gender-stats">
-                                    <div class="gender-stat">
-                                        <div class="gender-stat-title">👩 Mulheres</div>
-                                        <div>Total: ${femaleStudents.length}</div>
-                                        <div class="positive">Positivas: ${femalePositive}</div>
-                                        <div class="negative">Negativas: ${femaleNegative}</div>
+                            <div class="message-content">
+                                <p>${pedido.message}</p>
+                                <div style="margin-top: 10px; display: flex; gap: 15px;">
+                                    <div>
+                                        <strong>Urgência:</strong> ${urgencyColor} ${pedido.urgency}
                                     </div>
-                                    <div class="gender-stat">
-                                        <div class="gender-stat-title">👨 Homens</div>
-                                        <div>Total: ${maleStudents.length}</div>
-                                        <div class="positive">Positivas: ${malePositive}</div>
-                                        <div class="negative">Negativas: ${maleNegative}</div>
+                                    <div>
+                                        <strong>Status:</strong> <span style="color: ${statusColor}; font-weight: 600;">${statusText}</span>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
 
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Aluno</th>
-                                            <th>Disciplina</th>
-                                            <th>Professor</th>
-                                            <th>Nota</th>
-                                            <th>Ações</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        ${classGrades.map(grade => {
-                                            const student = students.find(s => s.id === grade.student_id);
-                                            const discipline = disciplines.find(d => d.id === grade.discipline_id);
-                                            const teacher = teachers.find(t => t.id === grade.teacher_id);
-                                            return `
-                                                <tr>
-                                                    <td>${student ? student.name : 'N/A'}</td>
-                                                    <td>${discipline ? discipline.name : 'N/A'}</td>
-                                                    <td>${teacher ? teacher.name : 'N/A'}</td>
-                                                    <td><strong>${grade.grade}</strong></td>
-                                                    <td>
-                                                        <button class="btn btn-success" onclick="approveGrade('${grade.id}')">✅ Aprovar</button>
-                                                        <button class="btn btn-danger" onclick="openRejectionModal('grade', '${grade.id}')">❌ Rejeitar</button>
-                                                    </td>
-                                                </tr>
-                                            `;
-                                        }).join('')}
-                                    </tbody>
-                                </table>
+            document.getElementById('pedidos-list').innerHTML = pedidosHTML;
+        }
+
+        // RECEPÇÃO
+        function loadRecepcaoTab() {
+            loadVisitasStats();
+            loadVisitasList();
+        }
+
+        function registrarVisita() {
+            const nome = document.getElementById('visita-nome').value.trim();
+            const tipo = document.getElementById('visita-tipo').value;
+            const assunto = document.getElementById('visita-assunto').value.trim();
+            const observacoes = document.getElementById('visita-observacoes').value.trim();
+            
+            if (!nome) {
+                showAlert('Digite o nome do visitante', 'warning');
+                return;
+            }
+            
+            const visita = {
+                id: Date.now().toString(),
+                nome: nome,
+                tipo: tipo,
+                assunto: assunto,
+                observacoes: observacoes,
+                data: new Date().toISOString(),
+                atendida: false,
+                registrado_por: currentUser.name
+            };
+            
+            DB.insert('visitas', visita);
+            
+            // Limpar formulário
+            document.getElementById('visita-nome').value = '';
+            document.getElementById('visita-assunto').value = '';
+            document.getElementById('visita-observacoes').value = '';
+            
+            showAlert('📝 Visita registrada com sucesso!', 'success');
+            loadVisitasStats();
+            loadVisitasList();
+        }
+
+        function loadVisitasStats() {
+            const visitas = DB.get('visitas');
+            const hoje = new Date().toDateString();
+            
+            const visitasHoje = visitas.filter(v => new Date(v.data).toDateString() === hoje);
+            const visitasPendentes = visitasHoje.filter(v => !v.atendida);
+            const visitasAtendidas = visitasHoje.filter(v => v.atendida);
+            
+            document.getElementById('total-visitas').textContent = visitasHoje.length;
+            document.getElementById('visitas-pendentes').textContent = visitasPendentes.length;
+            document.getElementById('visitas-atendidas').textContent = visitasAtendidas.length;
+        }
+
+        function loadVisitasList() {
+            const visitas = DB.get('visitas');
+            const hoje = new Date().toDateString();
+            const visitasHoje = visitas.filter(v => new Date(v.data).toDateString() === hoje);
+
+            let visitasHTML = '';
+
+            if (visitasHoje.length === 0) {
+                visitasHTML = `
+                    <div style="text-align: center; padding: 40px;">
+                        <h3 style="color: #8B0000;">👥 Nenhuma visita hoje</h3>
+                        <p style="color: #8B0000; opacity: 0.8;">Use o formulário acima para registrar visitas.</p>
+                    </div>
+                `;
+            } else {
+                visitasHTML = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Tipo</th>
+                                <th>Assunto</th>
+                                <th>Hora</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${visitasHoje.map(visita => {
+                                const tipoText = {
+                                    'pai': '👨‍👦 Pai/Encarregado',
+                                    'fornecedor': '🚚 Fornecedor',
+                                    'visita': '👤 Visita Técnica',
+                                    'outro': '📋 Outro'
+                                }[visita.tipo] || visita.tipo;
                                 
-                                <div style="text-align: center; margin-top: 20px;">
-                                    <button class="btn btn-success" onclick="approveAllClassGrades('${classId}')">
-                                        ✅ Aprovar Toda a Turma
-                                    </button>
-                                    <button class="btn btn-danger" onclick="openRejectionModal('class', '${classId}')">
-                                        ❌ Rejeitar Toda a Turma
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                });
-            }
-
-            document.getElementById('approvals-content').innerHTML = approvalsHTML;
-        }
-
-        function toggleClassFolder(element) {
-            const folder = element.parentElement;
-            folder.classList.toggle('open');
-        }
-
-        function approveEnrollment(studentId) {
-            DB.update('students', studentId, { 
-                status: 'approved',
-                approved_at: new Date().toISOString(),
-                approved_by: currentUser.id
-            });
-            showAlert('✅ Matrícula aprovada com sucesso!', 'success');
-            loadPendingEnrollments();
-        }
-
-        function approveGrade(gradeId) {
-            DB.update('grades', gradeId, { 
-                status: 'approved',
-                approved_at: new Date().toISOString(),
-                approved_by: currentUser.id
-            });
-            showAlert('✅ Nota aprovada com sucesso!', 'success');
-            loadPendingGrades();
-        }
-
-        function approveAllClassGrades(classId) {
-            const grades = DB.get('grades');
-            const classGrades = grades.filter(g => g.class_id === classId && g.status === 'pending');
-            
-            classGrades.forEach(grade => {
-                DB.update('grades', grade.id, { 
-                    status: 'approved',
-                    approved_at: new Date().toISOString(),
-                    approved_by: currentUser.id
-                });
-            });
-            
-            showAlert(`✅ ${classGrades.length} notas da turma aprovadas com sucesso!`, 'success');
-            loadPendingGrades();
-        }
-
-        // MODAL DE REJEIÇÃO
-        function openRejectionModal(type, id) {
-            currentRejection = { type, id };
-            document.getElementById('rejection-modal').style.display = 'flex';
-        }
-
-        function closeRejectionModal() {
-            document.getElementById('rejection-modal').style.display = 'none';
-            document.getElementById('rejection-reason').value = '';
-            currentRejection = { type: null, id: null };
-        }
-
-        function confirmRejection() {
-            const reason = document.getElementById('rejection-reason').value.trim();
-            
-            if (!reason) {
-                showAlert('Digite o motivo da rejeição', 'warning');
-                return;
-            }
-
-            const { type, id } = currentRejection;
-
-            if (type === 'enrollment') {
-                DB.delete('students', id);
-                // Remover usuário associado
-                const students = DB.get('students');
-                const student = students.find(s => s.id === id);
-                if (student && student.email) {
-                    const users = DB.get('users');
-                    const userIndex = users.findIndex(u => u.email === student.email);
-                    if (userIndex !== -1) {
-                        users.splice(userIndex, 1);
-                        localStorage.setItem('users', JSON.stringify(users));
-                    }
-                }
-                showAlert('❌ Matrícula rejeitada e removida!', 'success');
-                loadPendingEnrollments();
-            } else if (type === 'grade') {
-                DB.update('grades', id, { 
-                    status: 'rejected',
-                    rejection_reason: reason,
-                    rejected_at: new Date().toISOString(),
-                    rejected_by: currentUser.id
-                });
-                showAlert('❌ Nota rejeitada com observação!', 'success');
-                loadPendingGrades();
-            } else if (type === 'class') {
-                const grades = DB.get('grades');
-                const classGrades = grades.filter(g => g.class_id === id && g.status === 'pending');
-                
-                classGrades.forEach(grade => {
-                    DB.update('grades', grade.id, { 
-                        status: 'rejected',
-                        rejection_reason: reason,
-                        rejected_at: new Date().toISOString(),
-                        rejected_by: currentUser.id
-                    });
-                });
-                
-                showAlert(`❌ ${classGrades.length} notas da turma rejeitadas!`, 'success');
-                loadPendingGrades();
-            }
-
-            closeRejectionModal();
-        }
-
-        // ALUNOS
-        function loadStudentsTab() {
-            const students = DB.get('students');
-            const classes = DB.get('classes');
-            
-            // Estatísticas gerais
-            const totalStudents = students.length;
-            const femaleStudents = students.filter(s => s.gender === 'F').length;
-            const maleStudents = students.filter(s => s.gender === 'M').length;
-            const approvedStudents = students.filter(s => s.status === 'approved').length;
-            const pendingStudents = students.filter(s => s.status === 'pending').length;
-
-            let studentsHTML = `
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-number">${totalStudents}</div>
-                        <div class="stat-label">Total de Alunos</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">👩 ${femaleStudents}</div>
-                        <div class="stat-label">Mulheres</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">👨 ${maleStudents}</div>
-                        <div class="stat-label">Homens</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">${approvedStudents}</div>
-                        <div class="stat-label">Ativos</div>
-                    </div>
-                </div>
-            `;
-
-            if (students.length === 0) {
-                studentsHTML += `
-                    <div style="text-align: center; padding: 40px;">
-                        <h3 style="color: #8B0000;">👥 Nenhum aluno matriculado</h3>
-                        <p style="color: #8B0000; opacity: 0.8;">Os alunos aparecerão aqui após serem matriculados pela secretaria.</p>
-                    </div>
+                                const status = visita.atendida ? 
+                                    '<span class="status-active">Atendido</span>' : 
+                                    '<span class="status-suspended">Aguardando</span>';
+                                
+                                const acao = visita.atendida ?
+                                    `<button class="btn btn-warning" onclick="marcarComoPendente('${visita.id}')">⏳ Pendente</button>` :
+                                    `<button class="btn btn-success" onclick="marcarComoAtendido('${visita.id}')">✅ Atendido</button>`;
+                                
+                                return `
+                                    <tr>
+                                        <td>${visita.nome}</td>
+                                        <td>${tipoText}</td>
+                                        <td>${visita.assunto || 'N/A'}</td>
+                                        <td>${new Date(visita.data).toLocaleTimeString('pt-BR')}</td>
+                                        <td>${status}</td>
+                                        <td>
+                                            ${acao}
+                                            <button class="btn btn-danger" onclick="excluirVisita('${visita.id}')">🗑️</button>
+                                        </td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                        </tbody>
+                    </table>
                 `;
-            } else {
-                // Agrupar alunos por turma
-                const classesWithStudents = classes.map(classObj => {
-                    const classStudents = students.filter(s => s.class_id === classObj.id);
-                    return { ...classObj, students: classStudents };
-                }).filter(c => c.students.length > 0);
-
-                studentsHTML += '<h3 style="color: #8B0000; margin: 30px 0 20px;">📋 Alunos por Turma</h3>';
-
-                classesWithStudents.forEach(classObj => {
-                    studentsHTML += `
-                        <div class="class-folder open">
-                            <div class="class-folder-header" onclick="toggleClassFolder(this)">
-                                <strong>${classObj.grade}ª ${classObj.name}</strong>
-                                <span>${classObj.students.length} alunos</span>
-                            </div>
-                            <div class="class-folder-content">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Nome</th>
-                                            <th>Matrícula</th>
-                                            <th>Gênero</th>
-                                            <th>Status</th>
-                                            <th>Ações</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        ${classObj.students.map(student => {
-                                            const status = student.status === 'approved' ? 
-                                                '<span style="color: #27ae60; font-weight: bold;">✅ Ativo</span>' : 
-                                                '<span style="color: #f39c12; font-weight: bold;">⏳ Pendente</span>';
-                                            
-                                            return `
-                                                <tr>
-                                                    <td>${student.name}</td>
-                                                    <td>${student.student_id || 'N/A'}</td>
-                                                    <td>${student.gender === 'F' ? '👩 Feminino' : '👨 Masculino'}</td>
-                                                    <td>${status}</td>
-                                                    <td>
-                                                        <select onchange="changeStudentClass('${student.id}', this.value)" style="padding: 5px; border: 1px solid #ffed4e; border-radius: 4px;">
-                                                            <option value="">Mudar turma...</option>
-                                                            ${classes.map(c => 
-                                                                `<option value="${c.id}" ${c.id === student.class_id ? 'selected' : ''}>
-                                                                    ${c.grade}ª ${c.name}
-                                                                </option>`
-                                                            ).join('')}
-                                                        </select>
-                                                    </td>
-                                                </tr>
-                                            `;
-                                        }).join('')}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    `;
-                });
             }
 
-            document.getElementById('students-content').innerHTML = studentsHTML;
+            document.getElementById('visitas-list').innerHTML = visitasHTML;
         }
 
-        function changeStudentClass(studentId, newClassId) {
-            if (!newClassId) return;
-            
-            DB.update('students', studentId, { class_id: newClassId });
-            showAlert('✅ Turma do aluno alterada com sucesso!', 'success');
-            loadStudentsTab();
+        function marcarComoAtendido(visitaId) {
+            DB.update('visitas', visitaId, { atendida: true, atendida_em: new Date().toISOString() });
+            showAlert('✅ Visita marcada como atendida!', 'success');
+            loadVisitasStats();
+            loadVisitasList();
         }
 
-        // RELATÓRIOS
-        function loadReportsTab() {
-            const endDate = new Date();
-            const startDate = new Date();
-            startDate.setMonth(startDate.getMonth() - 1);
-            
-            document.getElementById('report-start-date').value = startDate.toISOString().split('T')[0];
-            document.getElementById('report-end-date').value = endDate.toISOString().split('T')[0];
+        function marcarComoPendente(visitaId) {
+            DB.update('visitas', visitaId, { atendida: false, atendida_em: null });
+            showAlert('⏳ Visita marcada como pendente!', 'success');
+            loadVisitasStats();
+            loadVisitasList();
         }
 
-        function generateReport() {
-            const startDate = new Date(document.getElementById('report-start-date').value);
-            const endDate = new Date(document.getElementById('report-end-date').value);
-            const reportType = document.getElementById('report-type').value;
-
-            // Validar período (máximo 3 meses)
-            const diffMonths = (endDate.getFullYear() - startDate.getFullYear()) * 12 + (endDate.getMonth() - startDate.getMonth());
-            if (diffMonths > 3) {
-                showAlert('O período não pode ser superior a 3 meses', 'warning');
-                return;
+        function excluirVisita(visitaId) {
+            if (confirm('Tem certeza que deseja excluir esta visita?')) {
+                DB.delete('visitas', visitaId);
+                showAlert('🗑️ Visita excluída!', 'success');
+                loadVisitasStats();
+                loadVisitasList();
             }
-
-            let reportHTML = '';
-
-            if (reportType === 'general') {
-                reportHTML = generateGeneralReport(startDate, endDate);
-            } else if (reportType === 'financial') {
-                reportHTML = generateFinancialReport(startDate, endDate);
-            } else if (reportType === 'teacher') {
-                reportHTML = generateTeacherReport(startDate, endDate);
-            } else if (reportType === 'class') {
-                reportHTML = generateClassReport(startDate, endDate);
-            }
-
-            document.getElementById('reports-content').innerHTML = reportHTML;
-            document.getElementById('download-pdf-btn').style.display = 'inline-block';
-            showAlert('📊 Relatório gerado com sucesso!', 'success');
-        }
-
-        function generateGeneralReport(startDate, endDate) {
-            const students = DB.get('students');
-            const teachers = DB.get('teachers');
-            const classes = DB.get('classes');
-            const grades = DB.get('grades');
-            
-            const periodGrades = grades.filter(g => {
-                const gradeDate = new Date(g.created_at);
-                return gradeDate >= startDate && gradeDate <= endDate;
-            });
-
-            const approvedGrades = periodGrades.filter(g => g.status === 'approved');
-            const averageGrade = approvedGrades.length > 0 ? 
-                approvedGrades.reduce((sum, g) => sum + g.grade, 0) / approvedGrades.length : 0;
-
-            return `
-                <div class="card">
-                    <h3 style="color: #8B0000; margin-bottom: 20px;">📋 Relatório Geral - ${startDate.toLocaleDateString('pt-BR')} à ${endDate.toLocaleDateString('pt-BR')}</h3>
-                    
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <div class="stat-number">${students.length}</div>
-                            <div class="stat-label">Total de Alunos</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number">${teachers.length}</div>
-                            <div class="stat-label">Professores</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number">${classes.length}</div>
-                            <div class="stat-label">Turmas</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number">${averageGrade.toFixed(1)}</div>
-                            <div class="stat-label">Média Geral</div>
-                        </div>
-                    </div>
-
-                    <h4 style="color: #8B0000; margin: 20px 0 10px;">Resumo Executivo</h4>
-                    <p style="color: #2c3e50; line-height: 1.6;">
-                        No período analisado, o colégio manteve suas operações com excelência, com foco na qualidade do ensino e acompanhamento pedagógico.
-                    </p>
-                </div>
-            `;
         }
 
         // FINANCEIRO - CONFIGURAÇÕES
@@ -1528,73 +1703,7 @@
             }
         }
 
-        function updatePaymentsWithPenalty(percentage) {
-            const payments = DB.get('payments');
-            const updatedPayments = payments.map(payment => {
-                if (payment.status === 'overdue') {
-                    const originalAmount = payment.original_amount || payment.amount;
-                    const penaltyAmount = originalAmount * (percentage / 100);
-                    return {
-                        ...payment,
-                        original_amount: originalAmount,
-                        amount: originalAmount + penaltyAmount,
-                        penalty_applied: true,
-                        penalty_percentage: percentage,
-                        penalty_amount: penaltyAmount
-                    };
-                }
-                return payment;
-            });
-            
-            localStorage.setItem('payments', JSON.stringify(updatedPayments));
-        }
-
-        function loadFinancialTab() {
-            const students = DB.get('students');
-            const payments = DB.get('payments');
-            const currentMonth = new Date().getMonth() + 1;
-            
-            const monthPayments = payments.filter(p => p.month === currentMonth);
-            const paidCount = monthPayments.filter(p => p.status === 'paid').length;
-            const pendingCount = monthPayments.filter(p => p.status === 'pending').length;
-            const overdueCount = payments.filter(p => p.status === 'overdue').length;
-            const totalRevenue = monthPayments.filter(p => p.status === 'paid').reduce((sum, p) => sum + (p.amount || 0), 0);
-
-            const financialHTML = `
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-number">${paidCount}</div>
-                        <div class="stat-label">Pagamentos Efetuados</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">${pendingCount}</div>
-                        <div class="stat-label">Pagamentos Pendentes</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">${overdueCount}</div>
-                        <div class="stat-label">Em Atraso</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">${totalRevenue.toLocaleString('pt-BR')} MZN</div>
-                        <div class="stat-label">Receita do Mês</div>
-                    </div>
-                </div>
-
-                <div style="background: #fff9e6; padding: 20px; border-radius: 10px; margin-top: 20px; border: 1px solid #ffed4e;">
-                    <h4 style="color: #8B0000; margin-bottom: 15px;">📊 Estatísticas Financeiras</h4>
-                    <p style="color: #2c3e50; margin-bottom: 10px;">
-                        <strong>Taxa de Pagamento:</strong> ${students.length > 0 ? ((paidCount / students.length) * 100).toFixed(1) : 0}%
-                    </p>
-                    <p style="color: #2c3e50;">
-                        <strong>Alunos com Pagamento em Dia:</strong> ${paidCount} de ${students.length}
-                    </p>
-                </div>
-            `;
-
-            document.getElementById('financial-content').innerHTML = financialHTML;
-        }
-
-        // GESTÃO DE USUÁRIOS
+        // GESTÃO DE USUÁRIOS - CORRIGIDA
         function toggleTeacherClasses() {
             const userType = document.getElementById('user-type').value;
             const section = document.getElementById('teacher-classes-section');
@@ -1688,7 +1797,7 @@
                     role: userType,
                     name: name,
                     username: email.split('@')[0],
-                    status: 'active',
+                    status: 'active', // CORRIGIDO: Inicializar como 'active'
                     created_at: new Date().toISOString(),
                     created_by: currentUser.id,
                     user_data: {
@@ -1727,6 +1836,7 @@
                                 <p style="margin: 5px 0; color: #2c3e50;"><strong>Email:</strong> ${email}</p>
                                 <p style="margin: 5px 0; color: #2c3e50;"><strong>Senha:</strong> ${password}</p>
                                 <p style="margin: 5px 0; color: #2c3e50;"><strong>Função:</strong> ${roleNames[userType]}</p>
+                                <p style="margin: 5px 0; color: #2c3e50;"><strong>Status:</strong> <span class="status-active">Ativo</span></p>
                             </div>
                         </div>
                     </div>
@@ -1776,7 +1886,14 @@
                         <tbody>
                             ${filteredUsers.map(user => {
                                 const roleText = user.role === 'admin' ? '📋 Secretaria' : '👨‍🏫 Professor';
-                                const status = user.status || 'active';
+                                const status = user.status || 'active'; // Garantir que sempre tenha status
+                                
+                                const statusBadge = status === 'active' ? 
+                                    '<span class="status-badge status-active">Ativo</span>' :
+                                    status === 'suspended' ?
+                                    '<span class="status-badge status-suspended">Suspenso</span>' :
+                                    '<span class="status-badge status-inactive">Inativo</span>';
+                                
                                 const classes = DB.get('classes');
                                 const assignedClasses = user.assigned_classes || [];
                                 const classNames = assignedClasses.map(classId => {
@@ -1784,9 +1901,9 @@
                                     return classObj ? `${classObj.grade}ª ${classObj.name}` : 'N/A';
                                 }).join(', ') || 'Nenhuma';
                                 
-                                const statusBadge = status === 'active' ? 
-                                    '<span style="background: #27ae60; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">Ativo</span>' :
-                                    '<span style="background: #f39c12; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">Suspenso</span>';
+                                const activateBtn = status === 'active' ?
+                                    `<button class="btn btn-warning" onclick="toggleUserStatus('${user.id}', 'suspended')">Suspender</button>` :
+                                    `<button class="btn btn-success" onclick="toggleUserStatus('${user.id}', 'active')">Ativar</button>`;
                                 
                                 return `
                                     <tr>
@@ -1796,8 +1913,7 @@
                                         <td>${classNames}</td>
                                         <td>${statusBadge}</td>
                                         <td>
-                                            <button class="btn btn-success" onclick="toggleUserStatus('${user.id}', 'active')">Ativar</button>
-                                            <button class="btn btn-warning" onclick="toggleUserStatus('${user.id}', 'suspended')">Suspender</button>
+                                            ${activateBtn}
                                             <button class="btn btn-danger" onclick="deleteUser('${user.id}')">Eliminar</button>
                                         </td>
                                     </tr>
@@ -1847,24 +1963,6 @@
             loadUsersTab();
         }
 
-        // DOWNLOAD PDF
-        function downloadPDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF('p', 'mm', 'a4');
-            
-            // Cabeçalho
-            doc.setFillColor(255, 215, 0);
-            doc.rect(0, 0, 210, 40, 'F');
-            doc.setTextColor(139, 0, 0);
-            doc.setFontSize(24);
-            doc.text('Colégio 27 de Março', 105, 20, { align: 'center' });
-            doc.setFontSize(16);
-            doc.text('Relatório Pedagógico', 105, 30, { align: 'center' });
-            
-            doc.save('relatorio_pedagogico.pdf');
-            showAlert('📥 PDF baixado com sucesso!', 'success');
-        }
-
         // LOGOUT
         function logout() {
             if (confirm('Deseja realmente sair do sistema?')) {
@@ -1900,4 +1998,4 @@
         }
     </script>
 </body>
-  </html>
+    </html>
