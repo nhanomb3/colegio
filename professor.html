@@ -12,13 +12,14 @@
       min-height: 100vh; 
     }
     
-    /* CABEÇALHO AMARELO COM LOGO FLUTUANTE */
+    /* CABEÇALHO AMARELO COM BORDAS VERMELHO VINHO */
     .school-header-container {
       background: linear-gradient(135deg, #FFD700, #FFC107);
       padding: 15px 20px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.1);
       position: relative;
       overflow: hidden;
+      border-bottom: 3px solid #8B0000; /* Vermelho vinho */
     }
     
     .school-header {
@@ -41,13 +42,14 @@
       background: white;
       width: 60px;
       height: 60px;
-      border-radius: 50%;
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
       box-shadow: 0 4px 15px rgba(0,0,0,0.2);
       font-size: 28px;
       animation: float 3s ease-in-out infinite;
+      border: 2px solid #8B0000; /* Vermelho vinho */
     }
     
     @keyframes float {
@@ -63,11 +65,13 @@
       font-size: 1.8rem;
       margin-bottom: 5px;
       color: #333;
+      font-weight: 800;
     }
     
     .school-info p {
       font-size: 0.9rem;
       color: #666;
+      font-weight: 600;
     }
     
     .user-info-top {
@@ -84,6 +88,7 @@
       padding: 8px 15px;
       border-radius: 30px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      border: 2px solid #8B0000; /* Vermelho vinho */
     }
     
     .user-avatar {
@@ -96,21 +101,25 @@
       justify-content: center;
       color: white;
       font-weight: bold;
+      border: 2px solid #000;
     }
     
     .logout-btn-top {
-      background: #dc3545;
+      background: #8B0000; /* Vermelho vinho */
       color: white;
-      border: none;
-      padding: 8px 20px;
-      border-radius: 20px;
+      border: 2px solid #000; /* Borda preta */
+      padding: 10px 20px;
+      border-radius: 6px;
       cursor: pointer;
-      font-weight: 600;
+      font-weight: 700;
       transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
     
     .logout-btn-top:hover {
-      background: #c82333;
+      background: #a00000;
       transform: translateY(-2px);
     }
     
@@ -121,39 +130,30 @@
       padding: 0 20px;
     }
     
-    .user-header { 
-      background: white; 
-      padding: 20px; 
-      border-radius: 12px; 
-      margin-bottom: 25px; 
-      display: flex; 
-      justify-content: space-between; 
-      align-items: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    }
-    
-    /* MENU LATERAL E FUNCIONALIDADES DA IMAGEM */
+    /* MENU LATERAL COM BOTÕES AMARELOS E BORDAS PRETAS */
     .dashboard-container {
       display: flex;
       gap: 20px;
     }
     
     .sidebar-menu {
-      width: 250px;
-      background: white;
+      width: 280px;
+      background: linear-gradient(180deg, #FFD700 0%, #FFC107 100%);
       border-radius: 12px;
       padding: 20px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
       height: fit-content;
+      border: 2px solid #000; /* Borda preta */
     }
     
     .sidebar-title {
       font-size: 1.2rem;
-      font-weight: 600;
+      font-weight: 700;
       margin-bottom: 20px;
-      color: #333;
+      color: #8B0000; /* Vermelho vinho */
       padding-bottom: 10px;
-      border-bottom: 2px solid #FFD700;
+      border-bottom: 2px solid #8B0000; /* Vermelho vinho */
+      text-align: center;
     }
     
     .menu-list {
@@ -162,24 +162,32 @@
     
     .menu-item {
       padding: 12px 15px;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       border-radius: 8px;
       cursor: pointer;
       transition: all 0.3s;
-      font-weight: 500;
+      font-weight: 600;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
+      background: white;
+      border: 2px solid #000; /* Borda preta */
+      color: #333;
     }
     
     .menu-item:hover {
       background: #FFF9C4;
       transform: translateX(5px);
+      border-color: #8B0000; /* Vermelho vinho */
     }
     
     .menu-item.active {
-      background: #FFD700;
-      font-weight: 600;
+      background: #8B0000; /* Vermelho vinho */
+      color: white;
+      font-weight: 700;
+      border-color: #000; /* Borda preta */
+      transform: translateX(5px);
+      box-shadow: 0 4px 8px rgba(139, 0, 0, 0.2);
     }
     
     .content-area {
@@ -188,9 +196,10 @@
       border-radius: 12px;
       padding: 25px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border: 2px solid #000; /* Borda preta */
     }
     
-    /* ESTILOS EXISTENTES DO PROFESSOR */
+    /* ESTILOS DO PROFESSOR */
     .tabs { 
       display: flex; 
       background: white; 
@@ -198,6 +207,7 @@
       overflow: hidden; 
       margin-bottom: 25px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border: 2px solid #000; /* Borda preta */
     }
     
     .tab { 
@@ -208,11 +218,24 @@
       font-weight: 600; 
       background: white; 
       border: none;
+      border-right: 1px solid #ddd;
       transition: all 0.3s ease;
     }
     
-    .tab:hover { background-color: #f0f0f0; }
-    .tab.active { background-color: #FFD700; color: #333; }
+    .tab:last-child {
+      border-right: none;
+    }
+    
+    .tab:hover { 
+      background-color: #FFF9C4; 
+      color: #8B0000; /* Vermelho vinho */
+    }
+    
+    .tab.active { 
+      background: #FFD700; /* Amarelo */
+      color: #8B0000; /* Vermelho vinho */
+      font-weight: 700;
+    }
     
     .tab-content { 
       display: none; 
@@ -223,7 +246,15 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     }
     
-    .tab-content.active { display: block; }
+    .tab-content.active { 
+      display: block; 
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
     
     .card { 
       background: white; 
@@ -231,16 +262,18 @@
       padding: 20px; 
       margin-bottom: 20px; 
       box-shadow: 0 2px 8px rgba(0,0,0,0.08); 
+      border: 2px solid #000; /* Borda preta */
     }
     
+    /* BOTÕES COM CORES DO SISTEMA */
     .btn { 
-      background-color: #FFD700; 
-      color: #333; 
-      border: none; 
+      background-color: #FFD700; /* Amarelo */
+      color: #8B0000; /* Vermelho vinho */
+      border: 2px solid #000; /* Borda preta */
       padding: 10px 20px; 
-      border-radius: 8px; 
+      border-radius: 6px; 
       cursor: pointer; 
-      font-weight: 600;
+      font-weight: 700;
       transition: all 0.3s;
       display: inline-flex;
       align-items: center;
@@ -251,44 +284,79 @@
       background-color: #FFC107; 
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
+      border-color: #8B0000; /* Vermelho vinho */
     }
     
-    .btn-success { background-color: #28a745; color: white; }
-    .btn-success:hover { background-color: #218838; }
+    .btn-success { 
+      background-color: #28a745; 
+      color: white;
+      border-color: #000; /* Borda preta */
+    }
     
-    .btn-primary { background-color: #007bff; color: white; }
-    .btn-primary:hover { background-color: #0056b3; }
+    .btn-success:hover { 
+      background-color: #218838;
+      border-color: #000; /* Borda preta */
+    }
     
-    .btn-warning { background-color: #ffc107; color: #333; }
-    .btn-warning:hover { background-color: #e0a800; }
+    .btn-primary { 
+      background-color: #007bff; 
+      color: white;
+      border-color: #000; /* Borda preta */
+    }
     
-    .btn-danger { background-color: #dc3545; color: white; }
-    .btn-danger:hover { background-color: #c82333; }
+    .btn-primary:hover { 
+      background-color: #0056b3;
+      border-color: #000; /* Borda preta */
+    }
     
+    .btn-warning { 
+      background-color: #ffc107; 
+      color: #212529;
+      border-color: #000; /* Borda preta */
+    }
+    
+    .btn-warning:hover { 
+      background-color: #e0a800;
+      border-color: #000; /* Borda preta */
+    }
+    
+    .btn-danger { 
+      background-color: #8B0000; /* Vermelho vinho */
+      color: white;
+      border-color: #000; /* Borda preta */
+    }
+    
+    .btn-danger:hover { 
+      background-color: #a00000;
+      border-color: #000; /* Borda preta */
+    }
+    
+    /* ALERTAS COM CORES DO SISTEMA */
     .alert { 
-      padding: 15px; 
-      border-radius: 8px; 
+      padding: 15px 20px; 
+      border-radius: 6px; 
       margin-bottom: 20px; 
-      text-align: center; 
-      border-left: 4px solid transparent;
+      font-weight: 600;
+      border-left: 4px solid;
+      border: 2px solid #000; /* Borda preta */
     }
     
     .alert-success { 
       background-color: #d4edda; 
-      color: #155724; 
-      border-color: #28a745;
-    }
-    
-    .alert-warning { 
-      background-color: #fff3cd; 
-      color: #856404; 
-      border-color: #ffc107;
+      color: #155724;
+      border-left-color: #28a745;
     }
     
     .alert-danger { 
       background-color: #f8d7da; 
-      color: #721c24; 
-      border-color: #dc3545;
+      color: #721c24;
+      border-left-color: #8B0000; /* Vermelho vinho */
+    }
+    
+    .alert-warning { 
+      background-color: #fff3cd; 
+      color: #856404;
+      border-left-color: #ffc107;
     }
     
     .empty-state { 
@@ -308,6 +376,7 @@
       color: #6c757d; 
     }
     
+    /* ESTATÍSTICAS DO DASHBOARD */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -320,8 +389,9 @@
       padding: 20px;
       border-radius: 10px;
       text-align: center;
-      border-left: 4px solid #FFD700;
+      border-left: 4px solid #FFD700; /* Amarelo */
       transition: all 0.3s;
+      border: 2px solid #000; /* Borda preta */
     }
     
     .stat-card:hover {
@@ -332,16 +402,17 @@
     .stat-value {
       font-size: 2.5rem;
       font-weight: 800;
-      color: #333;
+      color: #8B0000; /* Vermelho vinho */
       margin: 10px 0;
     }
     
     .stat-label {
-      font-size: 0.9rem;
-      color: #6c757d;
-      font-weight: 500;
+      font-size: 0.95rem;
+      color: #333;
+      font-weight: 600;
     }
     
+    /* CARDS DE TURMA */
     .class-grid { 
       display: grid; 
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
@@ -354,13 +425,15 @@
       padding: 20px; 
       border-radius: 10px; 
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      border-left: 4px solid #FFD700;
+      border-left: 4px solid #FFD700; /* Amarelo */
       transition: all 0.3s;
+      border: 2px solid #000; /* Borda preta */
     }
     
     .class-card:hover {
       transform: translateY(-5px);
       box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+      border-color: #8B0000; /* Vermelho vinho */
     }
     
     .class-header { 
@@ -377,12 +450,13 @@
     }
     
     .class-grade { 
-      background: #FFD700; 
-      color: #333; 
+      background: #FFD700; /* Amarelo */
+      color: #8B0000; /* Vermelho vinho */
       padding: 4px 12px; 
       border-radius: 20px; 
       font-size: 0.8rem; 
       font-weight: 600; 
+      border: 1px solid #000; /* Borda preta */
     }
     
     .class-stats { 
@@ -396,14 +470,64 @@
       flex: 1; 
     }
     
-    .rejection-notice { 
-      background: #f8d7da; 
-      padding: 20px; 
-      border-radius: 8px; 
-      margin-bottom: 20px; 
-      border-left: 4px solid #dc3545; 
+    /* AÇÕES RÁPIDAS */
+    .quick-actions {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 25px;
+      border: 2px solid #000; /* Borda preta */
     }
     
+    .quick-actions h4 {
+      margin-bottom: 15px;
+      color: #8B0000; /* Vermelho vinho */
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+    
+    .action-buttons {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+    }
+    
+    .action-btn {
+      padding: 15px;
+      background: #FFD700; /* Amarelo */
+      border: 2px solid #000; /* Borda preta */
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+      color: #8B0000; /* Vermelho vinho */
+      text-align: center;
+      transition: all 0.3s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.95rem;
+    }
+    
+    .action-btn:hover {
+      background: #FFC107;
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+      border-color: #8B0000; /* Vermelho vinho */
+    }
+    
+    .action-btn.export {
+      background: #8B0000; /* Vermelho vinho */
+      color: white;
+      border-color: #000; /* Borda preta */
+    }
+    
+    .action-btn.export:hover {
+      background: #a00000;
+      border-color: #000; /* Borda preta */
+    }
+    
+    /* FORMULÁRIOS */
     .form-group {
       margin-bottom: 20px;
     }
@@ -411,85 +535,107 @@
     label {
       display: block;
       margin-bottom: 8px;
-      font-weight: 600;
-      color: #333;
+      font-weight: 700;
+      color: #8B0000; /* Vermelho vinho */
     }
     
-    select, input, textarea {
+    input, select, textarea {
       width: 100%;
       padding: 12px;
-      border: 1px solid #ddd;
+      border: 2px solid #000; /* Borda preta */
       border-radius: 6px;
       font-size: 1rem;
-      transition: border-color 0.3s;
+      transition: all 0.3s;
+      background: white;
     }
     
-    select:focus, input:focus, textarea:focus {
+    input:focus, select:focus, textarea:focus {
       outline: none;
-      border-color: #FFD700;
-      box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+      border-color: #8B0000; /* Vermelho vinho */
+      box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.1);
     }
     
+    /* TABELAS */
     table {
       width: 100%;
       border-collapse: collapse;
       margin: 20px 0;
-    }
-    
-    th, td {
-      padding: 15px;
-      text-align: left;
-      border-bottom: 1px solid #dee2e6;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border: 2px solid #000; /* Borda preta */
     }
     
     th {
-      background-color: #f8f9fa;
-      font-weight: 600;
+      background: #FFD700; /* Amarelo */
+      color: #8B0000; /* Vermelho vinho */
+      padding: 15px;
+      text-align: left;
+      font-weight: 800;
+      border-bottom: 2px solid #000; /* Borda preta */
+    }
+    
+    td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #eee;
       color: #333;
     }
     
     tr:hover {
-      background-color: #f8f9fa;
+      background: #fff9e6;
     }
     
-    /* QUICK ACTIONS DA IMAGEM */
-    .quick-actions {
-      background: #f8f9fa;
-      padding: 20px;
-      border-radius: 10px;
-      margin-top: 25px;
+    /* NOTIFICAÇÕES */
+    .rejection-notice { 
+      background: #f8d7da; 
+      padding: 20px; 
+      border-radius: 8px; 
+      margin-bottom: 20px; 
+      border-left: 4px solid #dc3545; 
+      border: 2px solid #000; /* Borda preta */
     }
     
-    .quick-actions h4 {
-      margin-bottom: 15px;
-      color: #333;
+    /* RESPONSIVIDADE */
+    @media (max-width: 768px) {
+      .dashboard-container {
+        flex-direction: column;
+      }
+      
+      .sidebar-menu {
+        width: 100%;
+      }
+      
+      .stats-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      
+      .action-buttons {
+        grid-template-columns: 1fr;
+      }
     }
     
-    .action-buttons {
-      display: flex;
-      gap: 15px;
-      flex-wrap: wrap;
+    /* SCROLLBAR */
+    ::-webkit-scrollbar {
+      width: 8px;
     }
     
-    .action-btn {
-      flex: 1;
-      min-width: 200px;
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
     }
     
-    .export-btn {
-      background: #6c757d;
-      color: white;
-      margin-top: 20px;
+    ::-webkit-scrollbar-thumb {
+      background: #FFD700;
+      border-radius: 4px;
     }
     
-    .export-btn:hover {
-      background: #5a6268;
+    ::-webkit-scrollbar-thumb:hover {
+      background: #FFC107;
     }
   </style>
 </head>
 <body>
 
-  <!-- CABEÇALHO AMARELO COM LOGO FLUTUANTE -->
+  <!-- CABEÇALHO AMARELO COM BORDAS VERMELHO VINHO -->
   <div class="school-header-container">
     <div class="school-header">
       <div class="logo-container">
@@ -508,7 +654,9 @@
             <small id="current-user-role">director</small>
           </div>
         </div>
-        <button class="logout-btn-top" onclick="logout()">Sair</button>
+        <button class="logout-btn-top" onclick="logout()">
+          🚪 Sair
+        </button>
       </div>
     </div>
   </div>
@@ -516,7 +664,7 @@
   <div class="main-container">
     <div id="alert-container"></div>
 
-    <!-- MENU LATERAL COM FUNCIONALIDADES DA IMAGEM -->
+    <!-- MENU LATERAL COM BOTÕES AMARELOS E BORDAS PRETAS -->
     <div class="dashboard-container">
       <div class="sidebar-menu">
         <h3 class="sidebar-title">Dashboard da Direção</h3>
@@ -530,7 +678,7 @@
           <li class="menu-item" data-section="credentials">
             <span>🔑</span> Credenciais
           </li>
-          <li class="menu-item" data-section="reports2">
+          <li class="menu-item" data-section="informes">
             <span>📋</span> Informes
           </li>
           <li class="menu-item" data-section="financial">
@@ -538,29 +686,29 @@
           </li>
         </ul>
         
-        <!-- AÇÕES RÁPIDAS DA IMAGEM -->
+        <!-- AÇÕES RÁPIDAS -->
         <div class="quick-actions">
           <h4>Ações Rápidas</h4>
           <div class="action-buttons">
-            <button class="btn action-btn" onclick="gerarRelatorio()">
+            <button class="action-btn" onclick="loadContent('reports')">
               📊 Gerar Relatório
             </button>
-            <button class="btn action-btn" onclick="emitirCredenciais()">
-              🎫 Emitir Credenciais
+            <button class="action-btn" onclick="citarCredenciais()">
+              🔑 Citar Credenciais
             </button>
-            <button class="btn action-btn" onclick="enviarInforme()">
+            <button class="action-btn" onclick="enviarInforme()">
               📧 Enviar Informe
             </button>
+            <button class="action-btn export" onclick="exportarPDF()">
+              📄 Exportar PDF
+            </button>
           </div>
-          <button class="btn export-btn">
-            📄 Exportar PDF
-          </button>
         </div>
       </div>
 
       <!-- ÁREA DE CONTEÚDO PRINCIPAL -->
       <div class="content-area">
-        <!-- TABS DO PROFESSOR (serão mostradas apenas para professores) -->
+        <!-- TABS DO PROFESSOR -->
         <div id="teacher-tabs" class="tabs" style="display: none;">
           <div class="tab active" data-tab="dashboard">Dashboard</div>
           <div class="tab" data-tab="grades">Lançar Notas</div>
@@ -571,22 +719,27 @@
         <div id="content-sections">
           <!-- DASHBOARD GERAL -->
           <div id="dashboard-section" class="content-section active">
-            <h2>Dashboard da Direção</h2>
-            
-            <!-- ESTATÍSTICAS DA IMAGEM -->
+            <div class="dashboard-header">
+              <h2>Dashboard da Direção</h2>
+            </div>
+
+            <!-- ESTATÍSTICAS -->
             <div class="stats-grid">
               <div class="stat-card">
                 <div class="stat-label">Total de Alunos</div>
                 <div class="stat-value" id="total-alunos">0</div>
               </div>
+              
               <div class="stat-card">
                 <div class="stat-label">Professores</div>
                 <div class="stat-value" id="total-professores">0</div>
               </div>
+              
               <div class="stat-card">
                 <div class="stat-label">Turmas Ativas</div>
                 <div class="stat-value" id="turmas-ativas">0</div>
               </div>
+              
               <div class="stat-card">
                 <div class="stat-label">Pendências</div>
                 <div class="stat-value" id="total-pendencias">0</div>
@@ -596,7 +749,7 @@
             <!-- CONTEÚDO ESPECÍFICO DO PROFESSOR -->
             <div id="teacher-dashboard-content" style="display: none;">
               <h3>📊 Minhas Turmas e Disciplinas</h3>
-              <div id="teacher-assignments-info" class="teacher-assignments">
+              <div id="teacher-assignments-info" class="card">
                 <div class="loading">Carregando suas atribuições...</div>
               </div>
               <div id="teacher-classes">
@@ -607,37 +760,45 @@
 
           <!-- RELATÓRIOS -->
           <div id="reports-section" class="content-section">
-            <h2>📈 Relatórios</h2>
-            <div class="empty-state">
-              <h3>Funcionalidade em Desenvolvimento</h3>
-              <p>Em breve você poderá gerar relatórios detalhados.</p>
+            <div class="card">
+              <h3>📈 Relatórios</h3>
+              <div class="empty-state">
+                <h3>Funcionalidade em Desenvolvimento</h3>
+                <p>Em breve você poderá gerar relatórios detalhados.</p>
+              </div>
             </div>
           </div>
 
           <!-- CREDENCIAIS -->
           <div id="credentials-section" class="content-section">
-            <h2>🔑 Credenciais</h2>
-            <div class="empty-state">
-              <h3>Funcionalidade em Desenvolvimento</h3>
-              <p>Em breve você poderá gerenciar credenciais de acesso.</p>
+            <div class="card">
+              <h3>🔑 Credenciais</h3>
+              <div class="empty-state">
+                <h3>Funcionalidade em Desenvolvimento</h3>
+                <p>Em breve você poderá gerenciar credenciais de acesso.</p>
+              </div>
             </div>
           </div>
 
           <!-- INFORMES -->
-          <div id="reports2-section" class="content-section">
-            <h2>📋 Informes</h2>
-            <div class="empty-state">
-              <h3>Funcionalidade em Desenvolvimento</h3>
-              <p>Em breve você poderá enviar informes.</p>
+          <div id="informes-section" class="content-section">
+            <div class="card">
+              <h3>📋 Informes</h3>
+              <div class="empty-state">
+                <h3>Funcionalidade em Desenvolvimento</h3>
+                <p>Em breve você poderá enviar informes.</p>
+              </div>
             </div>
           </div>
 
           <!-- FINANCEIRO -->
           <div id="financial-section" class="content-section">
-            <h2>💰 Financeiro</h2>
-            <div class="empty-state">
-              <h3>Funcionalidade em Desenvolvimento</h3>
-              <p>Em breve você poderá gerenciar o financeiro.</p>
+            <div class="card">
+              <h3>💰 Financeiro</h3>
+              <div class="empty-state">
+                <h3>Funcionalidade em Desenvolvimento</h3>
+                <p>Em breve você poderá gerenciar o financeiro.</p>
+              </div>
             </div>
           </div>
 
@@ -688,6 +849,15 @@
                     role: 'teacher',
                     email: 'professor@colegio27demarco.edu',
                     created_at: new Date().toISOString()
+                },
+                {
+                    id: '3',
+                    name: 'Pedagogo Teste',
+                    username: 'pedagogo',
+                    password: 'ped123',
+                    role: 'coordinator',
+                    email: 'pedagogo@colegio27demarco.edu',
+                    created_at: new Date().toISOString()
                 }
             ];
 
@@ -702,10 +872,18 @@
                 { id: 1, year: '2024-2025', is_active: true, created_at: new Date().toISOString() }
             ]));
             if (!localStorage.getItem('grades')) localStorage.setItem('grades', JSON.stringify([]));
-            if (!localStorage.getItem('disciplines')) localStorage.setItem('disciplines', JSON.stringify([]));
+            if (!localStorage.getItem('disciplines')) localStorage.setItem('disciplines', JSON.stringify([
+                { id: '1', name: 'Matemática', grade: 'all' },
+                { id: '2', name: 'Português', grade: 'all' },
+                { id: '3', name: 'História', grade: 'all' },
+                { id: '4', name: 'Geografia', grade: 'all' },
+                { id: '5', name: 'Ciências', grade: 'all' },
+                { id: '6', name: 'Inglês', grade: 'all' }
+            ]));
             if (!localStorage.getItem('payments')) localStorage.setItem('payments', JSON.stringify([]));
             if (!localStorage.getItem('announcements')) localStorage.setItem('announcements', JSON.stringify([]));
             if (!localStorage.getItem('teacher_assignments')) localStorage.setItem('teacher_assignments', JSON.stringify([]));
+            if (!localStorage.getItem('pending_approvals')) localStorage.setItem('pending_approvals', JSON.stringify([]));
             console.log('✅ Banco de dados inicializado');
         },
 
@@ -775,7 +953,10 @@
         
         // Atualizar informações do usuário no cabeçalho
         document.getElementById('current-user-name').textContent = currentUser.name;
-        document.getElementById('current-user-role').textContent = currentUser.role;
+        document.getElementById('current-user-role').textContent = 
+          currentUser.role === 'director' ? 'Director' : 
+          currentUser.role === 'teacher' ? 'Professor' : 
+          currentUser.role === 'coordinator' ? 'Coordenador' : 'Usuário';
         document.getElementById('user-avatar').textContent = currentUser.name.charAt(0);
         
         // Carregar dados do localStorage
@@ -791,7 +972,7 @@
         // Configurar interface baseada no papel do usuário
         if (currentUser.role === 'teacher') {
           setupTeacherInterface();
-        } else if (currentUser.role === 'director') {
+        } else if (currentUser.role === 'director' || currentUser.role === 'coordinator') {
           setupDirectorInterface();
         }
 
@@ -800,7 +981,7 @@
 
       } catch (error) {
         console.error('Erro ao carregar dados:', error);
-        showAlert('Erro ao carregar dados do sistema', 'warning');
+        showAlert('Erro ao carregar dados do sistema', 'danger');
       }
     }
 
@@ -810,9 +991,10 @@
       document.getElementById('total-professores').textContent = DB.get('teachers').length;
       document.getElementById('turmas-ativas').textContent = classes.filter(c => c.status === 'active').length;
       
-      // Calcular pendências (notas pendentes + outras pendências)
+      // Calcular pendências (notas pendentes + matrículas pendentes)
       const notasPendentes = grades.filter(g => g.status === 'pending').length;
-      document.getElementById('total-pendencias').textContent = notasPendentes;
+      const matriculasPendentes = students.filter(s => s.status === 'pending').length;
+      document.getElementById('total-pendencias').textContent = notasPendentes + matriculasPendentes;
     }
 
     // CONFIGURAR INTERFACE DO PROFESSOR
@@ -838,7 +1020,7 @@
       loadTeacherDashboard();
     }
 
-    // CONFIGURAR INTERFACE DO DIRETOR
+    // CONFIGURAR INTERFACE DO DIRETOR/COORDENADOR
     function setupDirectorInterface() {
       // Ocultar conteúdo específico do professor
       document.getElementById('teacher-tabs').style.display = 'none';
@@ -863,7 +1045,10 @@
           const section = item.dataset.section;
           
           // Mostrar seção correspondente
-          document.getElementById(`${section}-section`).classList.add('active');
+          const contentElement = document.getElementById(`${section}-section`);
+          if (contentElement) {
+            contentElement.classList.add('active');
+          }
         });
       });
 
@@ -918,6 +1103,9 @@
         <h4>🎯 Minhas Atribuições</h4>
         <p><strong>Turmas:</strong> ${myClasses.map(c => `${c.grade}ª ${c.name}`).join(', ')}</p>
         <p><strong>Disciplinas:</strong> ${myDisciplines.map(d => d.name).join(', ')}</p>
+        <div style="margin-top: 15px; padding: 10px; background: #f8f9fa; border-radius: 6px;">
+          <small>📌 Você pode lançar notas para suas disciplinas na aba "Lançar Notas"</small>
+        </div>
       `;
 
       const teacherGrades = grades.filter(g => g.teacher_id === currentUser.id);
@@ -943,15 +1131,15 @@
                 </div>
                 <div class="class-stats">
                   <div class="class-stat">
-                    <div class="stat-value">${approvedGrades.length}</div>
+                    <div class="stat-value" style="color: #28a745;">${approvedGrades.length}</div>
                     <div class="stat-label">Aprovadas</div>
                   </div>
                   <div class="class-stat">
-                    <div class="stat-value">${pendingGrades.length}</div>
+                    <div class="stat-value" style="color: #ffc107;">${pendingGrades.length}</div>
                     <div class="stat-label">Pendentes</div>
                   </div>
                   <div class="class-stat">
-                    <div class="stat-value">${rejectedGrades.length}</div>
+                    <div class="stat-value" style="color: #dc3545;">${rejectedGrades.length}</div>
                     <div class="stat-label">Rejeitadas</div>
                   </div>
                 </div>
@@ -985,14 +1173,14 @@
       let gradesHTML = `
         <div class="form-group">
           <label>Selecionar Turma:</label>
-          <select id="grade-class" onchange="loadClassStudents()">
+          <select id="grade-class" onchange="loadClassStudents()" style="border: 2px solid #000;">
             <option value="">Selecione a turma</option>
             ${myClasses.map(c => `<option value="${c.id}">${c.grade}ª ${c.name}</option>`).join('')}
           </select>
         </div>
         <div class="form-group">
           <label>Selecionar Disciplina:</label>
-          <select id="grade-discipline">
+          <select id="grade-discipline" style="border: 2px solid #000;">
             <option value="">Selecione a disciplina</option>
             ${myDisciplines.map(d => `<option value="${d.id}">${d.name}</option>`).join('')}
           </select>
@@ -1051,22 +1239,27 @@
         return;
       }
 
+      const discipline = disciplines.find(d => d.id == disciplineId);
+      
       let studentsHTML = `
-        <h4>📝 Lançar Notas - ${disciplines.find(d => d.id == disciplineId)?.name || 'Disciplina'}</h4>
-        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-          <strong>💡 Instruções:</strong> Preencha as notas de 0 a 20 para cada aluno.
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 2px solid #000;">
+          <strong>📚 Disciplina:</strong> ${discipline ? discipline.name : 'N/A'}<br>
+          <strong>💡 Instruções:</strong> Preencha as notas de 0 a 20 para cada aluno. 
+          <span style="color: #8B0000; font-weight: 700;">As notas serão salvas localmente e enviadas para aprovação pedagógica.</span>
         </div>
         <table>
           <thead>
             <tr>
+              <th>Nº</th>
               <th>Aluno</th>
               <th>Nota (0-20)</th>
               <th>Tipo de Avaliação</th>
               <th>Status</th>
+              <th>Ação</th>
             </tr>
           </thead>
           <tbody>
-            ${classStudents.map(student => {
+            ${classStudents.map((student, index) => {
               const existingGrade = grades.find(g => 
                 g.student_id === student.id && 
                 g.discipline_id == disciplineId &&
@@ -1074,12 +1267,14 @@
               );
               
               const status = existingGrade ? 
-                (existingGrade.status === 'approved' ? '✅ Aprovada' : 
-                 existingGrade.status === 'pending' ? '⏳ Pendente' : 
-                 '❌ Rejeitada') : '📝 Nova';
+                (existingGrade.status === 'approved' ? '<span style="color: #28a745; font-weight: 700;">✅ Aprovada</span>' : 
+                 existingGrade.status === 'pending' ? '<span style="color: #ffc107; font-weight: 700;">⏳ Pendente</span>' : 
+                 '<span style="color: #dc3545; font-weight: 700;">❌ Rejeitada</span>') : 
+                 '<span style="color: #6c757d; font-weight: 700;">📝 Nova</span>';
               
               return `
                 <tr>
+                  <td>${index + 1}</td>
                   <td>${student.name}</td>
                   <td>
                     <input type="number" 
@@ -1088,30 +1283,114 @@
                            step="0.5" 
                            placeholder="0-20"
                            value="${existingGrade ? existingGrade.grade : ''}"
-                           style="width: 80px; padding: 8px;">
+                           style="width: 80px; padding: 8px; border: 2px solid #000; border-radius: 4px;">
                   </td>
                   <td>
-                    <select id="type-${student.id}" style="padding: 8px;">
+                    <select id="type-${student.id}" style="padding: 8px; border: 2px solid #000; border-radius: 4px;">
                       <option value="teste" ${existingGrade?.grade_type === 'teste' ? 'selected' : ''}>Teste</option>
                       <option value="trabalho" ${existingGrade?.grade_type === 'trabalho' ? 'selected' : ''}>Trabalho</option>
                       <option value="prova" ${existingGrade?.grade_type === 'prova' ? 'selected' : ''}>Prova</option>
+                      <option value="participacao" ${existingGrade?.grade_type === 'participacao' ? 'selected' : ''}>Participação</option>
                     </select>
                   </td>
                   <td>${status}</td>
+                  <td>
+                    <button class="btn btn-success" onclick="saveSingleGrade('${student.id}', '${disciplineId}')" style="padding: 6px 12px; font-size: 0.9rem;">
+                      💾 Salvar
+                    </button>
+                  </td>
                 </tr>
               `;
             }).join('')}
           </tbody>
         </table>
-        <button class="btn btn-success" onclick="submitGrades()" style="margin-top: 15px;">
-          💾 Salvar Todas as Notas
-        </button>
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+          <button class="btn btn-success" onclick="saveAllGrades()" style="flex: 1; padding: 15px; font-weight: 700;">
+            💾 Salvar Todas as Notas
+          </button>
+          <button class="btn btn-primary" onclick="sendToPedagogical()" style="flex: 1; padding: 15px; font-weight: 700;">
+            📤 Enviar para Pedágogico
+          </button>
+        </div>
+        <div style="margin-top: 15px; padding: 10px; background: #e9ecef; border-radius: 6px; border: 2px solid #000;">
+          <small>📌 <strong>Nota:</strong> As notas são salvas localmente automaticamente. Use "Enviar para Pedágogico" para solicitar aprovação.</small>
+        </div>
       `;
 
       container.innerHTML = studentsHTML;
     }
 
-    function submitGrades() {
+    // SALVAR UMA NOTA INDIVIDUAL
+    function saveSingleGrade(studentId, disciplineId) {
+      const classId = document.getElementById('grade-class').value;
+      
+      if (!classId || !disciplineId) {
+        showAlert('Selecione uma turma e disciplina primeiro', 'warning');
+        return;
+      }
+
+      const gradeValue = document.getElementById(`grade-${studentId}`).value;
+      const gradeType = document.getElementById(`type-${studentId}`).value;
+      
+      if (!gradeValue || isNaN(gradeValue)) {
+        showAlert('Digite uma nota válida', 'warning');
+        return;
+      }
+
+      const gradeNum = parseFloat(gradeValue);
+      
+      if (gradeNum < 0 || gradeNum > 20) {
+        showAlert('Nota deve estar entre 0 e 20', 'warning');
+        return;
+      }
+
+      const student = students.find(s => s.id === studentId);
+      const existingGrade = grades.find(g => 
+        g.student_id === studentId && 
+        g.discipline_id == disciplineId &&
+        g.teacher_id === currentUser.id
+      );
+
+      try {
+        if (existingGrade) {
+          // Atualizar nota existente
+          DB.update('grades', existingGrade.id, {
+            grade: gradeNum,
+            grade_type: gradeType,
+            status: 'pending',
+            updated_at: new Date().toISOString()
+          });
+        } else {
+          // Criar nova nota
+          const gradeData = {
+            student_id: studentId,
+            teacher_id: currentUser.id,
+            discipline_id: disciplineId,
+            class_id: classId,
+            grade: gradeNum,
+            grade_type: gradeType,
+            status: 'pending',
+            created_at: new Date().toISOString()
+          };
+          DB.insert('grades', gradeData);
+        }
+        
+        // Atualizar visualização
+        const statusElement = document.querySelector(`tr:has(#grade-${studentId}) td:nth-child(5)`);
+        if (statusElement) {
+          statusElement.innerHTML = '<span style="color: #ffc107; font-weight: 700;">⏳ Pendente</span>';
+        }
+        
+        showAlert(`✅ Nota de ${student.name} salva localmente!`, 'success');
+        
+      } catch (error) {
+        console.error('Erro ao salvar nota:', error);
+        showAlert('Erro ao salvar nota', 'danger');
+      }
+    }
+
+    // SALVAR TODAS AS NOTAS
+    function saveAllGrades() {
       const classId = document.getElementById('grade-class').value;
       const disciplineId = document.getElementById('grade-discipline').value;
       const classStudents = students.filter(s => s.class_id === classId && s.status === 'approved');
@@ -1132,8 +1411,8 @@
         return;
       }
 
-      let hasErrors = false;
       let savedCount = 0;
+      let hasErrors = false;
 
       classStudents.forEach(student => {
         const gradeValue = document.getElementById(`grade-${student.id}`).value;
@@ -1144,7 +1423,6 @@
           
           if (gradeNum < 0 || gradeNum > 20) {
             hasErrors = true;
-            showAlert(`Nota inválida para ${student.name}. Use valores entre 0 e 20.`, 'warning');
             return;
           }
 
@@ -1158,32 +1436,101 @@
             DB.update('grades', existingGrade.id, {
               grade: gradeNum,
               grade_type: gradeType,
-              status: 'pending'
+              status: 'pending',
+              updated_at: new Date().toISOString()
             });
           } else {
             const gradeData = {
               student_id: student.id,
               teacher_id: currentUser.id,
               discipline_id: disciplineId,
+              class_id: classId,
               grade: gradeNum,
               grade_type: gradeType,
-              status: 'pending'
+              status: 'pending',
+              created_at: new Date().toISOString()
             };
             DB.insert('grades', gradeData);
           }
           
           savedCount++;
+          
+          // Atualizar visualização
+          const statusElement = document.querySelector(`tr:has(#grade-${student.id}) td:nth-child(5)`);
+          if (statusElement) {
+            statusElement.innerHTML = '<span style="color: #ffc107; font-weight: 700;">⏳ Pendente</span>';
+          }
         }
       });
 
       if (hasErrors) {
-        showAlert('Algumas notas não foram salvas. Verifique os valores.', 'warning');
+        showAlert('Algumas notas não foram salvas. Verifique se todas estão entre 0 e 20.', 'warning');
       } else if (savedCount > 0) {
-        showAlert(`✅ ${savedCount} nota(s) salva(s) e enviada(s) para aprovação!`, 'success');
+        showAlert(`✅ ${savedCount} nota(s) salva(s) localmente com sucesso!`, 'success');
         updateDashboardStats();
       } else {
         showAlert('Nenhuma nota foi preenchida.', 'warning');
       }
+    }
+
+    // ENVIAR NOTAS PARA APROVAÇÃO PEDAGÓGICA
+    function sendToPedagogical() {
+      const classId = document.getElementById('grade-class').value;
+      const disciplineId = document.getElementById('grade-discipline').value;
+      
+      if (!classId || !disciplineId) {
+        showAlert('Selecione uma turma e disciplina primeiro', 'warning');
+        return;
+      }
+
+      // Buscar todas as notas pendentes deste professor para esta turma e disciplina
+      const teacherPendingGrades = grades.filter(g => 
+        g.teacher_id === currentUser.id && 
+        g.class_id === classId && 
+        g.discipline_id === disciplineId && 
+        g.status === 'pending'
+      );
+
+      if (teacherPendingGrades.length === 0) {
+        showAlert('Não há notas pendentes para enviar.', 'warning');
+        return;
+      }
+
+      // Criar registro de aprovação pendente
+      const approvalData = {
+        teacher_id: currentUser.id,
+        teacher_name: currentUser.name,
+        class_id: classId,
+        discipline_id: disciplineId,
+        grades_count: teacherPendingGrades.length,
+        status: 'pending_review',
+        created_at: new Date().toISOString()
+      };
+
+      // Inserir na tabela de aprovações pendentes
+      const pendingApprovals = DB.get('pending_approvals');
+      approvalData.id = Date.now().toString(36);
+      pendingApprovals.push(approvalData);
+      localStorage.setItem('pending_approvals', JSON.stringify(pendingApprovals));
+
+      // Atualizar status das notas para 'submitted'
+      teacherPendingGrades.forEach(grade => {
+        DB.update('grades', grade.id, {
+          status: 'submitted',
+          submitted_at: new Date().toISOString()
+        });
+      });
+
+      showAlert(`✅ ${teacherPendingGrades.length} nota(s) enviada(s) para aprovação pedagógica!`, 'success');
+      
+      // Atualizar visualização
+      const classStudents = students.filter(s => s.class_id === classId);
+      classStudents.forEach(student => {
+        const statusElement = document.querySelector(`tr:has(#grade-${student.id}) td:nth-child(5)`);
+        if (statusElement) {
+          statusElement.innerHTML = '<span style="color: #007bff; font-weight: 700;">📤 Enviada</span>';
+        }
+      });
     }
 
     // CARREGAR TAB DE NOTIFICAÇÕES
@@ -1193,6 +1540,9 @@
 
       const teacherGrades = grades.filter(g => g.teacher_id === currentUser.id);
       const rejectedGrades = teacherGrades.filter(g => g.status === 'rejected');
+      const pendingApprovals = DB.get('pending_approvals').filter(a => 
+        a.teacher_id === currentUser.id && a.status === 'pending_review'
+      );
       const announcements = DB.get('announcements').filter(a => 
         (a.recipient === 'teachers' || a.recipient === 'all') && 
         a.status === 'published'
@@ -1200,7 +1550,7 @@
 
       let notificationsHTML = '';
 
-      if (rejectedGrades.length === 0 && announcements.length === 0) {
+      if (rejectedGrades.length === 0 && pendingApprovals.length === 0 && announcements.length === 0) {
         notificationsHTML = `
           <div class="empty-state">
             <h3>✅ Nenhuma notificação</h3>
@@ -1214,7 +1564,7 @@
       if (rejectedGrades.length > 0) {
         notificationsHTML += `
           <div class="alert alert-warning">
-            <strong>⚠️ Atenção:</strong> Você tem ${rejectedGrades.length} nota(s) rejeitada(s).
+            <strong>⚠️ Atenção:</strong> Você tem ${rejectedGrades.length} nota(s) rejeitada(s) que precisam de correção.
           </div>
         `;
 
@@ -1230,7 +1580,8 @@
                 </div>
               </div>
               <p><strong>Disciplina:</strong> ${discipline ? discipline.name : 'N/A'}</p>
-              <p><strong>Nota:</strong> ${grade.grade}</p>
+              <p><strong>Nota Enviada:</strong> ${grade.grade}</p>
+              <p><strong>Observação:</strong> ${grade.rejection_reason || 'Nenhuma observação fornecida.'}</p>
               <button class="btn btn-warning" onclick="reSubmitGrade('${grade.id}')">
                 ✏️ Corrigir e Reenviar
               </button>
@@ -1239,14 +1590,37 @@
         });
       }
 
+      if (pendingApprovals.length > 0) {
+        notificationsHTML += `
+          <div style="background: #d1ecf1; padding: 20px; border-radius: 8px; margin: 20px 0; border: 2px solid #000;">
+            <h4 style="color: #0c5460; margin-bottom: 10px;">📤 Aguardando Aprovação</h4>
+            ${pendingApprovals.map(approval => {
+              const classObj = classes.find(c => c.id === approval.class_id);
+              const disciplineObj = disciplines.find(d => d.id === approval.discipline_id);
+              return `
+                <div style="margin: 10px 0; padding: 10px; background: white; border-radius: 6px; border: 1px solid #000;">
+                  <strong>${classObj ? `${classObj.grade}ª ${classObj.name}` : 'Turma'}</strong> - 
+                  <strong>${disciplineObj ? disciplineObj.name : 'Disciplina'}</strong><br>
+                  <small>${approval.grades_count} nota(s) aguardando análise pedagógica</small>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+      }
+
       if (announcements.length > 0) {
         notificationsHTML += `
-          <div style="margin-top: 30px;">
-            <h4 style="color: #2c3e50; margin-bottom: 15px;">📢 Comunicados</h4>
+          <div style="background: #e8f4fd; padding: 20px; border-radius: 8px; margin: 20px 0; border: 2px solid #000;">
+            <h4 style="color: #2c5aa0; margin-bottom: 15px;">📢 Comunicados</h4>
             ${announcements.map(announcement => `
-              <div style="background: #e8f4fd; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+              <div style="margin: 10px 0; padding: 15px; background: white; border-radius: 6px; border: 1px solid #000;">
                 <h5 style="color: #2c5aa0;">${announcement.title}</h5>
                 <p>${announcement.message}</p>
+                <small style="color: #7f8c8d;">
+                  Por: ${announcement.author_name || 'Director'} - 
+                  ${new Date(announcement.created_at).toLocaleDateString('pt-BR')}
+                </small>
               </div>
             `).join('')}
           </div>
@@ -1278,10 +1652,11 @@
         DB.update('grades', gradeId, {
           grade: gradeNum,
           status: 'pending',
-          rejection_observation: null
+          rejection_reason: null,
+          updated_at: new Date().toISOString()
         });
 
-        showAlert('✅ Nota corrigida e reenviada para aprovação!', 'success');
+        showAlert('✅ Nota corrigida e salva localmente!', 'success');
         loadNotificationsTab();
         
       } catch (error) {
@@ -1292,15 +1667,30 @@
 
     // FUNÇÕES DAS AÇÕES RÁPIDAS
     function gerarRelatorio() {
-      showAlert('Relatório gerado com sucesso!', 'success');
+      showAlert('📊 Relatório gerado com sucesso!', 'success');
     }
 
-    function emitirCredenciais() {
-      showAlert('Credenciais emitidas com sucesso!', 'success');
+    function citarCredenciais() {
+      showAlert('🔑 Credenciais citadas com sucesso!', 'success');
     }
 
     function enviarInforme() {
-      showAlert('Informe enviado com sucesso!', 'success');
+      loadContent('informes');
+    }
+
+    function exportarPDF() {
+      showAlert('📄 PDF exportado com sucesso!', 'success');
+    }
+
+    function loadContent(section) {
+      document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+      document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+      
+      const menuItem = document.querySelector(`.menu-item[data-section="${section}"]`);
+      if (menuItem) menuItem.classList.add('active');
+      
+      const contentElement = document.getElementById(`${section}-section`);
+      if (contentElement) contentElement.classList.add('active');
     }
 
     function loadTeacherTab(tab) {
@@ -1323,17 +1713,32 @@
     function showAlert(message, type) {
       const alertDiv = document.createElement('div');
       alertDiv.className = `alert alert-${type}`;
-      alertDiv.textContent = message;
+      alertDiv.innerHTML = `
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <span>${message}</span>
+          <button onclick="this.parentElement.parentElement.remove()" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: inherit;">
+            &times;
+          </button>
+        </div>
+      `;
+      
       const container = document.getElementById('alert-container');
       if (container) {
         container.appendChild(alertDiv);
-        setTimeout(() => alertDiv.remove(), 5000);
+        setTimeout(() => {
+          if (alertDiv.parentNode) {
+            alertDiv.style.opacity = '0';
+            setTimeout(() => alertDiv.remove(), 500);
+          }
+        }, 5000);
       }
     }
 
     function logout() {
-      localStorage.removeItem('currentUser');
-      window.location.href = 'index.html';
+      if (confirm('Deseja realmente sair do sistema?')) {
+        localStorage.removeItem('currentUser');
+        window.location.href = 'index.html';
+      }
     }
 
     // INICIALIZAÇÃO
