@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Colégio 27 de Março - Sistema Académico</title>
+  <title>Colégio 27 de Março - Área do Professor</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { 
@@ -12,14 +12,14 @@
       min-height: 100vh; 
     }
     
-    /* CABEÇALHO AMARELO COM BORDAS VERMELHO VINHO */
+    /* CABEÇALHO AMARELO COM LOGO FLUTUANTE */
     .school-header-container {
       background: linear-gradient(135deg, #FFD700, #FFC107);
       padding: 15px 20px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.1);
       position: relative;
       overflow: hidden;
-      border-bottom: 3px solid #8B0000; /* Vermelho vinho */
+      border-bottom: 3px solid #8B0000;
     }
     
     .school-header {
@@ -49,7 +49,7 @@
       box-shadow: 0 4px 15px rgba(0,0,0,0.2);
       font-size: 28px;
       animation: float 3s ease-in-out infinite;
-      border: 2px solid #8B0000; /* Vermelho vinho */
+      border: 2px solid #8B0000;
     }
     
     @keyframes float {
@@ -88,7 +88,7 @@
       padding: 8px 15px;
       border-radius: 30px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      border: 2px solid #8B0000; /* Vermelho vinho */
+      border: 2px solid #8B0000;
     }
     
     .user-avatar {
@@ -105,9 +105,9 @@
     }
     
     .logout-btn-top {
-      background: #8B0000; /* Vermelho vinho */
+      background: #8B0000;
       color: white;
-      border: 2px solid #000; /* Borda preta */
+      border: 2px solid #000;
       padding: 10px 20px;
       border-radius: 6px;
       cursor: pointer;
@@ -123,6 +123,22 @@
       transform: translateY(-2px);
     }
     
+    /* BOTÃO DE CONFIGURAÇÃO */
+    .settings-btn {
+      background: none;
+      border: none;
+      color: #8B0000;
+      cursor: pointer;
+      padding: 5px;
+      font-size: 1.2rem;
+      transition: all 0.3s;
+    }
+    
+    .settings-btn:hover {
+      color: #000;
+      transform: rotate(90deg);
+    }
+    
     /* CONTEÚDO PRINCIPAL */
     .main-container {
       max-width: 1200px;
@@ -130,76 +146,19 @@
       padding: 0 20px;
     }
     
-    /* MENU LATERAL COM BOTÕES AMARELOS E BORDAS PRETAS */
-    .dashboard-container {
-      display: flex;
-      gap: 20px;
-    }
-    
-    .sidebar-menu {
-      width: 280px;
-      background: linear-gradient(180deg, #FFD700 0%, #FFC107 100%);
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      height: fit-content;
-      border: 2px solid #000; /* Borda preta */
-    }
-    
-    .sidebar-title {
-      font-size: 1.2rem;
-      font-weight: 700;
-      margin-bottom: 20px;
-      color: #8B0000; /* Vermelho vinho */
-      padding-bottom: 10px;
-      border-bottom: 2px solid #8B0000; /* Vermelho vinho */
-      text-align: center;
-    }
-    
-    .menu-list {
-      list-style: none;
-    }
-    
-    .menu-item {
-      padding: 12px 15px;
-      margin-bottom: 10px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.3s;
-      font-weight: 600;
-      display: flex;
+    .user-header { 
+      background: white; 
+      padding: 20px; 
+      border-radius: 12px; 
+      margin-bottom: 25px; 
+      display: flex; 
+      justify-content: space-between; 
       align-items: center;
-      gap: 12px;
-      background: white;
-      border: 2px solid #000; /* Borda preta */
-      color: #333;
-    }
-    
-    .menu-item:hover {
-      background: #FFF9C4;
-      transform: translateX(5px);
-      border-color: #8B0000; /* Vermelho vinho */
-    }
-    
-    .menu-item.active {
-      background: #8B0000; /* Vermelho vinho */
-      color: white;
-      font-weight: 700;
-      border-color: #000; /* Borda preta */
-      transform: translateX(5px);
-      box-shadow: 0 4px 8px rgba(139, 0, 0, 0.2);
-    }
-    
-    .content-area {
-      flex: 1;
-      background: white;
-      border-radius: 12px;
-      padding: 25px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      border: 2px solid #000; /* Borda preta */
+      border: 2px solid #000;
     }
     
-    /* ESTILOS DO PROFESSOR */
+    /* TABS DO PROFESSOR */
     .tabs { 
       display: flex; 
       background: white; 
@@ -207,7 +166,7 @@
       overflow: hidden; 
       margin-bottom: 25px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      border: 2px solid #000; /* Borda preta */
+      border: 2px solid #000;
     }
     
     .tab { 
@@ -220,6 +179,7 @@
       border: none;
       border-right: 1px solid #ddd;
       transition: all 0.3s ease;
+      color: #333;
     }
     
     .tab:last-child {
@@ -228,12 +188,12 @@
     
     .tab:hover { 
       background-color: #FFF9C4; 
-      color: #8B0000; /* Vermelho vinho */
+      color: #8B0000;
     }
     
     .tab.active { 
-      background: #FFD700; /* Amarelo */
-      color: #8B0000; /* Vermelho vinho */
+      background: #FFD700;
+      color: #8B0000;
       font-weight: 700;
     }
     
@@ -244,11 +204,12 @@
       border-radius: 10px; 
       margin-bottom: 25px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border: 2px solid #000;
+      animation: fadeIn 0.3s ease;
     }
     
     .tab-content.active { 
       display: block; 
-      animation: fadeIn 0.3s ease;
     }
     
     @keyframes fadeIn {
@@ -262,14 +223,14 @@
       padding: 20px; 
       margin-bottom: 20px; 
       box-shadow: 0 2px 8px rgba(0,0,0,0.08); 
-      border: 2px solid #000; /* Borda preta */
+      border: 2px solid #000;
     }
     
-    /* BOTÕES COM CORES DO SISTEMA */
+    /* BOTÕES */
     .btn { 
-      background-color: #FFD700; /* Amarelo */
-      color: #8B0000; /* Vermelho vinho */
-      border: 2px solid #000; /* Borda preta */
+      background-color: #FFD700; 
+      color: #8B0000; 
+      border: 2px solid #000; 
       padding: 10px 20px; 
       border-radius: 6px; 
       cursor: pointer; 
@@ -284,61 +245,61 @@
       background-color: #FFC107; 
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
-      border-color: #8B0000; /* Vermelho vinho */
+      border-color: #8B0000;
     }
     
     .btn-success { 
       background-color: #28a745; 
       color: white;
-      border-color: #000; /* Borda preta */
+      border-color: #000;
     }
     
     .btn-success:hover { 
       background-color: #218838;
-      border-color: #000; /* Borda preta */
+      border-color: #000;
     }
     
     .btn-primary { 
       background-color: #007bff; 
       color: white;
-      border-color: #000; /* Borda preta */
+      border-color: #000;
     }
     
     .btn-primary:hover { 
       background-color: #0056b3;
-      border-color: #000; /* Borda preta */
+      border-color: #000;
     }
     
     .btn-warning { 
       background-color: #ffc107; 
       color: #212529;
-      border-color: #000; /* Borda preta */
+      border-color: #000;
     }
     
     .btn-warning:hover { 
       background-color: #e0a800;
-      border-color: #000; /* Borda preta */
+      border-color: #000;
     }
     
     .btn-danger { 
-      background-color: #8B0000; /* Vermelho vinho */
+      background-color: #8B0000; 
       color: white;
-      border-color: #000; /* Borda preta */
+      border-color: #000;
     }
     
     .btn-danger:hover { 
       background-color: #a00000;
-      border-color: #000; /* Borda preta */
+      border-color: #000;
     }
     
-    /* ALERTAS COM CORES DO SISTEMA */
+    /* ALERTAS */
     .alert { 
       padding: 15px 20px; 
       border-radius: 6px; 
       margin-bottom: 20px; 
       font-weight: 600;
       border-left: 4px solid;
-      border: 2px solid #000; /* Borda preta */
+      border: 2px solid #000;
     }
     
     .alert-success { 
@@ -350,7 +311,7 @@
     .alert-danger { 
       background-color: #f8d7da; 
       color: #721c24;
-      border-left-color: #8B0000; /* Vermelho vinho */
+      border-left-color: #8B0000;
     }
     
     .alert-warning { 
@@ -376,7 +337,7 @@
       color: #6c757d; 
     }
     
-    /* ESTATÍSTICAS DO DASHBOARD */
+    /* ESTATÍSTICAS */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -389,9 +350,9 @@
       padding: 20px;
       border-radius: 10px;
       text-align: center;
-      border-left: 4px solid #FFD700; /* Amarelo */
+      border-left: 4px solid #FFD700;
       transition: all 0.3s;
-      border: 2px solid #000; /* Borda preta */
+      border: 2px solid #000;
     }
     
     .stat-card:hover {
@@ -402,7 +363,7 @@
     .stat-value {
       font-size: 2.5rem;
       font-weight: 800;
-      color: #8B0000; /* Vermelho vinho */
+      color: #8B0000;
       margin: 10px 0;
     }
     
@@ -425,15 +386,15 @@
       padding: 20px; 
       border-radius: 10px; 
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      border-left: 4px solid #FFD700; /* Amarelo */
+      border-left: 4px solid #FFD700;
       transition: all 0.3s;
-      border: 2px solid #000; /* Borda preta */
+      border: 2px solid #000;
     }
     
     .class-card:hover {
       transform: translateY(-5px);
       box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-      border-color: #8B0000; /* Vermelho vinho */
+      border-color: #8B0000;
     }
     
     .class-header { 
@@ -450,13 +411,13 @@
     }
     
     .class-grade { 
-      background: #FFD700; /* Amarelo */
-      color: #8B0000; /* Vermelho vinho */
+      background: #FFD700; 
+      color: #8B0000; 
       padding: 4px 12px; 
       border-radius: 20px; 
       font-size: 0.8rem; 
       font-weight: 600; 
-      border: 1px solid #000; /* Borda preta */
+      border: 1px solid #000;
     }
     
     .class-stats { 
@@ -470,63 +431,6 @@
       flex: 1; 
     }
     
-    /* AÇÕES RÁPIDAS */
-    .quick-actions {
-      background: #f8f9fa;
-      padding: 20px;
-      border-radius: 10px;
-      margin-top: 25px;
-      border: 2px solid #000; /* Borda preta */
-    }
-    
-    .quick-actions h4 {
-      margin-bottom: 15px;
-      color: #8B0000; /* Vermelho vinho */
-      font-size: 1.1rem;
-      font-weight: 700;
-    }
-    
-    .action-buttons {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 15px;
-    }
-    
-    .action-btn {
-      padding: 15px;
-      background: #FFD700; /* Amarelo */
-      border: 2px solid #000; /* Borda preta */
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 700;
-      color: #8B0000; /* Vermelho vinho */
-      text-align: center;
-      transition: all 0.3s;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.95rem;
-    }
-    
-    .action-btn:hover {
-      background: #FFC107;
-      transform: translateY(-3px);
-      box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
-      border-color: #8B0000; /* Vermelho vinho */
-    }
-    
-    .action-btn.export {
-      background: #8B0000; /* Vermelho vinho */
-      color: white;
-      border-color: #000; /* Borda preta */
-    }
-    
-    .action-btn.export:hover {
-      background: #a00000;
-      border-color: #000; /* Borda preta */
-    }
-    
     /* FORMULÁRIOS */
     .form-group {
       margin-bottom: 20px;
@@ -536,13 +440,13 @@
       display: block;
       margin-bottom: 8px;
       font-weight: 700;
-      color: #8B0000; /* Vermelho vinho */
+      color: #8B0000;
     }
     
     input, select, textarea {
       width: 100%;
       padding: 12px;
-      border: 2px solid #000; /* Borda preta */
+      border: 2px solid #000;
       border-radius: 6px;
       font-size: 1rem;
       transition: all 0.3s;
@@ -551,7 +455,7 @@
     
     input:focus, select:focus, textarea:focus {
       outline: none;
-      border-color: #8B0000; /* Vermelho vinho */
+      border-color: #8B0000;
       box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.1);
     }
     
@@ -563,16 +467,16 @@
       border-radius: 8px;
       overflow: hidden;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      border: 2px solid #000; /* Borda preta */
+      border: 2px solid #000;
     }
     
     th {
-      background: #FFD700; /* Amarelo */
-      color: #8B0000; /* Vermelho vinho */
+      background: #FFD700;
+      color: #8B0000;
       padding: 15px;
       text-align: left;
       font-weight: 800;
-      border-bottom: 2px solid #000; /* Borda preta */
+      border-bottom: 2px solid #000;
     }
     
     td {
@@ -592,25 +496,88 @@
       border-radius: 8px; 
       margin-bottom: 20px; 
       border-left: 4px solid #dc3545; 
-      border: 2px solid #000; /* Borda preta */
+      border: 2px solid #000;
+    }
+    
+    /* MODAL PARA ALTERAR SENHA */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      border: 2px solid #8B0000;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #FFD700;
+    }
+
+    .modal-header h3 {
+      color: #8B0000;
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+
+    .close-modal {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #666;
+    }
+
+    .close-modal:hover {
+      color: #333;
     }
     
     /* RESPONSIVIDADE */
     @media (max-width: 768px) {
-      .dashboard-container {
+      .school-header {
         flex-direction: column;
+        gap: 15px;
+        text-align: center;
       }
       
-      .sidebar-menu {
-        width: 100%;
+      .user-info-top {
+        flex-direction: column;
+        gap: 10px;
       }
       
       .stats-grid {
         grid-template-columns: 1fr 1fr;
       }
       
-      .action-buttons {
+      .class-grid {
         grid-template-columns: 1fr;
+      }
+      
+      .tabs {
+        flex-direction: column;
+      }
+      
+      .tab {
+        border-right: none;
+        border-bottom: 1px solid #ddd;
       }
     }
     
@@ -626,23 +593,41 @@
     ::-webkit-scrollbar-thumb {
       background: #FFD700;
       border-radius: 4px;
+      border: 1px solid #000;
     }
     
     ::-webkit-scrollbar-thumb:hover {
       background: #FFC107;
     }
+    
+    /* CLASSES UTILITÁRIAS */
+    .hidden {
+      display: none !important;
+    }
+    
+    .text-center {
+      text-align: center;
+    }
+    
+    .mt-20 {
+      margin-top: 20px;
+    }
+    
+    .mb-20 {
+      margin-bottom: 20px;
+    }
   </style>
 </head>
 <body>
 
-  <!-- CABEÇALHO AMARELO COM BORDAS VERMELHO VINHO -->
+  <!-- CABEÇALHO AMARELO -->
   <div class="school-header-container">
     <div class="school-header">
       <div class="logo-container">
         <div class="floating-logo">🏫</div>
         <div class="school-info">
           <h1>Colégio 27 de Março</h1>
-          <p>Painel de Direção - Sistema Académico</p>
+          <p>Área do Professor - Sistema Académico</p>
         </div>
       </div>
       
@@ -650,9 +635,12 @@
         <div class="user-profile">
           <div class="user-avatar" id="user-avatar">P</div>
           <div>
-            <div id="current-user-name">Edmilson Bartolomeu</div>
-            <small id="current-user-role">director</small>
+            <div id="current-user-name">Professor</div>
+            <small id="current-user-role">professor</small>
           </div>
+          <button class="settings-btn" onclick="openPasswordModal()" title="Alterar senha">
+            ⚙️
+          </button>
         </div>
         <button class="logout-btn-top" onclick="logout()">
           🚪 Sair
@@ -661,166 +649,81 @@
     </div>
   </div>
 
+  <!-- MODAL PARA ALTERAR SENHA -->
+  <div id="password-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>🔐 Alterar Senha</h3>
+        <button class="close-modal" onclick="closePasswordModal()">&times;</button>
+      </div>
+      <div class="form-group">
+        <label>Senha Atual:</label>
+        <input type="password" id="current-password" placeholder="Digite sua senha atual">
+      </div>
+      <div class="form-group">
+        <label>Nova Senha:</label>
+        <input type="password" id="new-password" placeholder="Digite a nova senha">
+        <small style="color: #666; display: block; margin-top: 5px;">
+          A senha deve ter pelo menos 8 caracteres, incluindo letras maiúsculas, minúsculas e números.
+        </small>
+      </div>
+      <div class="form-group">
+        <label>Confirmar Nova Senha:</label>
+        <input type="password" id="confirm-password" placeholder="Confirme a nova senha">
+      </div>
+      <div style="display: flex; gap: 10px; margin-top: 20px;">
+        <button class="btn btn-success" onclick="changePassword()" style="flex: 1;">
+          💾 Salvar Nova Senha
+        </button>
+        <button class="btn" onclick="closePasswordModal()" style="background: #6c757d; color: white; flex: 1;">
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+
   <div class="main-container">
     <div id="alert-container"></div>
 
-    <!-- MENU LATERAL COM BOTÕES AMARELOS E BORDAS PRETAS -->
-    <div class="dashboard-container">
-      <div class="sidebar-menu">
-        <h3 class="sidebar-title">Dashboard da Direção</h3>
-        <ul class="menu-list">
-          <li class="menu-item active" data-section="dashboard">
-            <span>📊</span> Supervisão
-          </li>
-          <li class="menu-item" data-section="reports">
-            <span>📈</span> Relatórios
-          </li>
-          <li class="menu-item" data-section="credentials">
-            <span>🔑</span> Credenciais
-          </li>
-          <li class="menu-item" data-section="informes">
-            <span>📋</span> Informes
-          </li>
-          <li class="menu-item" data-section="financial">
-            <span>💰</span> Financeiro
-          </li>
-        </ul>
+    <!-- TABS DO PROFESSOR -->
+    <div class="tabs">
+      <div class="tab active" data-tab="dashboard">Dashboard</div>
+      <div class="tab" data-tab="grades">Lançar Notas</div>
+      <div class="tab" data-tab="notifications">Notificações</div>
+    </div>
+
+    <!-- CONTEÚDO DAS TABS -->
+    <div id="dashboard-tab" class="tab-content active">
+      <div class="card">
+        <h2>📊 Minhas Turmas e Disciplinas</h2>
         
-        <!-- AÇÕES RÁPIDAS -->
-        <div class="quick-actions">
-          <h4>Ações Rápidas</h4>
-          <div class="action-buttons">
-            <button class="action-btn" onclick="loadContent('reports')">
-              📊 Gerar Relatório
-            </button>
-            <button class="action-btn" onclick="citarCredenciais()">
-              🔑 Citar Credenciais
-            </button>
-            <button class="action-btn" onclick="enviarInforme()">
-              📧 Enviar Informe
-            </button>
-            <button class="action-btn export" onclick="exportarPDF()">
-              📄 Exportar PDF
-            </button>
-          </div>
+        <!-- Informações das atribuições do professor -->
+        <div id="teacher-assignments-info" class="card mb-20">
+          <div class="loading">Carregando suas atribuições...</div>
+        </div>
+        
+        <div id="teacher-classes">
+          <div class="loading">Carregando suas turmas...</div>
         </div>
       </div>
+    </div>
 
-      <!-- ÁREA DE CONTEÚDO PRINCIPAL -->
-      <div class="content-area">
-        <!-- TABS DO PROFESSOR -->
-        <div id="teacher-tabs" class="tabs" style="display: none;">
-          <div class="tab active" data-tab="dashboard">Dashboard</div>
-          <div class="tab" data-tab="grades">Lançar Notas</div>
-          <div class="tab" data-tab="notifications">Notificações</div>
+    <!-- LANÇAR NOTAS -->
+    <div id="grades-tab" class="tab-content">
+      <div class="card">
+        <h2>📝 Lançar Notas</h2>
+        <div id="grades-content">
+          <div class="loading">Carregando formulário de notas...</div>
         </div>
+      </div>
+    </div>
 
-        <!-- CONTEÚDO DAS SESSÕES -->
-        <div id="content-sections">
-          <!-- DASHBOARD GERAL -->
-          <div id="dashboard-section" class="content-section active">
-            <div class="dashboard-header">
-              <h2>Dashboard da Direção</h2>
-            </div>
-
-            <!-- ESTATÍSTICAS -->
-            <div class="stats-grid">
-              <div class="stat-card">
-                <div class="stat-label">Total de Alunos</div>
-                <div class="stat-value" id="total-alunos">0</div>
-              </div>
-              
-              <div class="stat-card">
-                <div class="stat-label">Professores</div>
-                <div class="stat-value" id="total-professores">0</div>
-              </div>
-              
-              <div class="stat-card">
-                <div class="stat-label">Turmas Ativas</div>
-                <div class="stat-value" id="turmas-ativas">0</div>
-              </div>
-              
-              <div class="stat-card">
-                <div class="stat-label">Pendências</div>
-                <div class="stat-value" id="total-pendencias">0</div>
-              </div>
-            </div>
-
-            <!-- CONTEÚDO ESPECÍFICO DO PROFESSOR -->
-            <div id="teacher-dashboard-content" style="display: none;">
-              <h3>📊 Minhas Turmas e Disciplinas</h3>
-              <div id="teacher-assignments-info" class="card">
-                <div class="loading">Carregando suas atribuições...</div>
-              </div>
-              <div id="teacher-classes">
-                <div class="loading">Carregando suas turmas...</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- RELATÓRIOS -->
-          <div id="reports-section" class="content-section">
-            <div class="card">
-              <h3>📈 Relatórios</h3>
-              <div class="empty-state">
-                <h3>Funcionalidade em Desenvolvimento</h3>
-                <p>Em breve você poderá gerar relatórios detalhados.</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- CREDENCIAIS -->
-          <div id="credentials-section" class="content-section">
-            <div class="card">
-              <h3>🔑 Credenciais</h3>
-              <div class="empty-state">
-                <h3>Funcionalidade em Desenvolvimento</h3>
-                <p>Em breve você poderá gerenciar credenciais de acesso.</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- INFORMES -->
-          <div id="informes-section" class="content-section">
-            <div class="card">
-              <h3>📋 Informes</h3>
-              <div class="empty-state">
-                <h3>Funcionalidade em Desenvolvimento</h3>
-                <p>Em breve você poderá enviar informes.</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- FINANCEIRO -->
-          <div id="financial-section" class="content-section">
-            <div class="card">
-              <h3>💰 Financeiro</h3>
-              <div class="empty-state">
-                <h3>Funcionalidade em Desenvolvimento</h3>
-                <p>Em breve você poderá gerenciar o financeiro.</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- CONTEÚDO DO PROFESSOR (notas) -->
-          <div id="grades-tab" class="tab-content">
-            <div class="card">
-              <h3 class="card-title">📝 Lançar Notas</h3>
-              <div id="grades-content">
-                <div class="loading">Carregando formulário de notas...</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- CONTEÚDO DO PROFESSOR (notificações) -->
-          <div id="notifications-tab" class="tab-content">
-            <div class="card">
-              <h3 class="card-title">🔔 Notificações</h3>
-              <div id="notifications-content">
-                <div class="loading">Carregando notificações...</div>
-              </div>
-            </div>
-          </div>
+    <!-- NOTIFICAÇÕES -->
+    <div id="notifications-tab" class="tab-content">
+      <div class="card">
+        <h2>🔔 Notificações</h2>
+        <div id="notifications-content">
+          <div class="loading">Carregando notificações...</div>
         </div>
       </div>
     </div>
@@ -831,33 +734,18 @@
     const DB = {
         init: function() {
             console.log('🔄 Inicializando banco de dados...');
+            
+            // Usuários padrão
             const defaultUsers = [
                 {
-                    id: '1',
-                    name: 'Edmilson Bartolomeu',
-                    username: 'director',
-                    password: 'admin123',
-                    role: 'director',
-                    email: 'director@colegio27demarco.edu',
-                    created_at: new Date().toISOString()
-                },
-                {
                     id: '2',
-                    name: 'Professor Teste',
+                    name: 'Professor Silva',
                     username: 'professor',
                     password: 'prof123',
                     role: 'teacher',
                     email: 'professor@colegio27demarco.edu',
-                    created_at: new Date().toISOString()
-                },
-                {
-                    id: '3',
-                    name: 'Pedagogo Teste',
-                    username: 'pedagogo',
-                    password: 'ped123',
-                    role: 'coordinator',
-                    email: 'pedagogo@colegio27demarco.edu',
-                    created_at: new Date().toISOString()
+                    created_at: new Date().toISOString(),
+                    is_temporary_password: true
                 }
             ];
 
@@ -865,13 +753,29 @@
                 localStorage.setItem('users', JSON.stringify(defaultUsers));
             }
             
-            if (!localStorage.getItem('students')) localStorage.setItem('students', JSON.stringify([]));
-            if (!localStorage.getItem('teachers')) localStorage.setItem('teachers', JSON.stringify([]));
-            if (!localStorage.getItem('classes')) localStorage.setItem('classes', JSON.stringify([]));
+            // Inicializar outras tabelas se não existirem
+            if (!localStorage.getItem('students')) localStorage.setItem('students', JSON.stringify([
+                { id: '1', name: 'João Silva', class_id: '1', status: 'approved', grade: '10' },
+                { id: '2', name: 'Maria Santos', class_id: '1', status: 'approved', grade: '10' },
+                { id: '3', name: 'Pedro Costa', class_id: '2', status: 'approved', grade: '11' },
+                { id: '4', name: 'Ana Pereira', class_id: '2', status: 'approved', grade: '11' }
+            ]));
+            
+            if (!localStorage.getItem('teachers')) localStorage.setItem('teachers', JSON.stringify([
+                { id: '2', name: 'Professor Silva', email: 'professor@colegio27demarco.edu', status: 'active' }
+            ]));
+            
+            if (!localStorage.getItem('classes')) localStorage.setItem('classes', JSON.stringify([
+                { id: '1', name: 'A', grade: '10', status: 'active', capacity: 30 },
+                { id: '2', name: 'B', grade: '11', status: 'active', capacity: 30 }
+            ]));
+            
             if (!localStorage.getItem('school_years')) localStorage.setItem('school_years', JSON.stringify([
                 { id: 1, year: '2024-2025', is_active: true, created_at: new Date().toISOString() }
             ]));
+            
             if (!localStorage.getItem('grades')) localStorage.setItem('grades', JSON.stringify([]));
+            
             if (!localStorage.getItem('disciplines')) localStorage.setItem('disciplines', JSON.stringify([
                 { id: '1', name: 'Matemática', grade: 'all' },
                 { id: '2', name: 'Português', grade: 'all' },
@@ -880,10 +784,26 @@
                 { id: '5', name: 'Ciências', grade: 'all' },
                 { id: '6', name: 'Inglês', grade: 'all' }
             ]));
+            
             if (!localStorage.getItem('payments')) localStorage.setItem('payments', JSON.stringify([]));
-            if (!localStorage.getItem('announcements')) localStorage.setItem('announcements', JSON.stringify([]));
-            if (!localStorage.getItem('teacher_assignments')) localStorage.setItem('teacher_assignments', JSON.stringify([]));
-            if (!localStorage.getItem('pending_approvals')) localStorage.setItem('pending_approvals', JSON.stringify([]));
+            
+            if (!localStorage.getItem('announcements')) localStorage.setItem('announcements', JSON.stringify([
+                {
+                    id: '1',
+                    title: 'Bem-vindo ao novo sistema',
+                    message: 'Seja bem-vindo ao novo sistema acadêmico do Colégio 27 de Março.',
+                    recipient: 'all',
+                    author_name: 'Director',
+                    status: 'published',
+                    created_at: new Date().toISOString()
+                }
+            ]));
+            
+            if (!localStorage.getItem('teacher_assignments')) localStorage.setItem('teacher_assignments', JSON.stringify([
+                { id: '1', teacher_id: '2', class_id: '1', discipline_id: '1' },
+                { id: '2', teacher_id: '2', class_id: '2', discipline_id: '1' }
+            ]));
+            
             console.log('✅ Banco de dados inicializado');
         },
 
@@ -935,6 +855,7 @@
     let grades = [];
     let disciplines = [];
     let teacherAssignments = [];
+    let announcements = [];
     let myClasses = [];
     let myDisciplines = [];
 
@@ -951,12 +872,16 @@
 
         currentUser = JSON.parse(savedUser);
         
+        // VERIFICAR SE É PROFESSOR
+        if (currentUser.role !== 'teacher') {
+          showAlert('Acesso não autorizado! Esta área é apenas para professores.', 'danger');
+          setTimeout(() => window.location.href = 'index.html', 3000);
+          return;
+        }
+        
         // Atualizar informações do usuário no cabeçalho
         document.getElementById('current-user-name').textContent = currentUser.name;
-        document.getElementById('current-user-role').textContent = 
-          currentUser.role === 'director' ? 'Director' : 
-          currentUser.role === 'teacher' ? 'Professor' : 
-          currentUser.role === 'coordinator' ? 'Coordenador' : 'Usuário';
+        document.getElementById('current-user-role').textContent = 'Professor';
         document.getElementById('user-avatar').textContent = currentUser.name.charAt(0);
         
         // Carregar dados do localStorage
@@ -965,19 +890,16 @@
         grades = DB.get('grades');
         disciplines = DB.get('disciplines');
         teacherAssignments = DB.get('teacher_assignments');
+        announcements = DB.get('announcements');
 
-        // Atualizar estatísticas do dashboard
-        updateDashboardStats();
+        // Configurar interface do professor
+        setupTeacherInterface();
 
-        // Configurar interface baseada no papel do usuário
-        if (currentUser.role === 'teacher') {
-          setupTeacherInterface();
-        } else if (currentUser.role === 'director' || currentUser.role === 'coordinator') {
-          setupDirectorInterface();
-        }
+        // Configurar tabs
+        setupTabs();
 
-        // Configurar menu lateral
-        setupSidebarMenu();
+        // Carregar dashboard inicial
+        loadTeacherDashboard();
 
       } catch (error) {
         console.error('Erro ao carregar dados:', error);
@@ -985,24 +907,8 @@
       }
     }
 
-    // ATUALIZAR ESTATÍSTICAS DO DASHBOARD
-    function updateDashboardStats() {
-      document.getElementById('total-alunos').textContent = students.length;
-      document.getElementById('total-professores').textContent = DB.get('teachers').length;
-      document.getElementById('turmas-ativas').textContent = classes.filter(c => c.status === 'active').length;
-      
-      // Calcular pendências (notas pendentes + matrículas pendentes)
-      const notasPendentes = grades.filter(g => g.status === 'pending').length;
-      const matriculasPendentes = students.filter(s => s.status === 'pending').length;
-      document.getElementById('total-pendencias').textContent = notasPendentes + matriculasPendentes;
-    }
-
     // CONFIGURAR INTERFACE DO PROFESSOR
     function setupTeacherInterface() {
-      // Mostrar tabs do professor
-      document.getElementById('teacher-tabs').style.display = 'flex';
-      document.getElementById('teacher-dashboard-content').style.display = 'block';
-      
       // Filtrar turmas e disciplinas do professor
       const myAssignments = teacherAssignments.filter(assignment => 
         assignment.teacher_id === currentUser.id
@@ -1015,65 +921,36 @@
       myDisciplines = disciplines.filter(discipline => 
         myAssignments.some(assignment => assignment.discipline_id === discipline.id)
       );
-
-      // Carregar dashboard do professor
-      loadTeacherDashboard();
     }
 
-    // CONFIGURAR INTERFACE DO DIRETOR/COORDENADOR
-    function setupDirectorInterface() {
-      // Ocultar conteúdo específico do professor
-      document.getElementById('teacher-tabs').style.display = 'none';
-      document.getElementById('teacher-dashboard-content').style.display = 'none';
-    }
-
-    // CONFIGURAR MENU LATERAL
-    function setupSidebarMenu() {
-      const menuItems = document.querySelectorAll('.menu-item');
-      const contentSections = document.querySelectorAll('.content-section');
+    // CONFIGURAR TABS
+    function setupTabs() {
+      const tabs = document.querySelectorAll('.tab');
       const tabContents = document.querySelectorAll('.tab-content');
 
-      menuItems.forEach(item => {
-        item.addEventListener('click', () => {
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
           // Remover active de todos
-          menuItems.forEach(i => i.classList.remove('active'));
-          contentSections.forEach(s => s.classList.remove('active'));
+          tabs.forEach(t => t.classList.remove('active'));
           tabContents.forEach(t => t.classList.remove('active'));
-
-          // Adicionar active ao item clicado
-          item.classList.add('active');
-          const section = item.dataset.section;
           
-          // Mostrar seção correspondente
-          const contentElement = document.getElementById(`${section}-section`);
-          if (contentElement) {
-            contentElement.classList.add('active');
-          }
+          // Adicionar active ao tab clicado
+          tab.classList.add('active');
+          const tabId = tab.dataset.tab;
+          document.getElementById(`${tabId}-tab`).classList.add('active');
+          
+          // Carregar conteúdo da tab
+          loadTabContent(tabId);
         });
       });
+    }
 
-      // Configurar tabs do professor
-      if (currentUser.role === 'teacher') {
-        const tabs = document.querySelectorAll('.tab');
-        tabs.forEach(tab => {
-          tab.addEventListener('click', () => {
-            tabs.forEach(t => t.classList.remove('active'));
-            tabContents.forEach(t => t.classList.remove('active'));
-            
-            tab.classList.add('active');
-            const tabId = tab.dataset.tab;
-            
-            if (tabId === 'dashboard') {
-              contentSections.forEach(s => s.classList.remove('active'));
-              document.getElementById('dashboard-section').classList.add('active');
-              loadTeacherDashboard();
-            } else {
-              document.getElementById(`${tabId}-tab`).classList.add('active');
-              if (tabId === 'grades') loadGradesTab();
-              if (tabId === 'notifications') loadNotificationsTab();
-            }
-          });
-        });
+    // CARREGAR CONTEÚDO DA TAB
+    function loadTabContent(tabId) {
+      switch(tabId) {
+        case 'dashboard': loadTeacherDashboard(); break;
+        case 'grades': loadGradesTab(); break;
+        case 'notifications': loadNotificationsTab(); break;
       }
     }
 
@@ -1100,17 +977,31 @@
       }
 
       assignmentsInfo.innerHTML = `
-        <h4>🎯 Minhas Atribuições</h4>
-        <p><strong>Turmas:</strong> ${myClasses.map(c => `${c.grade}ª ${c.name}`).join(', ')}</p>
-        <p><strong>Disciplinas:</strong> ${myDisciplines.map(d => d.name).join(', ')}</p>
-        <div style="margin-top: 15px; padding: 10px; background: #f8f9fa; border-radius: 6px;">
-          <small>📌 Você pode lançar notas para suas disciplinas na aba "Lançar Notas"</small>
+        <h3>🎯 Minhas Atribuições</h3>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Turmas</div>
+            <div class="stat-value">${myClasses.length}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Disciplinas</div>
+            <div class="stat-value">${myDisciplines.length}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Total de Alunos</div>
+            <div class="stat-value">${students.filter(s => myClasses.some(c => c.id === s.class_id)).length}</div>
+          </div>
+        </div>
+        <div style="margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px solid #ddd;">
+          <p><strong>📚 Disciplinas:</strong> ${myDisciplines.map(d => d.name).join(', ')}</p>
+          <p><strong>🏫 Turmas:</strong> ${myClasses.map(c => `${c.grade}ª ${c.name}`).join(', ')}</p>
         </div>
       `;
 
       const teacherGrades = grades.filter(g => g.teacher_id === currentUser.id);
 
       let classesHTML = `
+        <h3>📊 Minhas Turmas</h3>
         <div class="class-grid">
           ${myClasses.map(classe => {
             const classStudents = students.filter(s => s.class_id === classe.id);
@@ -1143,19 +1034,41 @@
                     <div class="stat-label">Rejeitadas</div>
                   </div>
                 </div>
-                <button class="btn" onclick="loadTeacherTab('grades')" style="width: 100%; margin-top: 10px;">
+                <button class="btn" onclick="loadTabContent('grades')" style="width: 100%; margin-top: 10px;">
                   📝 Lançar Notas
                 </button>
               </div>
             `;
           }).join('')}
         </div>
+        
+        <div class="card mt-20">
+          <h3>📈 Estatísticas Gerais</h3>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-value" style="color: #28a745;">${teacherGrades.filter(g => g.status === 'approved').length}</div>
+              <div class="stat-label">Notas Aprovadas</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" style="color: #ffc107;">${teacherGrades.filter(g => g.status === 'pending').length}</div>
+              <div class="stat-label">Aguardando Aprovação</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" style="color: #dc3545;">${teacherGrades.filter(g => g.status === 'rejected').length}</div>
+              <div class="stat-label">Notas Rejeitadas</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" style="color: #007bff;">${students.filter(s => myClasses.some(c => c.id === s.class_id)).length}</div>
+              <div class="stat-label">Meus Alunos</div>
+            </div>
+          </div>
+        </div>
       `;
 
       container.innerHTML = classesHTML;
     }
 
-    // CARREGAR TAB DE NOTAS DO PROFESSOR
+    // CARREGAR TAB DE NOTAS
     function loadGradesTab() {
       const container = document.getElementById('grades-content');
       if (!container) return;
@@ -1173,14 +1086,14 @@
       let gradesHTML = `
         <div class="form-group">
           <label>Selecionar Turma:</label>
-          <select id="grade-class" onchange="loadClassStudents()" style="border: 2px solid #000;">
+          <select id="grade-class" onchange="loadClassStudents()">
             <option value="">Selecione a turma</option>
             ${myClasses.map(c => `<option value="${c.id}">${c.grade}ª ${c.name}</option>`).join('')}
           </select>
         </div>
         <div class="form-group">
           <label>Selecionar Disciplina:</label>
-          <select id="grade-discipline" style="border: 2px solid #000;">
+          <select id="grade-discipline">
             <option value="">Selecione a disciplina</option>
             ${myDisciplines.map(d => `<option value="${d.id}">${d.name}</option>`).join('')}
           </select>
@@ -1240,17 +1153,31 @@
       }
 
       const discipline = disciplines.find(d => d.id == disciplineId);
+      const classObj = classes.find(c => c.id === classId);
       
       let studentsHTML = `
         <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 2px solid #000;">
-          <strong>📚 Disciplina:</strong> ${discipline ? discipline.name : 'N/A'}<br>
-          <strong>💡 Instruções:</strong> Preencha as notas de 0 a 20 para cada aluno. 
-          <span style="color: #8B0000; font-weight: 700;">As notas serão salvas localmente e enviadas para aprovação pedagógica.</span>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <strong>📚 Disciplina:</strong> ${discipline ? discipline.name : 'N/A'}<br>
+              <strong>🏫 Turma:</strong> ${classObj ? `${classObj.grade}ª ${classObj.name}` : 'N/A'}
+            </div>
+            <div style="text-align: right;">
+              <strong>👥 Alunos:</strong> ${classStudents.length}<br>
+              <small>Notas: 0 a 20</small>
+            </div>
+          </div>
         </div>
+        
+        <div style="background: #e8f4fd; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 2px solid #007bff;">
+          <strong>💡 Instruções:</strong> Preencha as notas de 0 a 20 para cada aluno. 
+          <span style="color: #8B0000; font-weight: 700;">Clique em "Salvar" para cada aluno ou use "Salvar Todas".</span>
+        </div>
+        
         <table>
           <thead>
             <tr>
-              <th>Nº</th>
+              <th>#</th>
               <th>Aluno</th>
               <th>Nota (0-20)</th>
               <th>Tipo de Avaliação</th>
@@ -1304,16 +1231,18 @@
             }).join('')}
           </tbody>
         </table>
+        
         <div style="display: flex; gap: 10px; margin-top: 20px;">
           <button class="btn btn-success" onclick="saveAllGrades()" style="flex: 1; padding: 15px; font-weight: 700;">
             💾 Salvar Todas as Notas
           </button>
           <button class="btn btn-primary" onclick="sendToPedagogical()" style="flex: 1; padding: 15px; font-weight: 700;">
-            📤 Enviar para Pedágogico
+            📤 Enviar para Aprovação
           </button>
         </div>
+        
         <div style="margin-top: 15px; padding: 10px; background: #e9ecef; border-radius: 6px; border: 2px solid #000;">
-          <small>📌 <strong>Nota:</strong> As notas são salvas localmente automaticamente. Use "Enviar para Pedágogico" para solicitar aprovação.</small>
+          <small>📌 <strong>Nota:</strong> As notas são salvas localmente automaticamente. Use "Enviar para Aprovação" para solicitar análise do coordenador pedagógico.</small>
         </div>
       `;
 
@@ -1333,7 +1262,7 @@
       const gradeType = document.getElementById(`type-${studentId}`).value;
       
       if (!gradeValue || isNaN(gradeValue)) {
-        showAlert('Digite uma nota válida', 'warning');
+        showAlert('Digite uma nota válida para este aluno', 'warning');
         return;
       }
 
@@ -1381,7 +1310,7 @@
           statusElement.innerHTML = '<span style="color: #ffc107; font-weight: 700;">⏳ Pendente</span>';
         }
         
-        showAlert(`✅ Nota de ${student.name} salva localmente!`, 'success');
+        showAlert(`✅ Nota de ${student.name} salva com sucesso!`, 'success');
         
       } catch (error) {
         console.error('Erro ao salvar nota:', error);
@@ -1466,14 +1395,13 @@
       if (hasErrors) {
         showAlert('Algumas notas não foram salvas. Verifique se todas estão entre 0 e 20.', 'warning');
       } else if (savedCount > 0) {
-        showAlert(`✅ ${savedCount} nota(s) salva(s) localmente com sucesso!`, 'success');
-        updateDashboardStats();
+        showAlert(`✅ ${savedCount} nota(s) salva(s) com sucesso!`, 'success');
       } else {
         showAlert('Nenhuma nota foi preenchida.', 'warning');
       }
     }
 
-    // ENVIAR NOTAS PARA APROVAÇÃO PEDAGÓGICA
+    // ENVIAR NOTAS PARA APROVAÇÃO
     function sendToPedagogical() {
       const classId = document.getElementById('grade-class').value;
       const disciplineId = document.getElementById('grade-discipline').value;
@@ -1495,23 +1423,6 @@
         showAlert('Não há notas pendentes para enviar.', 'warning');
         return;
       }
-
-      // Criar registro de aprovação pendente
-      const approvalData = {
-        teacher_id: currentUser.id,
-        teacher_name: currentUser.name,
-        class_id: classId,
-        discipline_id: disciplineId,
-        grades_count: teacherPendingGrades.length,
-        status: 'pending_review',
-        created_at: new Date().toISOString()
-      };
-
-      // Inserir na tabela de aprovações pendentes
-      const pendingApprovals = DB.get('pending_approvals');
-      approvalData.id = Date.now().toString(36);
-      pendingApprovals.push(approvalData);
-      localStorage.setItem('pending_approvals', JSON.stringify(pendingApprovals));
 
       // Atualizar status das notas para 'submitted'
       teacherPendingGrades.forEach(grade => {
@@ -1540,17 +1451,15 @@
 
       const teacherGrades = grades.filter(g => g.teacher_id === currentUser.id);
       const rejectedGrades = teacherGrades.filter(g => g.status === 'rejected');
-      const pendingApprovals = DB.get('pending_approvals').filter(a => 
-        a.teacher_id === currentUser.id && a.status === 'pending_review'
-      );
-      const announcements = DB.get('announcements').filter(a => 
+      const pendingGrades = teacherGrades.filter(g => g.status === 'submitted');
+      const teacherAnnouncements = announcements.filter(a => 
         (a.recipient === 'teachers' || a.recipient === 'all') && 
         a.status === 'published'
       );
 
       let notificationsHTML = '';
 
-      if (rejectedGrades.length === 0 && pendingApprovals.length === 0 && announcements.length === 0) {
+      if (rejectedGrades.length === 0 && pendingGrades.length === 0 && teacherAnnouncements.length === 0) {
         notificationsHTML = `
           <div class="empty-state">
             <h3>✅ Nenhuma notificação</h3>
@@ -1574,15 +1483,21 @@
           
           notificationsHTML += `
             <div class="rejection-notice">
-              <div class="rejection-header">
-                <div class="rejection-title">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <div style="font-weight: 700; color: #721c24; font-size: 1.1rem;">
                   ❌ Nota Rejeitada - ${student ? student.name : 'Aluno'}
                 </div>
               </div>
-              <p><strong>Disciplina:</strong> ${discipline ? discipline.name : 'N/A'}</p>
-              <p><strong>Nota Enviada:</strong> ${grade.grade}</p>
-              <p><strong>Observação:</strong> ${grade.rejection_reason || 'Nenhuma observação fornecida.'}</p>
-              <button class="btn btn-warning" onclick="reSubmitGrade('${grade.id}')">
+              <p><strong>📚 Disciplina:</strong> ${discipline ? discipline.name : 'N/A'}</p>
+              <p><strong>📝 Nota Enviada:</strong> ${grade.grade}</p>
+              <p><strong>📅 Data:</strong> ${new Date(grade.created_at).toLocaleDateString('pt-BR')}</p>
+              ${grade.rejection_reason ? `
+                <div style="margin-top: 10px; padding: 10px; background: #f5c6cb; border-radius: 4px;">
+                  <strong>📌 Observação do Coordenador:</strong><br>
+                  ${grade.rejection_reason}
+                </div>
+              ` : ''}
+              <button class="btn btn-warning" onclick="reSubmitGrade('${grade.id}')" style="margin-top: 15px;">
                 ✏️ Corrigir e Reenviar
               </button>
             </div>
@@ -1590,37 +1505,35 @@
         });
       }
 
-      if (pendingApprovals.length > 0) {
+      if (pendingGrades.length > 0) {
         notificationsHTML += `
-          <div style="background: #d1ecf1; padding: 20px; border-radius: 8px; margin: 20px 0; border: 2px solid #000;">
+          <div style="background: #d1ecf1; padding: 20px; border-radius: 8px; margin: 20px 0; border: 2px solid #0c5460;">
             <h4 style="color: #0c5460; margin-bottom: 10px;">📤 Aguardando Aprovação</h4>
-            ${pendingApprovals.map(approval => {
-              const classObj = classes.find(c => c.id === approval.class_id);
-              const disciplineObj = disciplines.find(d => d.id === approval.discipline_id);
-              return `
-                <div style="margin: 10px 0; padding: 10px; background: white; border-radius: 6px; border: 1px solid #000;">
-                  <strong>${classObj ? `${classObj.grade}ª ${classObj.name}` : 'Turma'}</strong> - 
-                  <strong>${disciplineObj ? disciplineObj.name : 'Disciplina'}</strong><br>
-                  <small>${approval.grades_count} nota(s) aguardando análise pedagógica</small>
-                </div>
-              `;
-            }).join('')}
+            <p>Você tem <strong>${pendingGrades.length} nota(s)</strong> aguardando análise do coordenador pedagógico.</p>
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+              <span style="padding: 5px 10px; background: #007bff; color: white; border-radius: 4px; font-size: 0.9rem;">
+                🕒 Em análise
+              </span>
+              <span style="padding: 5px 10px; background: #ffc107; color: #212529; border-radius: 4px; font-size: 0.9rem;">
+                ⏳ Aguardando
+              </span>
+            </div>
           </div>
         `;
       }
 
-      if (announcements.length > 0) {
+      if (teacherAnnouncements.length > 0) {
         notificationsHTML += `
-          <div style="background: #e8f4fd; padding: 20px; border-radius: 8px; margin: 20px 0; border: 2px solid #000;">
+          <div style="background: #e8f4fd; padding: 20px; border-radius: 8px; margin: 20px 0; border: 2px solid #2c5aa0;">
             <h4 style="color: #2c5aa0; margin-bottom: 15px;">📢 Comunicados</h4>
-            ${announcements.map(announcement => `
-              <div style="margin: 10px 0; padding: 15px; background: white; border-radius: 6px; border: 1px solid #000;">
-                <h5 style="color: #2c5aa0;">${announcement.title}</h5>
-                <p>${announcement.message}</p>
-                <small style="color: #7f8c8d;">
-                  Por: ${announcement.author_name || 'Director'} - 
-                  ${new Date(announcement.created_at).toLocaleDateString('pt-BR')}
-                </small>
+            ${teacherAnnouncements.map(announcement => `
+              <div style="margin: 10px 0; padding: 15px; background: white; border-radius: 6px; border: 1px solid #2c5aa0;">
+                <h5 style="color: #2c5aa0; margin-bottom: 8px;">${announcement.title}</h5>
+                <p style="margin-bottom: 10px;">${announcement.message}</p>
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; color: #7f8c8d;">
+                  <span>Por: ${announcement.author_name || 'Director'}</span>
+                  <span>${new Date(announcement.created_at).toLocaleDateString('pt-BR')}</span>
+                </div>
               </div>
             `).join('')}
           </div>
@@ -1656,7 +1569,7 @@
           updated_at: new Date().toISOString()
         });
 
-        showAlert('✅ Nota corrigida e salva localmente!', 'success');
+        showAlert('✅ Nota corrigida e salva! Agora você pode reenviá-la para aprovação.', 'success');
         loadNotificationsTab();
         
       } catch (error) {
@@ -1665,48 +1578,74 @@
       }
     }
 
-    // FUNÇÕES DAS AÇÕES RÁPIDAS
-    function gerarRelatorio() {
-      showAlert('📊 Relatório gerado com sucesso!', 'success');
+    // FUNÇÕES PARA ALTERAR SENHA
+    function openPasswordModal() {
+      document.getElementById('password-modal').style.display = 'flex';
     }
 
-    function citarCredenciais() {
-      showAlert('🔑 Credenciais citadas com sucesso!', 'success');
+    function closePasswordModal() {
+      document.getElementById('password-modal').style.display = 'none';
+      document.getElementById('current-password').value = '';
+      document.getElementById('new-password').value = '';
+      document.getElementById('confirm-password').value = '';
     }
 
-    function enviarInforme() {
-      loadContent('informes');
-    }
+    function changePassword() {
+      const currentPassword = document.getElementById('current-password').value;
+      const newPassword = document.getElementById('new-password').value;
+      const confirmPassword = document.getElementById('confirm-password').value;
 
-    function exportarPDF() {
-      showAlert('📄 PDF exportado com sucesso!', 'success');
-    }
+      if (!currentPassword || !newPassword || !confirmPassword) {
+        showAlert('Preencha todos os campos', 'warning');
+        return;
+      }
 
-    function loadContent(section) {
-      document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
-      document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-      
-      const menuItem = document.querySelector(`.menu-item[data-section="${section}"]`);
-      if (menuItem) menuItem.classList.add('active');
-      
-      const contentElement = document.getElementById(`${section}-section`);
-      if (contentElement) contentElement.classList.add('active');
-    }
+      if (currentPassword !== currentUser.password) {
+        showAlert('Senha atual incorreta', 'danger');
+        return;
+      }
 
-    function loadTeacherTab(tab) {
-      const tabs = document.querySelectorAll('.tab');
-      const tabContents = document.querySelectorAll('.tab-content');
-      const contentSections = document.querySelectorAll('.content-section');
+      if (newPassword.length < 8) {
+        showAlert('A nova senha deve ter pelo menos 8 caracteres', 'warning');
+        return;
+      }
+
+      if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(newPassword)) {
+        showAlert('A senha deve conter letras maiúsculas, minúsculas e números', 'warning');
+        return;
+      }
+
+      if (newPassword !== confirmPassword) {
+        showAlert('As senhas não coincidem', 'warning');
+        return;
+      }
+
+      // Atualizar senha no banco de dados
+      const users = DB.get('users');
+      const userIndex = users.findIndex(u => u.id === currentUser.id);
       
-      contentSections.forEach(s => s.classList.remove('active'));
-      tabContents.forEach(t => t.classList.remove('active'));
-      tabs.forEach(t => t.classList.remove('active'));
-      
-      document.querySelector(`.tab[data-tab="${tab}"]`).classList.add('active');
-      document.getElementById(`${tab}-tab`).classList.add('active');
-      
-      if (tab === 'grades') loadGradesTab();
-      if (tab === 'notifications') loadNotificationsTab();
+      if (userIndex !== -1) {
+        users[userIndex].password = newPassword;
+        users[userIndex].is_temporary_password = false;
+        users[userIndex].last_password_change = new Date().toISOString();
+        
+        localStorage.setItem('users', JSON.stringify(users));
+        
+        // Atualizar usuário atual
+        currentUser.password = newPassword;
+        currentUser.is_temporary_password = false;
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        
+        showAlert('✅ Senha alterada com sucesso!', 'success');
+        closePasswordModal();
+        
+        // Se for senha temporária, mostrar alerta
+        if (currentUser.is_temporary_password) {
+          showAlert('⚠️ Sua senha temporária foi alterada. Recomendamos que faça logout e login novamente.', 'warning');
+        }
+      } else {
+        showAlert('Erro ao atualizar senha', 'danger');
+      }
     }
 
     // FUNÇÕES AUXILIARES
@@ -1744,6 +1683,13 @@
     // INICIALIZAÇÃO
     document.addEventListener('DOMContentLoaded', () => {
       loadData();
+      
+      // Verificar se o usuário está com senha temporária
+      setTimeout(() => {
+        if (currentUser && currentUser.is_temporary_password) {
+          showAlert('⚠️ Você está usando uma senha temporária. Recomendamos que altere sua senha.', 'warning');
+        }
+      }, 1000);
     });
   </script>
 </body>
