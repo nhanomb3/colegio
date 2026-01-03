@@ -608,8 +608,7 @@
         },
 
         get: function(table) {
-            const data = JSON.parse(localStorage.getItem(table)) || [];
-            return data;
+            return JSON.parse(localStorage.getItem(table)) || [];
         },
 
         insert: function(table, data) {
@@ -705,6 +704,12 @@
       );
 
       loadTabContent('overview');
+      
+      // Mostrar tab de redefinição de senha
+      const senhaTab = document.querySelector('.tab[data-tab="senha"]');
+      if (senhaTab) {
+        senhaTab.style.display = 'flex';
+      }
     }
 
     function loadTabContent(tabId) {
@@ -716,7 +721,7 @@
     }
 
     function loadPasswordResetTab() {
-      // Resetar campos
+      // Preencher email automaticamente
       document.getElementById('verify-email').value = currentStudent.email || '';
       document.getElementById('verify-password').value = '';
       document.getElementById('new-password').value = '';
@@ -906,7 +911,7 @@
 
     function getMonthName(month) {
       const months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
-                     'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+                     'Jullo', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
       return months[month - 1] || 'N/A';
     }
 
@@ -950,7 +955,7 @@
       document.getElementById('announcements-content').innerHTML = html;
     }
 
-    // ✅ FUNÇÕES DE REDEFINIÇÃO DE SENHA
+    // ✅ FUNÇÕES DE REDEFINIÇÃO DE SENHA (CORRIGIDAS)
     function togglePasswordVisibility(inputId) {
       const input = document.getElementById(inputId);
       input.type = input.type === 'password' ? 'text' : 'password';
@@ -965,6 +970,7 @@
         return;
       }
       
+      // Buscar o usuário na tabela 'users'
       const users = DB.get('users');
       const user = users.find(u => u.email === email && u.password === password);
       
@@ -977,39 +983,17 @@
         return;
       }
       
-      // Verificar histórico de senhas
-      const passwordHistory = DB.get('password_history');
-      const userHistory = passwordHistory.filter(h => h.user_id === user.id);
-      
-      if (userHistory.length > 0) {
-        // Verificar se a senha atual é a mais recente
-        const latestHistory = userHistory.sort((a, b) => 
-          new Date(b.changed_at) - new Date(a.changed_at)
-        )[0];
-        
-        if (latestHistory.new_password === password) {
-          // Senha atual é a mais recente no histórico
-          verifiedUser = user;
-          
-          document.getElementById('verification-result').innerHTML = `
-            <div class="alert alert-success">
-              ✅ Identidade verificada com sucesso!
-            </div>
-          `;
-          
-          // Mostrar passo 2
-          setTimeout(() => {
-            document.getElementById('verification-step').style.display = 'none';
-            document.getElementById('password-change-step').style.display = 'block';
-            document.getElementById('verify-email').value = '';
-            document.getElementById('verify-password').value = '';
-          }, 1000);
-          
-          return;
-        }
+      // Verificar se é o mesmo usuário logado
+      if (user.email !== currentStudent.email) {
+        document.getElementById('verification-result').innerHTML = `
+          <div class="alert alert-danger">
+            ❌ Você só pode redefinir sua própria senha.
+          </div>
+        `;
+        return;
       }
       
-      // Se não há histórico ou senha não está no histórico
+      // ✅ CORREÇÃO: Usar o usuário encontrado
       verifiedUser = user;
       
       document.getElementById('verification-result').innerHTML = `
@@ -1022,7 +1006,6 @@
       setTimeout(() => {
         document.getElementById('verification-step').style.display = 'none';
         document.getElementById('password-change-step').style.display = 'block';
-        document.getElementById('verify-email').value = '';
         document.getElementById('verify-password').value = '';
       }, 1000);
     }
@@ -1151,33 +1134,41 @@
       btn.innerHTML = '⏳ Alterando senha...';
       btn.disabled = true;
       
-      // Atualizar senha no banco de dados
+      // ✅ CORREÇÃO: Atualizar senha no banco de dados
       const users = DB.get('users');
-      const userIndex = users.findIndex(u => u.id === verifiedUser.id);
+      const userIndex = users.findIndex(u => u.id === verifiedUser.id || u.email === verifiedUser.email);
       
       if (userIndex !== -1) {
         // Registrar no histórico
         DB.insert('password_history', {
-          user_id: verifiedUser.id,
+          user_id: verifiedUser.id || verifiedUser.email,
           user_email: verifiedUser.email,
           old_password: verifiedUser.password,
           new_password: newPassword,
-          changed_by: verifiedUser.id,
+          changed_by: verifiedUser.id || verifiedUser.email,
           changed_by_name: verifiedUser.name,
           reason: reason || 'Redefinição pelo aluno',
           changed_at: new Date().toISOString()
         });
         
-        // Atualizar senha
-        users[userIndex].password = newPassword;
-        users[userIndex].last_password_change = new Date().toISOString();
-        users[userIndex].password_changed_by = verifiedUser.id;
+        // ✅ CORREÇÃO: Atualizar senha corretamente
+        const updatedUser = {
+          ...users[userIndex],
+          password: newPassword,
+          last_password_change: new Date().toISOString(),
+          password_changed_by: verifiedUser.id || verifiedUser.email
+        };
         
+        users[userIndex] = updatedUser;
         localStorage.setItem('users', JSON.stringify(users));
         
-        // Atualizar usuário na sessão
+        // ✅ CORREÇÃO: Atualizar usuário na sessão atual
+        const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+        currentUser.password = newPassword;
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        
+        // ✅ CORREÇÃO: Atualizar currentStudent
         currentStudent.password = newPassword;
-        localStorage.setItem('currentUser', JSON.stringify(currentStudent));
         
         document.getElementById('password-change-result').innerHTML = `
           <div class="alert alert-success">
@@ -1208,7 +1199,7 @@
       } else {
         document.getElementById('password-change-result').innerHTML = `
           <div class="alert alert-danger">
-            ❌ Erro ao alterar senha. Tente novamente.
+            ❌ Erro ao alterar senha. Usuário não encontrado.
           </div>
         `;
         btn.innerHTML = '💾 Salvar Nova Senha';
@@ -1264,4 +1255,4 @@
     });
   </script>
 </body>
-</html>
+  </html>
